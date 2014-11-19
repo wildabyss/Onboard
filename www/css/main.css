@@ -1,0 +1,13 @@
+body{
+	font-family: Verdana,"Bitstream Vera Sans",sans-serif;
+	color: black;
+	font-size: 100%;
+	margin:0;
+	padding:0;
+}
+
+#global_wrapper{
+	width: 960px;
+	margin: 20px auto;
+	padding: 0;
+}

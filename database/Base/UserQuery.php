@@ -46,10 +46,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinActivityList($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityList relation
  * @method     ChildUserQuery innerJoinActivityList($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityList relation
  *
- * @method     ChildUserQuery leftJoinActivityUserAssociation($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivityUserAssociation relation
- * @method     ChildUserQuery rightJoinActivityUserAssociation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityUserAssociation relation
- * @method     ChildUserQuery innerJoinActivityUserAssociation($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityUserAssociation relation
- *
  * @method     ChildUserQuery leftJoinDiscussion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Discussion relation
  * @method     ChildUserQuery rightJoinDiscussion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Discussion relation
  * @method     ChildUserQuery innerJoinDiscussion($relationAlias = null) Adds a INNER JOIN clause to the query using the Discussion relation
@@ -66,7 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinUserCommunityAssociationRelatedByUserIdRight($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserCommunityAssociationRelatedByUserIdRight relation
  * @method     ChildUserQuery innerJoinUserCommunityAssociationRelatedByUserIdRight($relationAlias = null) Adds a INNER JOIN clause to the query using the UserCommunityAssociationRelatedByUserIdRight relation
  *
- * @method     \ActivityListQuery|\ActivityUserAssociationQuery|\DiscussionQuery|\DiscussionUserAssociationQuery|\UserCommunityAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \ActivityListQuery|\DiscussionQuery|\DiscussionUserAssociationQuery|\UserCommunityAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -611,79 +607,6 @@ abstract class UserQuery extends ModelCriteria
         return $this
             ->joinActivityList($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'ActivityList', '\ActivityListQuery');
-    }
-
-    /**
-     * Filter the query by a related \ActivityUserAssociation object
-     *
-     * @param \ActivityUserAssociation|ObjectCollection $activityUserAssociation  the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByActivityUserAssociation($activityUserAssociation, $comparison = null)
-    {
-        if ($activityUserAssociation instanceof \ActivityUserAssociation) {
-            return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $activityUserAssociation->getUserId(), $comparison);
-        } elseif ($activityUserAssociation instanceof ObjectCollection) {
-            return $this
-                ->useActivityUserAssociationQuery()
-                ->filterByPrimaryKeys($activityUserAssociation->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByActivityUserAssociation() only accepts arguments of type \ActivityUserAssociation or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the ActivityUserAssociation relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildUserQuery The current query, for fluid interface
-     */
-    public function joinActivityUserAssociation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('ActivityUserAssociation');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'ActivityUserAssociation');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the ActivityUserAssociation relation ActivityUserAssociation object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \ActivityUserAssociationQuery A secondary query class using the current class as primary query
-     */
-    public function useActivityUserAssociationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinActivityUserAssociation($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'ActivityUserAssociation', '\ActivityUserAssociationQuery');
     }
 
     /**

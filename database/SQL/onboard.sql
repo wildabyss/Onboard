@@ -60,16 +60,15 @@ CREATE TABLE `activity_list`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- activity_user_assoc
+-- activity_list_assoc
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `activity_user_assoc`;
+DROP TABLE IF EXISTS `activity_list_assoc`;
 
-CREATE TABLE `activity_user_assoc`
+CREATE TABLE `activity_list_assoc`
 (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `activity_id` int(10) unsigned NOT NULL,
-    `user_id` int(10) unsigned NOT NULL,
     `list_id` int(10) unsigned NOT NULL,
     `status` tinyint(3) unsigned NOT NULL,
     `date_added` DATETIME NOT NULL,
@@ -77,15 +76,10 @@ CREATE TABLE `activity_user_assoc`
     `description` VARCHAR(255),
     PRIMARY KEY (`id`),
     INDEX `activity_id` (`activity_id`),
-    INDEX `user_id` (`user_id`),
     INDEX `list_id` (`list_id`),
     CONSTRAINT `activity_user_assoc_ibfk_1`
         FOREIGN KEY (`activity_id`)
         REFERENCES `activity` (`id`)
-        ON DELETE CASCADE,
-    CONSTRAINT `activity_user_assoc_ibfk_2`
-        FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`id`)
         ON DELETE CASCADE,
     CONSTRAINT `activity_user_assoc_ibfk_3`
         FOREIGN KEY (`list_id`)

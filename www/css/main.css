@@ -16,6 +16,10 @@ body{
 	overflow: auto;
 }
 
+a:link{
+	text-decoration: none;
+}
+
 .center{
 	text-align: center;
 }
@@ -194,6 +198,9 @@ input#global_search.search{
 
 #column_wrapper_left.content_column_wrapper ul{
 	padding: 0;
+	border-style: solid none solid solid;
+	border-width: 1px;
+	border-color: #ddd;
 }
 #column_wrapper_left.content_column_wrapper li{
 	width: 100%;
@@ -212,6 +219,9 @@ input#global_search.search{
 	background-position: 6px;
 	color: #000;
 	font-size: 14px;
+}
+#column_wrapper_left.content_column_wrapper li a.selected{
+	background-color: #eee;
 }
 #column_wrapper_left.content_column_wrapper li a:hover{
 	background-color: #eee;

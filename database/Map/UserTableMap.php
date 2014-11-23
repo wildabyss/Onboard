@@ -177,7 +177,6 @@ class UserTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('ActivityList', '\\ActivityList', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'ActivityLists');
-        $this->addRelation('ActivityUserAssociation', '\\ActivityUserAssociation', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'ActivityUserAssociations');
         $this->addRelation('Discussion', '\\Discussion', RelationMap::ONE_TO_MANY, array('id' => 'owner_id', ), 'CASCADE', null, 'Discussions');
         $this->addRelation('DiscussionUserAssociation', '\\DiscussionUserAssociation', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'DiscussionUserAssociations');
         $this->addRelation('UserCommunityAssociationRelatedByUserIdLeft', '\\UserCommunityAssociation', RelationMap::ONE_TO_MANY, array('id' => 'user_id_left', ), 'CASCADE', null, 'UserCommunityAssociationsRelatedByUserIdLeft');
@@ -191,7 +190,6 @@ class UserTableMap extends TableMap
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ActivityListTableMap::clearInstancePool();
-        ActivityUserAssociationTableMap::clearInstancePool();
         DiscussionTableMap::clearInstancePool();
         DiscussionUserAssociationTableMap::clearInstancePool();
         UserCommunityAssociationTableMap::clearInstancePool();

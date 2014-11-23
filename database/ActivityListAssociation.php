@@ -1,9 +1,9 @@
 <?php
 
-use Base\ActivityUserAssociation as BaseActivityUserAssociation;
+use Base\ActivityListAssociation as BaseActivityListAssociation;
 
 /**
- * Skeleton subclass for representing a row from the 'activity_user_assoc' table.
+ * Skeleton subclass for representing a row from the 'activity_list_assoc' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\ActivityUserAssociation as BaseActivityUserAssociation;
  * long as it does not already exist in the output directory.
  *
  */
-class ActivityUserAssociation extends BaseActivityUserAssociation
+class ActivityListAssociation extends BaseActivityListAssociation
 {
 
 }

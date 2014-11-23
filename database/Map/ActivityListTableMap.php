@@ -147,7 +147,7 @@ class ActivityListTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('ActivityUserAssociation', '\\ActivityUserAssociation', RelationMap::ONE_TO_MANY, array('id' => 'list_id', ), 'CASCADE', null, 'ActivityUserAssociations');
+        $this->addRelation('ActivityListAssociation', '\\ActivityListAssociation', RelationMap::ONE_TO_MANY, array('id' => 'list_id', ), 'CASCADE', null, 'ActivityListAssociations');
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to activity_list     * by a foreign key with ON DELETE CASCADE
@@ -156,7 +156,7 @@ class ActivityListTableMap extends TableMap
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ActivityUserAssociationTableMap::clearInstancePool();
+        ActivityListAssociationTableMap::clearInstancePool();
     }
 
     /**

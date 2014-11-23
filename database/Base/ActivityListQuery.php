@@ -36,11 +36,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildActivityListQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
  * @method     ChildActivityListQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildActivityListQuery leftJoinActivityUserAssociation($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivityUserAssociation relation
- * @method     ChildActivityListQuery rightJoinActivityUserAssociation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityUserAssociation relation
- * @method     ChildActivityListQuery innerJoinActivityUserAssociation($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityUserAssociation relation
+ * @method     ChildActivityListQuery leftJoinActivityListAssociation($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivityListAssociation relation
+ * @method     ChildActivityListQuery rightJoinActivityListAssociation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityListAssociation relation
+ * @method     ChildActivityListQuery innerJoinActivityListAssociation($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityListAssociation relation
  *
- * @method     \UserQuery|\ActivityUserAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \UserQuery|\ActivityListAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildActivityList findOne(ConnectionInterface $con = null) Return the first ChildActivityList matching the query
  * @method     ChildActivityList findOneOrCreate(ConnectionInterface $con = null) Return the first ChildActivityList matching the query, or a new ChildActivityList object populated from the query conditions when no match is found
@@ -425,40 +425,40 @@ abstract class ActivityListQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \ActivityUserAssociation object
+     * Filter the query by a related \ActivityListAssociation object
      *
-     * @param \ActivityUserAssociation|ObjectCollection $activityUserAssociation  the related object to use as filter
+     * @param \ActivityListAssociation|ObjectCollection $activityListAssociation  the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildActivityListQuery The current query, for fluid interface
      */
-    public function filterByActivityUserAssociation($activityUserAssociation, $comparison = null)
+    public function filterByActivityListAssociation($activityListAssociation, $comparison = null)
     {
-        if ($activityUserAssociation instanceof \ActivityUserAssociation) {
+        if ($activityListAssociation instanceof \ActivityListAssociation) {
             return $this
-                ->addUsingAlias(ActivityListTableMap::COL_ID, $activityUserAssociation->getListId(), $comparison);
-        } elseif ($activityUserAssociation instanceof ObjectCollection) {
+                ->addUsingAlias(ActivityListTableMap::COL_ID, $activityListAssociation->getListId(), $comparison);
+        } elseif ($activityListAssociation instanceof ObjectCollection) {
             return $this
-                ->useActivityUserAssociationQuery()
-                ->filterByPrimaryKeys($activityUserAssociation->getPrimaryKeys())
+                ->useActivityListAssociationQuery()
+                ->filterByPrimaryKeys($activityListAssociation->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByActivityUserAssociation() only accepts arguments of type \ActivityUserAssociation or Collection');
+            throw new PropelException('filterByActivityListAssociation() only accepts arguments of type \ActivityListAssociation or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the ActivityUserAssociation relation
+     * Adds a JOIN clause to the query using the ActivityListAssociation relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildActivityListQuery The current query, for fluid interface
      */
-    public function joinActivityUserAssociation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinActivityListAssociation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('ActivityUserAssociation');
+        $relationMap = $tableMap->getRelation('ActivityListAssociation');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -473,14 +473,14 @@ abstract class ActivityListQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'ActivityUserAssociation');
+            $this->addJoinObject($join, 'ActivityListAssociation');
         }
 
         return $this;
     }
 
     /**
-     * Use the ActivityUserAssociation relation ActivityUserAssociation object
+     * Use the ActivityListAssociation relation ActivityListAssociation object
      *
      * @see useQuery()
      *
@@ -488,13 +488,13 @@ abstract class ActivityListQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \ActivityUserAssociationQuery A secondary query class using the current class as primary query
+     * @return \ActivityListAssociationQuery A secondary query class using the current class as primary query
      */
-    public function useActivityUserAssociationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useActivityListAssociationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinActivityUserAssociation($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'ActivityUserAssociation', '\ActivityUserAssociationQuery');
+            ->joinActivityListAssociation($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ActivityListAssociation', '\ActivityListAssociationQuery');
     }
 
     /**

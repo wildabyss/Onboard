@@ -3,9 +3,9 @@
 namespace Base;
 
 use \ActivityList as ChildActivityList;
+use \ActivityListAssociation as ChildActivityListAssociation;
+use \ActivityListAssociationQuery as ChildActivityListAssociationQuery;
 use \ActivityListQuery as ChildActivityListQuery;
-use \ActivityUserAssociation as ChildActivityUserAssociation;
-use \ActivityUserAssociationQuery as ChildActivityUserAssociationQuery;
 use \User as ChildUser;
 use \UserQuery as ChildUserQuery;
 use \Exception;
@@ -89,10 +89,10 @@ abstract class ActivityList implements ActiveRecordInterface
     protected $aUser;
 
     /**
-     * @var        ObjectCollection|ChildActivityUserAssociation[] Collection to store aggregation of ChildActivityUserAssociation objects.
+     * @var        ObjectCollection|ChildActivityListAssociation[] Collection to store aggregation of ChildActivityListAssociation objects.
      */
-    protected $collActivityUserAssociations;
-    protected $collActivityUserAssociationsPartial;
+    protected $collActivityListAssociations;
+    protected $collActivityListAssociationsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -104,9 +104,9 @@ abstract class ActivityList implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildActivityUserAssociation[]
+     * @var ObjectCollection|ChildActivityListAssociation[]
      */
-    protected $activityUserAssociationsScheduledForDeletion = null;
+    protected $activityListAssociationsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\ActivityList object.
@@ -536,7 +536,7 @@ abstract class ActivityList implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aUser = null;
-            $this->collActivityUserAssociations = null;
+            $this->collActivityListAssociations = null;
 
         } // if (deep)
     }
@@ -660,17 +660,17 @@ abstract class ActivityList implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->activityUserAssociationsScheduledForDeletion !== null) {
-                if (!$this->activityUserAssociationsScheduledForDeletion->isEmpty()) {
-                    \ActivityUserAssociationQuery::create()
-                        ->filterByPrimaryKeys($this->activityUserAssociationsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->activityListAssociationsScheduledForDeletion !== null) {
+                if (!$this->activityListAssociationsScheduledForDeletion->isEmpty()) {
+                    \ActivityListAssociationQuery::create()
+                        ->filterByPrimaryKeys($this->activityListAssociationsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->activityUserAssociationsScheduledForDeletion = null;
+                    $this->activityListAssociationsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collActivityUserAssociations !== null) {
-                foreach ($this->collActivityUserAssociations as $referrerFK) {
+            if ($this->collActivityListAssociations !== null) {
+                foreach ($this->collActivityListAssociations as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -858,20 +858,20 @@ abstract class ActivityList implements ActiveRecordInterface
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->collActivityUserAssociations) {
+            if (null !== $this->collActivityListAssociations) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'activityUserAssociations';
+                        $key = 'activityListAssociations';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'activity_user_assocs';
+                        $key = 'activity_list_assocs';
                         break;
                     default:
-                        $key = 'ActivityUserAssociations';
+                        $key = 'ActivityListAssociations';
                 }
 
-                $result[$key] = $this->collActivityUserAssociations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collActivityListAssociations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1095,9 +1095,9 @@ abstract class ActivityList implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getActivityUserAssociations() as $relObj) {
+            foreach ($this->getActivityListAssociations() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addActivityUserAssociation($relObj->copy($deepCopy));
+                    $copyObj->addActivityListAssociation($relObj->copy($deepCopy));
                 }
             }
 
@@ -1193,37 +1193,37 @@ abstract class ActivityList implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('ActivityUserAssociation' == $relationName) {
-            return $this->initActivityUserAssociations();
+        if ('ActivityListAssociation' == $relationName) {
+            return $this->initActivityListAssociations();
         }
     }
 
     /**
-     * Clears out the collActivityUserAssociations collection
+     * Clears out the collActivityListAssociations collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addActivityUserAssociations()
+     * @see        addActivityListAssociations()
      */
-    public function clearActivityUserAssociations()
+    public function clearActivityListAssociations()
     {
-        $this->collActivityUserAssociations = null; // important to set this to NULL since that means it is uninitialized
+        $this->collActivityListAssociations = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collActivityUserAssociations collection loaded partially.
+     * Reset is the collActivityListAssociations collection loaded partially.
      */
-    public function resetPartialActivityUserAssociations($v = true)
+    public function resetPartialActivityListAssociations($v = true)
     {
-        $this->collActivityUserAssociationsPartial = $v;
+        $this->collActivityListAssociationsPartial = $v;
     }
 
     /**
-     * Initializes the collActivityUserAssociations collection.
+     * Initializes the collActivityListAssociations collection.
      *
-     * By default this just sets the collActivityUserAssociations collection to an empty array (like clearcollActivityUserAssociations());
+     * By default this just sets the collActivityListAssociations collection to an empty array (like clearcollActivityListAssociations());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1232,17 +1232,17 @@ abstract class ActivityList implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initActivityUserAssociations($overrideExisting = true)
+    public function initActivityListAssociations($overrideExisting = true)
     {
-        if (null !== $this->collActivityUserAssociations && !$overrideExisting) {
+        if (null !== $this->collActivityListAssociations && !$overrideExisting) {
             return;
         }
-        $this->collActivityUserAssociations = new ObjectCollection();
-        $this->collActivityUserAssociations->setModel('\ActivityUserAssociation');
+        $this->collActivityListAssociations = new ObjectCollection();
+        $this->collActivityListAssociations->setModel('\ActivityListAssociation');
     }
 
     /**
-     * Gets an array of ChildActivityUserAssociation objects which contain a foreign key that references this object.
+     * Gets an array of ChildActivityListAssociation objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1252,108 +1252,108 @@ abstract class ActivityList implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildActivityUserAssociation[] List of ChildActivityUserAssociation objects
+     * @return ObjectCollection|ChildActivityListAssociation[] List of ChildActivityListAssociation objects
      * @throws PropelException
      */
-    public function getActivityUserAssociations(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getActivityListAssociations(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collActivityUserAssociationsPartial && !$this->isNew();
-        if (null === $this->collActivityUserAssociations || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collActivityUserAssociations) {
+        $partial = $this->collActivityListAssociationsPartial && !$this->isNew();
+        if (null === $this->collActivityListAssociations || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collActivityListAssociations) {
                 // return empty collection
-                $this->initActivityUserAssociations();
+                $this->initActivityListAssociations();
             } else {
-                $collActivityUserAssociations = ChildActivityUserAssociationQuery::create(null, $criteria)
+                $collActivityListAssociations = ChildActivityListAssociationQuery::create(null, $criteria)
                     ->filterByActivityList($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collActivityUserAssociationsPartial && count($collActivityUserAssociations)) {
-                        $this->initActivityUserAssociations(false);
+                    if (false !== $this->collActivityListAssociationsPartial && count($collActivityListAssociations)) {
+                        $this->initActivityListAssociations(false);
 
-                        foreach ($collActivityUserAssociations as $obj) {
-                            if (false == $this->collActivityUserAssociations->contains($obj)) {
-                                $this->collActivityUserAssociations->append($obj);
+                        foreach ($collActivityListAssociations as $obj) {
+                            if (false == $this->collActivityListAssociations->contains($obj)) {
+                                $this->collActivityListAssociations->append($obj);
                             }
                         }
 
-                        $this->collActivityUserAssociationsPartial = true;
+                        $this->collActivityListAssociationsPartial = true;
                     }
 
-                    return $collActivityUserAssociations;
+                    return $collActivityListAssociations;
                 }
 
-                if ($partial && $this->collActivityUserAssociations) {
-                    foreach ($this->collActivityUserAssociations as $obj) {
+                if ($partial && $this->collActivityListAssociations) {
+                    foreach ($this->collActivityListAssociations as $obj) {
                         if ($obj->isNew()) {
-                            $collActivityUserAssociations[] = $obj;
+                            $collActivityListAssociations[] = $obj;
                         }
                     }
                 }
 
-                $this->collActivityUserAssociations = $collActivityUserAssociations;
-                $this->collActivityUserAssociationsPartial = false;
+                $this->collActivityListAssociations = $collActivityListAssociations;
+                $this->collActivityListAssociationsPartial = false;
             }
         }
 
-        return $this->collActivityUserAssociations;
+        return $this->collActivityListAssociations;
     }
 
     /**
-     * Sets a collection of ChildActivityUserAssociation objects related by a one-to-many relationship
+     * Sets a collection of ChildActivityListAssociation objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $activityUserAssociations A Propel collection.
+     * @param      Collection $activityListAssociations A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildActivityList The current object (for fluent API support)
      */
-    public function setActivityUserAssociations(Collection $activityUserAssociations, ConnectionInterface $con = null)
+    public function setActivityListAssociations(Collection $activityListAssociations, ConnectionInterface $con = null)
     {
-        /** @var ChildActivityUserAssociation[] $activityUserAssociationsToDelete */
-        $activityUserAssociationsToDelete = $this->getActivityUserAssociations(new Criteria(), $con)->diff($activityUserAssociations);
+        /** @var ChildActivityListAssociation[] $activityListAssociationsToDelete */
+        $activityListAssociationsToDelete = $this->getActivityListAssociations(new Criteria(), $con)->diff($activityListAssociations);
 
 
-        $this->activityUserAssociationsScheduledForDeletion = $activityUserAssociationsToDelete;
+        $this->activityListAssociationsScheduledForDeletion = $activityListAssociationsToDelete;
 
-        foreach ($activityUserAssociationsToDelete as $activityUserAssociationRemoved) {
-            $activityUserAssociationRemoved->setActivityList(null);
+        foreach ($activityListAssociationsToDelete as $activityListAssociationRemoved) {
+            $activityListAssociationRemoved->setActivityList(null);
         }
 
-        $this->collActivityUserAssociations = null;
-        foreach ($activityUserAssociations as $activityUserAssociation) {
-            $this->addActivityUserAssociation($activityUserAssociation);
+        $this->collActivityListAssociations = null;
+        foreach ($activityListAssociations as $activityListAssociation) {
+            $this->addActivityListAssociation($activityListAssociation);
         }
 
-        $this->collActivityUserAssociations = $activityUserAssociations;
-        $this->collActivityUserAssociationsPartial = false;
+        $this->collActivityListAssociations = $activityListAssociations;
+        $this->collActivityListAssociationsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related ActivityUserAssociation objects.
+     * Returns the number of related ActivityListAssociation objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related ActivityUserAssociation objects.
+     * @return int             Count of related ActivityListAssociation objects.
      * @throws PropelException
      */
-    public function countActivityUserAssociations(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countActivityListAssociations(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collActivityUserAssociationsPartial && !$this->isNew();
-        if (null === $this->collActivityUserAssociations || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collActivityUserAssociations) {
+        $partial = $this->collActivityListAssociationsPartial && !$this->isNew();
+        if (null === $this->collActivityListAssociations || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collActivityListAssociations) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getActivityUserAssociations());
+                return count($this->getActivityListAssociations());
             }
 
-            $query = ChildActivityUserAssociationQuery::create(null, $criteria);
+            $query = ChildActivityListAssociationQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1363,54 +1363,54 @@ abstract class ActivityList implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collActivityUserAssociations);
+        return count($this->collActivityListAssociations);
     }
 
     /**
-     * Method called to associate a ChildActivityUserAssociation object to this object
-     * through the ChildActivityUserAssociation foreign key attribute.
+     * Method called to associate a ChildActivityListAssociation object to this object
+     * through the ChildActivityListAssociation foreign key attribute.
      *
-     * @param  ChildActivityUserAssociation $l ChildActivityUserAssociation
+     * @param  ChildActivityListAssociation $l ChildActivityListAssociation
      * @return $this|\ActivityList The current object (for fluent API support)
      */
-    public function addActivityUserAssociation(ChildActivityUserAssociation $l)
+    public function addActivityListAssociation(ChildActivityListAssociation $l)
     {
-        if ($this->collActivityUserAssociations === null) {
-            $this->initActivityUserAssociations();
-            $this->collActivityUserAssociationsPartial = true;
+        if ($this->collActivityListAssociations === null) {
+            $this->initActivityListAssociations();
+            $this->collActivityListAssociationsPartial = true;
         }
 
-        if (!$this->collActivityUserAssociations->contains($l)) {
-            $this->doAddActivityUserAssociation($l);
+        if (!$this->collActivityListAssociations->contains($l)) {
+            $this->doAddActivityListAssociation($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildActivityUserAssociation $activityUserAssociation The ChildActivityUserAssociation object to add.
+     * @param ChildActivityListAssociation $activityListAssociation The ChildActivityListAssociation object to add.
      */
-    protected function doAddActivityUserAssociation(ChildActivityUserAssociation $activityUserAssociation)
+    protected function doAddActivityListAssociation(ChildActivityListAssociation $activityListAssociation)
     {
-        $this->collActivityUserAssociations[]= $activityUserAssociation;
-        $activityUserAssociation->setActivityList($this);
+        $this->collActivityListAssociations[]= $activityListAssociation;
+        $activityListAssociation->setActivityList($this);
     }
 
     /**
-     * @param  ChildActivityUserAssociation $activityUserAssociation The ChildActivityUserAssociation object to remove.
+     * @param  ChildActivityListAssociation $activityListAssociation The ChildActivityListAssociation object to remove.
      * @return $this|ChildActivityList The current object (for fluent API support)
      */
-    public function removeActivityUserAssociation(ChildActivityUserAssociation $activityUserAssociation)
+    public function removeActivityListAssociation(ChildActivityListAssociation $activityListAssociation)
     {
-        if ($this->getActivityUserAssociations()->contains($activityUserAssociation)) {
-            $pos = $this->collActivityUserAssociations->search($activityUserAssociation);
-            $this->collActivityUserAssociations->remove($pos);
-            if (null === $this->activityUserAssociationsScheduledForDeletion) {
-                $this->activityUserAssociationsScheduledForDeletion = clone $this->collActivityUserAssociations;
-                $this->activityUserAssociationsScheduledForDeletion->clear();
+        if ($this->getActivityListAssociations()->contains($activityListAssociation)) {
+            $pos = $this->collActivityListAssociations->search($activityListAssociation);
+            $this->collActivityListAssociations->remove($pos);
+            if (null === $this->activityListAssociationsScheduledForDeletion) {
+                $this->activityListAssociationsScheduledForDeletion = clone $this->collActivityListAssociations;
+                $this->activityListAssociationsScheduledForDeletion->clear();
             }
-            $this->activityUserAssociationsScheduledForDeletion[]= clone $activityUserAssociation;
-            $activityUserAssociation->setActivityList(null);
+            $this->activityListAssociationsScheduledForDeletion[]= clone $activityListAssociation;
+            $activityListAssociation->setActivityList(null);
         }
 
         return $this;
@@ -1422,7 +1422,7 @@ abstract class ActivityList implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this ActivityList is new, it will return
      * an empty collection; or if this ActivityList has previously
-     * been saved, it will retrieve related ActivityUserAssociations from storage.
+     * been saved, it will retrieve related ActivityListAssociations from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -1431,39 +1431,14 @@ abstract class ActivityList implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildActivityUserAssociation[] List of ChildActivityUserAssociation objects
+     * @return ObjectCollection|ChildActivityListAssociation[] List of ChildActivityListAssociation objects
      */
-    public function getActivityUserAssociationsJoinActivity(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getActivityListAssociationsJoinActivity(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildActivityUserAssociationQuery::create(null, $criteria);
+        $query = ChildActivityListAssociationQuery::create(null, $criteria);
         $query->joinWith('Activity', $joinBehavior);
 
-        return $this->getActivityUserAssociations($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this ActivityList is new, it will return
-     * an empty collection; or if this ActivityList has previously
-     * been saved, it will retrieve related ActivityUserAssociations from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in ActivityList.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildActivityUserAssociation[] List of ChildActivityUserAssociation objects
-     */
-    public function getActivityUserAssociationsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildActivityUserAssociationQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
-
-        return $this->getActivityUserAssociations($query, $con);
+        return $this->getActivityListAssociations($query, $con);
     }
 
     /**
@@ -1497,14 +1472,14 @@ abstract class ActivityList implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collActivityUserAssociations) {
-                foreach ($this->collActivityUserAssociations as $o) {
+            if ($this->collActivityListAssociations) {
+                foreach ($this->collActivityListAssociations as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collActivityUserAssociations = null;
+        $this->collActivityListAssociations = null;
         $this->aUser = null;
     }
 

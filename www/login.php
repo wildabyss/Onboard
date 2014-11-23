@@ -1,5 +1,4 @@
-<?php error_reporting(E_ALL); ?>
-<?php require_once("../../Onboard/Utilities.php"); ?>
+<?php require_once("../loading.php"); ?>
 
 <?php if (isset($logged_in)) {
 	header("Location: index.php");

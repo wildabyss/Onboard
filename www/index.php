@@ -1,14 +1,18 @@
-<?php require_once("../Utilities.php"); ?>
-<?php require_once("../vendor/autoload.php"); ?>
+<?php require_once("../loading.php"); ?>
 
-<?php if (isset($logged_in)) {
-	header("Location: login.php");
-	die();
-}
+<?php 
+	if (isset($logged_in)) {
+		// Check login status, redirect to login if necessary
+		header("Location: login.php");
+		die();
+	}
 ?>
 
 <?php
-	$firstAuthor = UserQuery::create()->findPK(1);
+	// For development testing only
+	$user = UserQuery::create()
+		->filterByDisplayName('Jimmy Lu')
+		->findOne();
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +49,9 @@
 					<div class="content_column_wrapper" id="column_wrapper_middle">
 						<div id="profile_section">
 							<a id="profile_pic"></a>
-							<h1 id="profile_name">Jimmy Lu</h1>
+							<h1 class="profile_name"><?php echo $user->getDisplayName();?></h1>
+							<a class="user_info">Email: <?php echo $user->getEmail();?></a>
+							<a class="user_info">Phone: <?php echo $user->getPhone();?></a>
 						</div>
 						<div class="modification_bar">
 							<a class="add">New Activity</a>
@@ -65,12 +71,6 @@
 									Rock climb at the local gyms.
 								</p>
 								<div class="expand">...</div>
-							</li>
-							<li>
-								<h2>Watch Interstellar</h2>
-								<p>
-									Interstellar just came out! I want to watch!
-								</p>
 							</li>
 						</ul>
 					</div>

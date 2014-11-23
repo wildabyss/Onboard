@@ -21,7 +21,7 @@ body{
 }
 
 h1{
-	font-size: 17px;
+	font-size: 16px;
 	margin: 0;
 	margin-bottom: 20px;
 }
@@ -246,9 +246,17 @@ input#global_search.search{
 	background-color: gray;
 }
 
-h1#profile_name{
-	float: left;
-	margin: 20px;
+.profile_name{
+	display: block;
+	margin-top: 20px;
+	margin-left: 120px;
+}
+
+.user_info{
+	color: #808080;
+	display: block;
+	margin-top: 5px;
+	margin-left: 120px;
 }
 
 /* member's activity items */

@@ -1,0 +1,10 @@
+propel:
+  database:
+      connections:
+          mysource:
+              adapter: mysql
+              classname: Propel\Runtime\Connection\DebugPDO
+              dsn: mysql:host=localhost;dbname=onboard
+              user: server_user
+              password: server_user
+              attributes:

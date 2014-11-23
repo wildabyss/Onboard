@@ -1,5 +1,15 @@
-<?php error_reporting(E_ALL); ?>
-<?php require_once("../../Onboard/Utilities.php"); ?>
+<?php require_once("../Utilities.php"); ?>
+<?php require_once("../vendor/autoload.php"); ?>
+
+<?php if (isset($logged_in)) {
+	header("Location: login.php");
+	die();
+}
+?>
+
+<?php
+	$firstAuthor = UserQuery::create()->findPK(1);
+?>
 
 <!DOCTYPE html>
 <html>
@@ -10,9 +20,10 @@
 		<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" />
 	</head>
 	<body>
+		<script type="text/javascript" src="js/main_page.js"></script>
 		<div id="global_wrapper">
 			<div id="header">
-				<a id="header_logo"></a>
+				<a href="index.php" id="header_logo"></a>
 				<input class="search" id="global_search" />
 				<a id="header_options"></a>
 			</div>
@@ -32,12 +43,34 @@
 				<!-- main content -->
 				<div class="content_column" id="column_middle">
 					<div class="content_column_wrapper" id="column_wrapper_middle">
+						<div id="profile_section">
+							<a id="profile_pic"></a>
+							<h1 id="profile_name">Jimmy Lu</h1>
+						</div>
+						<div class="modification_bar">
+							<a class="add">New Activity</a>
+						</div>
 						<ul class="activity_list">
 							<li>
-								Activity 1
+								<h2>Rock climbing</h2>
+								<a class="details" onclick="displayDetailsBox('activity_edit_1')"></a>
+								<div class="details_box" id="activity_edit_1">
+									<a class="checked detail_box_item">Mark as completed</a>
+									<a class="edit detail_box_item">Edit</a>
+									<a class="delete detail_box_item">Delete</a>
+								</div>
+								<a class="datetime">Added: 2014-11-22 19:44</a>
+								<a class="interest_tally">5 interests</a>
+								<p class="post_body">
+									Rock climb at the local gyms.
+								</p>
+								<div class="expand">...</div>
 							</li>
 							<li>
-								Activity 2
+								<h2>Watch Interstellar</h2>
+								<p>
+									Interstellar just came out! I want to watch!
+								</p>
 							</li>
 						</ul>
 					</div>
@@ -55,7 +88,7 @@
 				<!-- news feed -->
 				<div class="content_column" id="column_right">
 					<div class="content_column_wrapper" id="column_wrapper_right">
-						Right
+						New Feed
 					</div>
 				</div>
 			</div>

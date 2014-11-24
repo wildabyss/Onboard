@@ -108,6 +108,12 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     protected $description;
 
     /**
+     * The value for the is_owner field.
+     * @var        int
+     */
+    protected $is_owner;
+
+    /**
      * @var        ChildActivity
      */
     protected $aActivity;
@@ -423,6 +429,16 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     }
 
     /**
+     * Get the [is_owner] column value.
+     *
+     * @return int
+     */
+    public function getIsOwner()
+    {
+        return $this->is_owner;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param  string $v new value
@@ -571,6 +587,26 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     } // setDescription()
 
     /**
+     * Set the value of [is_owner] column.
+     *
+     * @param  int $v new value
+     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     */
+    public function setIsOwner($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->is_owner !== $v) {
+            $this->is_owner = $v;
+            $this->modifiedColumns[ActivityListAssociationTableMap::COL_IS_OWNER] = true;
+        }
+
+        return $this;
+    } // setIsOwner()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -629,6 +665,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ActivityListAssociationTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ActivityListAssociationTableMap::translateFieldName('IsOwner', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->is_owner = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -637,7 +676,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = ActivityListAssociationTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = ActivityListAssociationTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\ActivityListAssociation'), 0, $e);
@@ -882,6 +921,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         if ($this->isColumnModified(ActivityListAssociationTableMap::COL_DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'description';
         }
+        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_IS_OWNER)) {
+            $modifiedColumns[':p' . $index++]  = 'is_owner';
+        }
 
         $sql = sprintf(
             'INSERT INTO activity_list_assoc (%s) VALUES (%s)',
@@ -913,6 +955,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                         break;
                     case 'description':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case 'is_owner':
+                        $stmt->bindValue($identifier, $this->is_owner, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -997,6 +1042,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
             case 6:
                 return $this->getDescription();
                 break;
+            case 7:
+                return $this->getIsOwner();
+                break;
             default:
                 return null;
                 break;
@@ -1034,6 +1082,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
             $keys[4] => $this->getDateAdded(),
             $keys[5] => $this->getAlias(),
             $keys[6] => $this->getDescription(),
+            $keys[7] => $this->getIsOwner(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1126,6 +1175,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
             case 6:
                 $this->setDescription($value);
                 break;
+            case 7:
+                $this->setIsOwner($value);
+                break;
         } // switch()
 
         return $this;
@@ -1172,6 +1224,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setDescription($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setIsOwner($arr[$keys[7]]);
         }
     }
 
@@ -1234,6 +1289,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         }
         if ($this->isColumnModified(ActivityListAssociationTableMap::COL_DESCRIPTION)) {
             $criteria->add(ActivityListAssociationTableMap::COL_DESCRIPTION, $this->description);
+        }
+        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_IS_OWNER)) {
+            $criteria->add(ActivityListAssociationTableMap::COL_IS_OWNER, $this->is_owner);
         }
 
         return $criteria;
@@ -1327,6 +1385,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         $copyObj->setDateAdded($this->getDateAdded());
         $copyObj->setAlias($this->getAlias());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setIsOwner($this->getIsOwner());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1477,6 +1536,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         $this->date_added = null;
         $this->alias = null;
         $this->description = null;
+        $this->is_owner = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

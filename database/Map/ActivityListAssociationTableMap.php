@@ -59,7 +59,7 @@ class ActivityListAssociationTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class ActivityListAssociationTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
@@ -107,6 +107,11 @@ class ActivityListAssociationTableMap extends TableMap
     const COL_DESCRIPTION = 'activity_list_assoc.description';
 
     /**
+     * the column name for the is_owner field
+     */
+    const COL_IS_OWNER = 'activity_list_assoc.is_owner';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -118,11 +123,11 @@ class ActivityListAssociationTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ActivityId', 'ListId', 'Status', 'DateAdded', 'Alias', 'Description', ),
-        self::TYPE_CAMELNAME     => array('id', 'activityId', 'listId', 'status', 'dateAdded', 'alias', 'description', ),
-        self::TYPE_COLNAME       => array(ActivityListAssociationTableMap::COL_ID, ActivityListAssociationTableMap::COL_ACTIVITY_ID, ActivityListAssociationTableMap::COL_LIST_ID, ActivityListAssociationTableMap::COL_STATUS, ActivityListAssociationTableMap::COL_DATE_ADDED, ActivityListAssociationTableMap::COL_ALIAS, ActivityListAssociationTableMap::COL_DESCRIPTION, ),
-        self::TYPE_FIELDNAME     => array('id', 'activity_id', 'list_id', 'status', 'date_added', 'alias', 'description', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'ActivityId', 'ListId', 'Status', 'DateAdded', 'Alias', 'Description', 'IsOwner', ),
+        self::TYPE_CAMELNAME     => array('id', 'activityId', 'listId', 'status', 'dateAdded', 'alias', 'description', 'isOwner', ),
+        self::TYPE_COLNAME       => array(ActivityListAssociationTableMap::COL_ID, ActivityListAssociationTableMap::COL_ACTIVITY_ID, ActivityListAssociationTableMap::COL_LIST_ID, ActivityListAssociationTableMap::COL_STATUS, ActivityListAssociationTableMap::COL_DATE_ADDED, ActivityListAssociationTableMap::COL_ALIAS, ActivityListAssociationTableMap::COL_DESCRIPTION, ActivityListAssociationTableMap::COL_IS_OWNER, ),
+        self::TYPE_FIELDNAME     => array('id', 'activity_id', 'list_id', 'status', 'date_added', 'alias', 'description', 'is_owner', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class ActivityListAssociationTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ActivityId' => 1, 'ListId' => 2, 'Status' => 3, 'DateAdded' => 4, 'Alias' => 5, 'Description' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'activityId' => 1, 'listId' => 2, 'status' => 3, 'dateAdded' => 4, 'alias' => 5, 'description' => 6, ),
-        self::TYPE_COLNAME       => array(ActivityListAssociationTableMap::COL_ID => 0, ActivityListAssociationTableMap::COL_ACTIVITY_ID => 1, ActivityListAssociationTableMap::COL_LIST_ID => 2, ActivityListAssociationTableMap::COL_STATUS => 3, ActivityListAssociationTableMap::COL_DATE_ADDED => 4, ActivityListAssociationTableMap::COL_ALIAS => 5, ActivityListAssociationTableMap::COL_DESCRIPTION => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'activity_id' => 1, 'list_id' => 2, 'status' => 3, 'date_added' => 4, 'alias' => 5, 'description' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'ActivityId' => 1, 'ListId' => 2, 'Status' => 3, 'DateAdded' => 4, 'Alias' => 5, 'Description' => 6, 'IsOwner' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'activityId' => 1, 'listId' => 2, 'status' => 3, 'dateAdded' => 4, 'alias' => 5, 'description' => 6, 'isOwner' => 7, ),
+        self::TYPE_COLNAME       => array(ActivityListAssociationTableMap::COL_ID => 0, ActivityListAssociationTableMap::COL_ACTIVITY_ID => 1, ActivityListAssociationTableMap::COL_LIST_ID => 2, ActivityListAssociationTableMap::COL_STATUS => 3, ActivityListAssociationTableMap::COL_DATE_ADDED => 4, ActivityListAssociationTableMap::COL_ALIAS => 5, ActivityListAssociationTableMap::COL_DESCRIPTION => 6, ActivityListAssociationTableMap::COL_IS_OWNER => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'activity_id' => 1, 'list_id' => 2, 'status' => 3, 'date_added' => 4, 'alias' => 5, 'description' => 6, 'is_owner' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -163,6 +168,7 @@ class ActivityListAssociationTableMap extends TableMap
         $this->addColumn('date_added', 'DateAdded', 'TIMESTAMP', true, null, null);
         $this->addColumn('alias', 'Alias', 'VARCHAR', false, 255, null);
         $this->addColumn('description', 'Description', 'VARCHAR', false, 255, null);
+        $this->addColumn('is_owner', 'IsOwner', 'TINYINT', true, 3, null);
     } // initialize()
 
     /**
@@ -322,6 +328,7 @@ class ActivityListAssociationTableMap extends TableMap
             $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_DATE_ADDED);
             $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_ALIAS);
             $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_IS_OWNER);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.activity_id');
@@ -330,6 +337,7 @@ class ActivityListAssociationTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.date_added');
             $criteria->addSelectColumn($alias . '.alias');
             $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.is_owner');
         }
     }
 

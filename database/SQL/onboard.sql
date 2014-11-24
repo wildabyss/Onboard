@@ -74,6 +74,7 @@ CREATE TABLE `activity_list_assoc`
     `date_added` DATETIME NOT NULL,
     `alias` VARCHAR(255),
     `description` VARCHAR(255),
+    `is_owner` tinyint(3) unsigned NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `activity_id` (`activity_id`),
     INDEX `list_id` (`list_id`),

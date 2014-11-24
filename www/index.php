@@ -9,9 +9,9 @@
 ?>
 
 <?php
-	// For development testing only
+	// FIXME: For development testing only
 	$user = UserQuery::create()
-		->filterByDisplayName('Jimmy Lu')
+		->filterByDisplayName('Ken Li')
 		->findOne();
 ?>
 
@@ -27,6 +27,7 @@
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
+	
 		<div id="profile_section">
 			<a id="profile_pic"></a>
 			<h1 class="profile_name"><?php echo $user->getDisplayName();?></h1>
@@ -36,23 +37,50 @@
 		<div class="modification_bar">
 			<a class="add">New Activity</a>
 		</div>
-		<ul class="activity_list">
-			<li>
-				<h2>Rock climbing</h2>
-				<a class="details" onclick="displayDetailsBox('activity_edit_1')"></a>
-				<div class="details_box" id="activity_edit_1">
-					<a class="checked detail_box_item">Mark as completed</a>
-					<a class="edit detail_box_item">Edit</a>
-					<a class="delete detail_box_item">Delete</a>
-				</div>
-				<a class="datetime">Added: 2014-11-22 19:44</a>
-				<a class="interest_tally">5 interests</a>
-				<p class="post_body">
-					Rock climb at the local gyms.
-				</p>
-				<div class="expand">...</div>
-			</li>
-		</ul>
+		
+		<?php $activityLists = $user->getActivityLists(); ?>
+		<?php foreach ($activityLists as $list):?>
+		
+			<?php if ($list->countActivityListAssociations() == 0):?>
+			
+				<p>You currently have no activity. Add one to get started.</p>
+				
+			<?php else:?>
+		
+				<ul class="activity_list">
+				
+					<?php 
+						// get activities associated with this user
+						$criteria = $list->buildCriteria()->addAscendingOrderByColumn(\Map\ActivityListAssociationTableMap::COL_ALIAS);
+						$activities = $list->getActivityListAssociationsJoinActivity($criteria);
+					?>
+					
+					<?php for ($i=0; $i<count($activities); $i++):?>
+						<?php $actAssoc = $activities[$i];?>
+						
+						<li>
+							<h2><?php echo $actAssoc->getAlias();?></h2>
+							<a class="details" onclick="displayDetailsBox('activity_edit_<?php echo $i;?>')"></a>
+							<div class="details_box" id="activity_edit_<?php echo $i;?>">
+								<a class="checked detail_box_item">Mark as completed</a>
+								<a class="edit detail_box_item">Edit</a>
+								<a class="delete detail_box_item">Delete</a>
+							</div>
+							<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
+							<a class="interest_tally">
+								<?php echo count(ActivityListAssociationQuery::create()->filterByActivityId($actAssoc->getActivityId())->find())-1;?>
+								interests
+							</a>
+							<p class="post_body">
+								<?php echo $actAssoc->getDescription();?>
+							</p>
+							<div class="expand">...</div>
+						</li>
+					<?php endfor;?>
+				</ul>
+			<?php endif;?>
+		<?php endforeach;?>
+			
 	</div>
 	
 	<div id="footer">

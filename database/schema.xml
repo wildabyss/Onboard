@@ -52,6 +52,7 @@
 		<column name="date_added" phpName="DateAdded" type="TIMESTAMP" required="true"/>
 		<column name="alias" phpName="Alias" type="VARCHAR" size="255"/>
 		<column name="description" phpName="Description" type="VARCHAR" size="255"/>
+		<column name="is_owner" phpName="IsOwner" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" required="true"/>
 		<foreign-key foreignTable="activity" name="activity_user_assoc_ibfk_1" onDelete="CASCADE">
 			<reference local="activity_id" foreign="id"/>
 		</foreign-key>

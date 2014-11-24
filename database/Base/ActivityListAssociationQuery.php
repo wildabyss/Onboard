@@ -27,6 +27,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildActivityListAssociationQuery orderByDateAdded($order = Criteria::ASC) Order by the date_added column
  * @method     ChildActivityListAssociationQuery orderByAlias($order = Criteria::ASC) Order by the alias column
  * @method     ChildActivityListAssociationQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildActivityListAssociationQuery orderByIsOwner($order = Criteria::ASC) Order by the is_owner column
  *
  * @method     ChildActivityListAssociationQuery groupById() Group by the id column
  * @method     ChildActivityListAssociationQuery groupByActivityId() Group by the activity_id column
@@ -35,6 +36,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildActivityListAssociationQuery groupByDateAdded() Group by the date_added column
  * @method     ChildActivityListAssociationQuery groupByAlias() Group by the alias column
  * @method     ChildActivityListAssociationQuery groupByDescription() Group by the description column
+ * @method     ChildActivityListAssociationQuery groupByIsOwner() Group by the is_owner column
  *
  * @method     ChildActivityListAssociationQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildActivityListAssociationQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -60,6 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildActivityListAssociation findOneByDateAdded(string $date_added) Return the first ChildActivityListAssociation filtered by the date_added column
  * @method     ChildActivityListAssociation findOneByAlias(string $alias) Return the first ChildActivityListAssociation filtered by the alias column
  * @method     ChildActivityListAssociation findOneByDescription(string $description) Return the first ChildActivityListAssociation filtered by the description column
+ * @method     ChildActivityListAssociation findOneByIsOwner(int $is_owner) Return the first ChildActivityListAssociation filtered by the is_owner column
  *
  * @method     ChildActivityListAssociation[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildActivityListAssociation objects based on current ModelCriteria
  * @method     ChildActivityListAssociation[]|ObjectCollection findById(string $id) Return ChildActivityListAssociation objects filtered by the id column
@@ -69,6 +72,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildActivityListAssociation[]|ObjectCollection findByDateAdded(string $date_added) Return ChildActivityListAssociation objects filtered by the date_added column
  * @method     ChildActivityListAssociation[]|ObjectCollection findByAlias(string $alias) Return ChildActivityListAssociation objects filtered by the alias column
  * @method     ChildActivityListAssociation[]|ObjectCollection findByDescription(string $description) Return ChildActivityListAssociation objects filtered by the description column
+ * @method     ChildActivityListAssociation[]|ObjectCollection findByIsOwner(int $is_owner) Return ChildActivityListAssociation objects filtered by the is_owner column
  * @method     ChildActivityListAssociation[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -160,7 +164,7 @@ abstract class ActivityListAssociationQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, activity_id, list_id, status, date_added, alias, description FROM activity_list_assoc WHERE id = :p0';
+        $sql = 'SELECT id, activity_id, list_id, status, date_added, alias, description, is_owner FROM activity_list_assoc WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -517,6 +521,47 @@ abstract class ActivityListAssociationQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ActivityListAssociationTableMap::COL_DESCRIPTION, $description, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_owner column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsOwner(1234); // WHERE is_owner = 1234
+     * $query->filterByIsOwner(array(12, 34)); // WHERE is_owner IN (12, 34)
+     * $query->filterByIsOwner(array('min' => 12)); // WHERE is_owner > 12
+     * </code>
+     *
+     * @param     mixed $isOwner The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildActivityListAssociationQuery The current query, for fluid interface
+     */
+    public function filterByIsOwner($isOwner = null, $comparison = null)
+    {
+        if (is_array($isOwner)) {
+            $useMinMax = false;
+            if (isset($isOwner['min'])) {
+                $this->addUsingAlias(ActivityListAssociationTableMap::COL_IS_OWNER, $isOwner['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isOwner['max'])) {
+                $this->addUsingAlias(ActivityListAssociationTableMap::COL_IS_OWNER, $isOwner['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ActivityListAssociationTableMap::COL_IS_OWNER, $isOwner, $comparison);
     }
 
     /**

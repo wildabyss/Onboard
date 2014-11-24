@@ -17,6 +17,9 @@ use Map\UserTableMap;
  */
 class User extends BaseUser
 {
+	const ACTIVE_STATUS = 1;
+	const INACTIVE_STATUS = 2;
+	
 	/**
 	 * Get this user's friends and return in the form of a short associative array
 	 * @param Results to be returned &$results
@@ -29,21 +32,30 @@ class User extends BaseUser
 		// search for friends
 		$conn = Propel::getReadConnection(UserTableMap::DATABASE_NAME);
 		$sql = <<<EOT
-			select distinct id, display_name from
-				(select user.id, user.display_name 
-					from user_community_assoc uca 
-					join user user on uca.user_id_right = user.id 
-					where uca.user_id_left = :myid1
-				union
-				select user.id, user.display_name 
-					from user_community_assoc uca 
-					join user user on uca.user_id_left = user.id 
-					where uca.user_id_right = :myid2) d
-			order by
-				display_name;
+			select distinct id, display_name from user
+				where id in
+					(select user.id
+						from user_community_assoc uca 
+						join user on uca.user_id_right = user.id 
+						where
+							user.status = :status1
+							and uca.user_id_left = :myid1
+					union
+					select user.id
+						from user_community_assoc uca 
+						join user on uca.user_id_left = user.id 
+						where
+							user.status = :status2 
+							and uca.user_id_right = :myid2)
+				order by
+					display_name;
 EOT;
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(array(':myid1' => $myId, ':myid2' => $myId));
+		$stmt->execute(array(
+			':status1' 	=> self::ACTIVE_STATUS, 
+			':myid1' 	=> $myId,
+			':status2' 	=> self::ACTIVE_STATUS, 
+			':myid2' 	=> $myId));
 		
 		// populate results array
 		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

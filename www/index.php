@@ -1,5 +1,4 @@
 <?php require_once("../loading.php"); ?>
-<?php use Map\ActivityListAssociationTableMap; ?>
 
 <?php 
 	if (isset($logged_in)) {
@@ -48,12 +47,7 @@
 		
 				<ul class="activity_list">
 				
-					<?php 
-						// get activities associated with this user
-						$criteria = $list->buildCriteria()->addAscendingOrderByColumn(ActivityListAssociationTableMap::COL_ALIAS);
-						$activities = $list->getActivityListAssociationsJoinActivity($criteria);
-					?>
-					
+					<?php $activities = $list->getActiveOrCompletedActivityAssociations(); ?>
 					<?php for ($i=0; $i<count($activities); $i++):?>
 						<?php $actAssoc = $activities[$i];?>
 						
@@ -67,7 +61,7 @@
 							</div>
 							<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
 							<a class="interest_tally">
-								<?php echo count(ActivityListAssociationQuery::create()->filterByActivityId($actAssoc->getActivityId())->find())-1;?>
+								<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
 								interests
 							</a>
 							<p class="post_body">

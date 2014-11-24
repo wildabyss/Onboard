@@ -8,6 +8,13 @@
 	}
 ?>
 
+<?php
+	// FIXME: For development testing only
+	$user = UserQuery::create()
+		->filterByDisplayName('Jimmy Lu')
+		->findOne();
+?>
+
 
 <?php 
 	// set basic variables for layout
@@ -20,17 +27,19 @@
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
+		<?php $user->getFriends($friends); ?>
 		
+		<h1 class="page_title">My Community</h1>
+		<?php foreach ($friends as $friend):?>
+			<div class="friend">
+				<a class="friend_profile_pic"></a>
+				<div style="vertical-align: middle; display:inline-block; height:100px; margin:0;"></div>
+				<a class="friend_name comm_link" href="community.php?id=<?php echo $friend['id']?>"><?php echo $friend['display_name']?></a>
+			</div>
+		<?php endforeach; ?>
 	</div>
 	
-	<div id="footer">
-		<a class="footer_block">
-			Copyright 2014
-		</a>
-		<a class="footer_block">
-			Contact
-		</a>
-	</div>
+	<?php include "../layout/screen_footer.php"?>
 </div>
 
 <!-- news feed -->

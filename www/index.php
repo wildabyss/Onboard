@@ -1,4 +1,5 @@
 <?php require_once("../loading.php"); ?>
+<?php use Map\ActivityListAssociationTableMap; ?>
 
 <?php 
 	if (isset($logged_in)) {
@@ -11,7 +12,7 @@
 <?php
 	// FIXME: For development testing only
 	$user = UserQuery::create()
-		->filterByDisplayName('Ken Li')
+		->filterByDisplayName('Jimmy Lu')
 		->findOne();
 ?>
 
@@ -42,16 +43,14 @@
 		<?php foreach ($activityLists as $list):?>
 		
 			<?php if ($list->countActivityListAssociations() == 0):?>
-			
-				<p>You currently have no activity. Add one to get started.</p>
-				
+				<p class="no_activity_msg">You currently have no activity. Add one to get started.</p>
 			<?php else:?>
 		
 				<ul class="activity_list">
 				
 					<?php 
 						// get activities associated with this user
-						$criteria = $list->buildCriteria()->addAscendingOrderByColumn(\Map\ActivityListAssociationTableMap::COL_ALIAS);
+						$criteria = $list->buildCriteria()->addAscendingOrderByColumn(ActivityListAssociationTableMap::COL_ALIAS);
 						$activities = $list->getActivityListAssociationsJoinActivity($criteria);
 					?>
 					
@@ -83,14 +82,7 @@
 			
 	</div>
 	
-	<div id="footer">
-		<a class="footer_block">
-			Copyright 2014
-		</a>
-		<a class="footer_block">
-			Contact
-		</a>
-	</div>
+	<?php include "../layout/screen_footer.php"?>
 </div>
 
 <!-- news feed -->

@@ -14,5 +14,7 @@ use Base\ActivityListAssociation as BaseActivityListAssociation;
  */
 class ActivityListAssociation extends BaseActivityListAssociation
 {
-
+	const ACTIVE_STATUS = 1;
+	const COMPLETED_STATUS = 2;
+	const ARCHIVED_STATUS = 3;
 }

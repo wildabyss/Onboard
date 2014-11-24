@@ -17,7 +17,11 @@ body{
 }
 
 a:link{
+	color: #000099;
 	text-decoration: none;
+}
+a:visited {
+    color: #000099;
 }
 
 .center{
@@ -27,6 +31,11 @@ a:link{
 h1{
 	font-size: 16px;
 	margin: 0;
+	margin-bottom: 20px;
+}
+
+h1.page_title{
+	margin: 10px;
 	margin-bottom: 20px;
 }
 
@@ -283,9 +292,6 @@ ul.activity_list li{
 	border: 1px solid #d9d9d9;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
 }
-ul.activity_list li:hover{
-	
-}
 
 .modification_bar{
 	overflow: auto;
@@ -313,6 +319,9 @@ ul.activity_list li:hover{
 	float: right;
 	cursor: pointer;
 	line-height: 15px;
+}
+.add:hover{
+	color: #999;
 }
 
 .detail_box_item{
@@ -383,6 +392,49 @@ ul.activity_list li:hover{
 	line-height: 16px;
 	background-image: url(../images/star.png);
 	text-decoration: underline;
+}
+
+.no_activity_msg{
+	text-align: center;
+	margin-top: 30px;
+}
+
+/* community */
+
+.friend{
+	float: left;
+	width: 240px;
+	height: 100px;
+	border: 1px solid #d9d9d9;
+	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+	margin: 5px;
+}
+
+.friend_profile_pic{
+	display: block;
+	float: left;
+	height: 100px;
+	width: 100px;
+	margin: 0;
+	background-color: gray;
+}
+
+.friend_name{
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 5px;
+	width: 120px;
+}
+
+a.comm_link:link{
+	color: #0000CC;
+	text-decoration: none;
+}
+a.comm_link:visited {
+    color: #0000CC;
+}
+a.comm_link:hover{
+	color: #0066FF;
 }
 
 /* footer */

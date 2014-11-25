@@ -60,13 +60,16 @@
 								<a class="delete detail_box_item">Delete</a>
 							</div>
 							<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
-							<a class="interest_tally">
-								<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
-								interests
-							</a>
 							<p class="post_body">
 								<?php echo $actAssoc->getDescription();?>
 							</p>
+							
+							<div class="interest_info">
+								<a class="interest_tally">
+									<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
+									interests
+								</a>
+							</div>
 							<div class="expand">...</div>
 						</li>
 					<?php endfor;?>

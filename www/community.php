@@ -58,14 +58,17 @@
 							<li>
 								<h2><?php echo $actAssoc->getAlias();?></h2>
 								<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
-								<a class="interest_tally">
-									<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
-									interests
-								</a>
 								<p class="post_body">
 									<?php echo $actAssoc->getDescription();?>
 								</p>
-								<div class="expand">...</div>
+								
+								<div class="interest_info">
+									<a class="interest_tally">
+										<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
+										interests
+										<a class="onboard_leave">Onboard!</a>
+									</a>
+								</div>
 							</li>
 						<?php endfor;?>
 					</ul>

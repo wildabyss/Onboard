@@ -1,6 +1,7 @@
 <?php
 
 use Base\Activity as BaseActivity;
+use Map\CategoryTableMap as CategoryTableMap;
 
 /**
  * Skeleton subclass for representing a row from the 'activity' table.
@@ -14,5 +15,15 @@ use Base\Activity as BaseActivity;
  */
 class Activity extends BaseActivity
 {
-
+	/**
+	 * Get a list of categories that this activity is associated with
+	 * @return array of ActivityCategoryAssociation objects joined by Categories
+	 */
+	public function getActivityCategories(){
+		return $actCatAssoc = ActivityCategoryAssociationQuery::create()
+			->filterByActivity($this)
+			->joinCategory()
+			->addAscendingOrderByColumn(CategoryTableMap::COL_NAME)
+			->find();
+	}
 }

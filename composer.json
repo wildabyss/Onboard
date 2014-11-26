@@ -3,7 +3,8 @@
         "swiftmailer/swiftmailer" : "@stable",
 		"facebook/php-sdk-v4" : "4.0.*",
 		"google/apiclient" : "1.0.*@beta",
-		"propel/propel" : "~2.0@dev"
+		"propel/propel" : "~2.0@dev",
+		"klein/klein" : "2.*"
 	},
 	
 	"autoload": {

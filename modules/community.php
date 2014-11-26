@@ -1,13 +1,3 @@
-<?php require_once("../loading.php"); ?>
-
-<?php 
-	if (isset($logged_in)) {
-		// Check login status, redirect to login if necessary
-		header("Location: login.php");
-		die();
-	}
-?>
-
 <?php
 	// FIXME: For development testing only
 	$user = UserQuery::create()
@@ -21,8 +11,8 @@
 	$_PAGE_TITLE = "Community"; 
 ?>
 
-<?php include "../layout/screen_header_start.php"; ?>
-<?php include "../layout/screen_layout_start.php"; ?>
+<?php include "/layout/screen_header_start.php"; ?>
+<?php include "/layout/screen_layout_start.php"; ?>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
@@ -66,8 +56,8 @@
 									<a class="interest_tally">
 										<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
 										interests
-										<a class="onboard_leave">Onboard!</a>
 									</a>
+									<a class="onboard_leave">Onboard!</a>
 								</div>
 							</li>
 						<?php endfor;?>
@@ -84,14 +74,14 @@
 				<div class="friend">
 					<a class="friend_profile_pic"></a>
 					<div style="vertical-align: middle; display:inline-block; height:100px; margin:0;"></div>
-					<a class="friend_name comm_link" href="community.php?id=<?php echo $friend['id']?>"><?php echo $friend['display_name']?></a>
+					<a class="friend_name comm_link" href="community?id=<?php echo $friend['id']?>"><?php echo $friend['display_name']?></a>
 				</div>
 			<?php endforeach; ?>
 		
 		<?php endif;?>
 	</div>
 	
-	<?php include "../layout/screen_footer.php"?>
+	<?php include "/layout/screen_footer.php"?>
 </div>
 
 <!-- news feed -->
@@ -101,5 +91,5 @@
 	</div>
 </div>
 
-<?php include "../layout/screen_layout_end.php"; ?>
-<?php include "../layout/screen_header_end.php"; ?>
+<?php include "/layout/screen_layout_end.php"; ?>
+<?php include "/layout/screen_header_end.php"; ?>

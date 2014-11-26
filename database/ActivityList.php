@@ -15,6 +15,10 @@ use Map\ActivityListAssociationTableMap;
  */
 class ActivityList extends BaseActivityList
 {
+	/**
+	 * Get all the activity list associations that are associated with this list
+	 * @return array of ActivityListAssociation objects
+	 */
 	public function getActiveOrCompletedActivityAssociations(){
 		$criteria = $this->buildCriteria()
 			->addOr(ActivityListAssociationTableMap::COL_STATUS, ActivityListAssociation::COMPLETED_STATUS)

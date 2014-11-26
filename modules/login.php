@@ -1,18 +1,9 @@
-<?php require_once("../loading.php"); ?>
-
-<?php if (isset($logged_in)) {
-	header("Location: index.php");
-	die();
-}
-?>
-
-
 <?php 
 	// set basic variables for layout
 	$_PAGE_TITLE = "Sign In"; 
 ?>
 
-<?php include "../layout/screen_header_start.php"; ?>
+<?php include "/layout/screen_header_start.php"; ?>
 
 <body>
 	<div id="global_wrapper">
@@ -39,4 +30,4 @@
 	</div>
 </body>
 
-<?php include "../layout/screen_header_end.php"; ?>
+<?php include "/layout/screen_header_end.php"; ?>

@@ -1,5 +1,5 @@
-<div class="content_column" id="column_right">
-	<div class="content_column_wrapper" id="column_wrapper_right">
+<div id="feed_wrapper">
+	<div id="feed_content">
 		<?php $recentActivityAssocs = ActivityListAssociationQuery::getRecentActivityListAssociations($_CUR_USER->getId(), 10)?>
 		<?php foreach ($recentActivityAssocs as $recentActivityAssoc):?>
 			<?php $assocUser = $recentActivityAssoc->getUser() ?>
@@ -16,8 +16,8 @@
 	</div>
 </div>
 <script type="text/javascript">
-	// prevent parent scrolling when mouse wheel scrolling through the news feed
-	$(document).on('DOMMouseScroll mousewheel', '#column_wrapper_right', function(ev) {
+	// prevent parent vertical scrolling
+	$(document).on('DOMMouseScroll mousewheel', '#feed_content', function(ev) {
 		var $this = $(this),
 			scrollTop = this.scrollTop,
 			scrollHeight = this.scrollHeight,

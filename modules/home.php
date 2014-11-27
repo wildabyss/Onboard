@@ -12,8 +12,7 @@
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
-	<div id="inner_middle_wrapper">
-	
+
 		<div id="profile_section">
 			<a id="profile_pic"></a>
 			<h1 class="profile_name"><?php echo $_CUR_USER->getDisplayName();?></h1>
@@ -72,12 +71,10 @@
 		<?php endforeach;?>
 		
 	</div>
-	</div>
 	
 	<?php include "layout/screen_footer.php"?>
 </div>
 
-<!-- news feed -->
 <?php include "newsfeed.php"; ?>
 
 <?php include "layout/screen_layout_end.php"; ?>

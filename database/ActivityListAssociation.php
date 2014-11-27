@@ -1,7 +1,12 @@
 <?php
 
+use Base\ActivityListAssociationQuery;
+
+use Base\DiscussionUserAssociationQuery;
 use Base\ActivityListAssociation as BaseActivityListAssociation;
 use Map\CategoryTableMap as CategoryTableMap;
+use Map\UserTableMap as UserTableMap;
+use Map\ActivityListTableMap as ActivityListTableMap;
 
 /**
  * Skeleton subclass for representing a row from the 'activity_list_assoc' table.
@@ -24,10 +29,22 @@ class ActivityListAssociation extends BaseActivityListAssociation
 	 * @return array of ActivityCategoryAssociation objects joined by Categories
 	 */
 	public function getActivityCategories(){
-		return $actCatAssoc = ActivityCategoryAssociationQuery::create()
-			->filterByActivityId($this->getActivityId())
-			->joinCategory()
-			->addAscendingOrderByColumn(CategoryTableMap::COL_NAME)
-			->find();
+		return ActivityCategoryAssociationQuery::getActivityCategories($this->getActivityId());
+	}
+	
+	
+	/**
+	 * Get the user associated with this ActivityListAssociation object
+	 * @return User
+	 */
+	public function getUser(){
+		$list = $this->getActivityList();
+		return $list->getUser();
+		
+		/*return $user = ActivityListAssociationQuery::create()
+			->joinActivityList()
+			->join(UserTableMap::COL_ID, UserQuery::LEFT_JOIN)
+			->filterBy(ActivityListTableMap::COL_ID, $this->getListId())
+			->findOne();*/
 	}
 }

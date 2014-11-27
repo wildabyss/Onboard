@@ -1,11 +1,3 @@
-<?php
-	// FIXME: For development testing only
-	$user = UserQuery::create()
-		->filterByDisplayName('Jimmy Lu')
-		->findOne();
-?>
-
-
 <?php 
 	// set basic variables for layout
 	$_PAGE_TITLE = "Home"; 
@@ -13,22 +5,26 @@
 
 <?php include "layout/screen_header_start.php"; ?>
 <?php include "layout/screen_layout_start.php"; ?>
+
+<!-- js inclusions -->
+<script type="text/javascript" src="js/home.js"></script>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
+	<div id="inner_middle_wrapper">
 	
 		<div id="profile_section">
 			<a id="profile_pic"></a>
-			<h1 class="profile_name"><?php echo $user->getDisplayName();?></h1>
-			<a class="user_info">Email: <?php echo $user->getEmail();?></a>
-			<a class="user_info">Phone: <?php echo $user->getPhone();?></a>
+			<h1 class="profile_name"><?php echo $_CUR_USER->getDisplayName();?></h1>
+			<a class="user_info">Email: <?php echo $_CUR_USER->getEmail();?></a>
+			<a class="user_info">Phone: <?php echo $_CUR_USER->getPhone();?></a>
 		</div>
 		<div class="modification_bar">
 			<a class="add">New Activity</a>
 		</div>
 		
-		<?php $activityLists = $user->getActivityLists(); ?>
+		<?php $activityLists = $_CUR_USER->getActivityLists(); ?>
 		<?php foreach ($activityLists as $list):?>
 		
 			<?php if ($list->countActivityListAssociations() == 0):?>
@@ -64,7 +60,7 @@
 							
 							<div class="interest_info">
 								<a class="interest_tally">
-									<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
+									<?php echo ActivityListAssociationQuery::countInterestedFriends($_CUR_USER->getPrimaryKey(), $actAssoc->getActivityId());?>
 									interests
 								</a>
 							</div>
@@ -74,18 +70,15 @@
 				</ul>
 			<?php endif;?>
 		<?php endforeach;?>
-			
+		
+	</div>
 	</div>
 	
 	<?php include "layout/screen_footer.php"?>
 </div>
 
 <!-- news feed -->
-<div class="content_column" id="column_right">
-	<div class="content_column_wrapper" id="column_wrapper_right">
-		New Feed
-	</div>
-</div>
+<?php include "newsfeed.php"; ?>
 
 <?php include "layout/screen_layout_end.php"; ?>
 <?php include "layout/screen_header_end.php"; ?>

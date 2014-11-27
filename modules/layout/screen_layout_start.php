@@ -1,5 +1,6 @@
 <body>
-	<script type="text/javascript" src="js/main_page.js"></script>
+	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+	
 	<div id="global_wrapper">
 		<div id="header">
 			<a href="/home" id="header_logo"></a>

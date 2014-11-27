@@ -10,9 +10,16 @@ Required Vendor Packages:
 5. Swiftmailer
 6. Klein
 
-Minimum Required Server:
--------
-Apache 2.x
-IIS 7.0
 
-Must have rewrite rule implemented to route requests to index.php, excluding .css, .js and .png
+Web Server Configuration:
+-------
+
+Must have the following rewrite rules implemented to enable Klein re-router:
+
+  1. Rewrite the exclusion of the following regex to viewReroute.php
+     ^(ajax.*)|(.*\.(css|gif|png|jpg|jpeg|js))$
+     
+  2. Rewrite the inclusion of the following regex to ajaxReroute.php
+     ^ajax.*$
+     
+Configuration for IIS7 is included in the web.config file under www/ directory

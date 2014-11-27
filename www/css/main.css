@@ -136,13 +136,17 @@ input#global_search.search{
 	min-height: 500px;
 	border: 1px solid;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-	padding: 5px;
+	padding: 2px;
 }
 #column_wrapper_right.content_column_wrapper {
-	height: 400px;
+	height: 500px;
 	border: 1px solid;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-	padding: 5px;
+	padding: 2px;
+	overflow-y: scroll;
+}
+#inner_middle_wrapper{
+	padding: 3px;
 }
 
 /* login screen only */
@@ -454,6 +458,12 @@ a.comm_link:hover{
 	color: #0066FF;
 }
 
+.onboard_leave_unavailable{
+	display: inline-block;
+	font-size: 12px;
+	margin-left: 10px;
+	float: right;
+}
 .onboard_leave{
 	display: inline-block;
 	cursor: pointer;
@@ -464,6 +474,46 @@ a.comm_link:hover{
 }
 .onboard_leave:hover{
 	text-decoration: underline;
+}
+
+/* news feed */
+
+.feed_block{
+	display: block;
+	border-bottom: 1px solid #ccc;
+	padding: 10px 5px;
+	min-height: 50px;
+	cursor: pointer;
+}
+.feed_block:hover{
+	background-color: #F8F8F8;
+}
+
+.feed_profile_pic{
+	display: block;
+	float: left;
+	height: 50px;
+	width: 50px;
+	margin: 0;
+	background-color: gray;
+}
+
+.feed_block_body{
+	display: inline-block;
+	margin-left: 5px;
+	width: 150px;
+}
+
+.feed_title{
+	display: block;
+	font-size: 13px;
+}
+
+.feed_datetime{
+	display: block;
+	color: #808080;
+	font-size: 12px;
+	margin-top: 5px;
 }
 
 /* footer */

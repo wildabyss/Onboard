@@ -1,6 +1,7 @@
 <?php
 
 use Base\ActivityCategoryAssociationQuery as BaseActivityCategoryAssociationQuery;
+use Map\CategoryTableMap as CategoryTableMap;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'activity_category_assoc' table.
@@ -14,5 +15,16 @@ use Base\ActivityCategoryAssociationQuery as BaseActivityCategoryAssociationQuer
  */
 class ActivityCategoryAssociationQuery extends BaseActivityCategoryAssociationQuery
 {
-
-} // ActivityCategoryAssociationQuery
+	/**
+	 * Get a list of categories that this activity is associated with
+	 * @param unknown $activityId
+	 * @return array of ActivityCategoryAssociation objects joined by Categories
+	 */
+	public static function getActivityCategories($activityId){
+		return $actCatAssoc = ActivityCategoryAssociationQuery::create()
+			->filterByActivityId($activityId)
+			->joinCategory()
+			->addAscendingOrderByColumn(CategoryTableMap::COL_NAME)
+			->find();
+	}
+}

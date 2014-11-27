@@ -1,11 +1,3 @@
-<?php
-	// FIXME: For development testing only
-	$user = UserQuery::create()
-		->filterByDisplayName('Jimmy Lu')
-		->findOne();
-?>
-
-
 <?php 
 	// set basic variables for layout
 	$_PAGE_TITLE = "Community"; 
@@ -13,6 +5,9 @@
 
 <?php include "/layout/screen_header_start.php"; ?>
 <?php include "/layout/screen_layout_start.php"; ?>
+
+<!-- js inclusions -->
+<script type="text/javascript" src="js/community.js"></script>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
@@ -53,11 +48,19 @@
 								</p>
 								
 								<div class="interest_info">
-									<a class="interest_tally">
-										<?php echo ActivityListAssociationQuery::countInterestedFriends($user->getPrimaryKey(), $actAssoc->getActivityId());?>
+									<a class="interest_tally" id="interest_tally_<?php echo $actAssoc->getActivityId()?>">
+										<?php echo ActivityListAssociationQuery::countInterestedFriends($_CUR_USER->getPrimaryKey(), $actAssoc->getActivityId())?>
 										interests
 									</a>
-									<a class="onboard_leave">Onboard!</a>
+									
+									<?php if (ActivityListAssociationQuery::isUserOwnerOfActivity($_CUR_USER->getId(), $actAssoc->getActivityId())):?>
+										<a class="onboard_leave_unavailable">You're an owner</a>
+									<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($_CUR_USER->getId(), $actAssoc->getActivityId())):?>
+										<a class="onboard_leave_unavailable">You're in discussion</a>
+									<?php else:?>
+										<a class="onboard_leave" onclick="likeActivity(this,<?php echo $actAssoc->getActivityId()?>);">Onboard!</a>
+									<?php endif;?>
+									
 								</div>
 							</li>
 						<?php endfor;?>
@@ -67,7 +70,7 @@
 		
 		<?php else:?>
 	
-			<?php $user->getFriends($friends); ?>
+			<?php $_CUR_USER->getFriends($friends); ?>
 			
 			<h1 class="page_title">My Community</h1>
 			<?php foreach ($friends as $friend):?>
@@ -85,11 +88,7 @@
 </div>
 
 <!-- news feed -->
-<div class="content_column" id="column_right">
-	<div class="content_column_wrapper" id="column_wrapper_right">
-		New Feed
-	</div>
-</div>
+<?php include "newsfeed.php"; ?>
 
 <?php include "/layout/screen_layout_end.php"; ?>
 <?php include "/layout/screen_header_end.php"; ?>

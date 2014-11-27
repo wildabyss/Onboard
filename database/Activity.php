@@ -20,10 +20,6 @@ class Activity extends BaseActivity
 	 * @return array of ActivityCategoryAssociation objects joined by Categories
 	 */
 	public function getActivityCategories(){
-		return $actCatAssoc = ActivityCategoryAssociationQuery::create()
-			->filterByActivity($this)
-			->joinCategory()
-			->addAscendingOrderByColumn(CategoryTableMap::COL_NAME)
-			->find();
+		return ActivityCategoryAssociationQuery::getActivityCategories($this->getId());
 	}
 }

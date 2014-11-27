@@ -20,6 +20,7 @@ class User extends BaseUser
 	const ACTIVE_STATUS = 1;
 	const INACTIVE_STATUS = 2;
 	
+	
 	/**
 	 * Get this user's friends and return in the form of a short associative array
 	 * @param Results to be returned &$results

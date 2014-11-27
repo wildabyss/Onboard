@@ -6,4 +6,4 @@ var displayDetailsBox = function (div_id){
 		else
 			div.style.display = "block";
 	}
-}
+};

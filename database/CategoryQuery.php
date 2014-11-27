@@ -1,6 +1,7 @@
 <?php
 
 use Base\CategoryQuery as BaseCategoryQuery;
+use Map\CategoryTableMap as CategoryTableMap;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'category' table.
@@ -15,4 +16,4 @@ use Base\CategoryQuery as BaseCategoryQuery;
 class CategoryQuery extends BaseCategoryQuery
 {
 
-} // CategoryQuery
+} 

@@ -1,3 +1,7 @@
+<!-- bottom margin -->
+<div id="bottom_margin"></div>
+	
+<!-- news feed -->
 <div id="feed_wrapper">
 	<div id="feed_content">
 		<?php $recentActivityAssocs = ActivityListAssociationQuery::getRecentActivityListAssociations($_CUR_USER->getId(), 10)?>

@@ -13,7 +13,7 @@ body{
 	width: 960px;
 	margin: 0px auto;
 	padding: 0;
-	overflow: auto;
+	overflow: visible;
 }
 
 a:link{
@@ -103,10 +103,11 @@ input#global_search.search{
 #content_wrapper{
 	width: 100%;
 	font-size: 13px;
+	position: relative;
 }
 
 .content_column{
-	float: left;
+	position: absolute;
 }
 
 .content_column_wrapper{
@@ -116,13 +117,15 @@ input#global_search.search{
 /* content division */
 
 #column_left.content_column {
-	width: 20%;
+	width: 192px;
 }
 #column_middle.content_column {
-	width: 55%;
+	width: 528px;
+	left: 192px;
 }
 #column_right.content_column {
-	width: 25%;
+	width: 240px;
+	left: 720px;
 }
 
 /* wrapper inside each content division */

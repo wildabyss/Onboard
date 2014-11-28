@@ -6,3 +6,4 @@
 		<title>Onboard - <?php echo $_PAGE_TITLE; ?></title>
 		<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" />
 	</head>
+	<body>

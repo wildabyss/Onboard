@@ -3,11 +3,11 @@
 	
 <!-- news feed -->
 <div id="feed_wrapper">
-	<div id="feed_content">
-		<?php $recentActivityAssocs = ActivityListAssociationQuery::getRecentActivityListAssociations($_CUR_USER->getId(), 10)?>
+	<ul id="feed_content">
+		<?php $recentActivityAssocs = ActivityListAssociationQuery::getRecentActivityListAssociations($_CUR_USER->getId(), 20)?>
 		<?php foreach ($recentActivityAssocs as $recentActivityAssoc):?>
 			<?php $assocUser = $recentActivityAssoc->getUser() ?>
-			<span class="feed_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>';">
+			<li class="feed_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>';">
 				<a class="feed_profile_pic"></a>
 				<span class="feed_block_body">
 					<a class="feed_title">
@@ -15,9 +15,9 @@
 					</a>
 					<a class="feed_datetime"><?php echo $recentActivityAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
 				</span>
-			</span>
+			</li>
 		<?php endforeach;?>
-	</div>
+	</ul>
 </div>
 <script type="text/javascript">
 	// prevent parent vertical scrolling

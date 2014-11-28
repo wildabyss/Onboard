@@ -10,17 +10,11 @@ body{
 }
 
 #global_wrapper{
-	width: 900px;
+	width: 850px;
 	margin: 0px auto;
 	padding: 0;
 	overflow: auto;
-	z-index: -1;
 	position: relative;
-}
-
-#bottom_margin{
-	display: block;
-	height: 100px;
 }
 
 a:link{
@@ -84,7 +78,7 @@ input#global_search.search{
 	font: bold 20px Georgia;
 	width: 192px;
 	height: 78px;
-	/*background-image: url(../images/logo.png);*/
+	background-image: url(../images/logo.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	position: absolute;
@@ -128,7 +122,7 @@ input#global_search.search{
 	width: 192px;
 }
 #column_middle.content_column {
-	width: 708px;
+	width: 658px;
 	left: 192px;
 }
 
@@ -474,6 +468,11 @@ a.comm_link:hover{
 
 /* news feed */
 
+#bottom_margin{
+	display: block;
+	height: 100px;
+}
+
 #feed_wrapper{
 	position: fixed;
 	bottom: 0;
@@ -481,27 +480,28 @@ a.comm_link:hover{
 }
 
 #feed_content{
-	margin: 0px auto;
+	margin: 0 auto;
 	border: 1px solid;
 	border-color: #ccc;
 	padding: 2px;
-	background-color: #E0E0F8;
+	background-color: #E0ECF8;
 	overflow-x: auto;
-	width: 900px;
+	overflow-y: hidden;
+	width: 100%;
 	z-index: 1000;
 	position: relative;
-	min-height: 50px;
+	min-height: 80px;
 	white-space: nowrap;
 }
 
 .feed_block{
+	vertical-align: top;
 	display: inline-block;
 	border-right: 1px solid #ccc;
 	padding: 5px;
 	height: 70px;
 	max-width: 250px;
 	cursor: pointer;
-	white-space: normal;
 }
 .feed_block:hover{
 	background-color: #F0F0F0;
@@ -520,6 +520,7 @@ a.comm_link:hover{
 	display: inline-block;
 	margin-left: 5px;
 	width: 180px;
+	white-space: normal;
 }
 
 .feed_title{

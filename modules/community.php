@@ -87,8 +87,8 @@
 	<?php include "/layout/screen_footer.php"?>
 </div>
 
-<!-- news feed -->
+<?php include "/layout/screen_layout_end.php"; ?>
+
 <?php include "newsfeed.php"; ?>
 
-<?php include "/layout/screen_layout_end.php"; ?>
 <?php include "/layout/screen_header_end.php"; ?>

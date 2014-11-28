@@ -87,16 +87,16 @@ EOT;
 	public static function countInterestedFriends($userId, $activityId){
 		self::getInterestedFriends($userId, $activityId, $results);
 		return count($results);
-	} 
+	}
 	
 	
 	/**
-	 * Determines whether the userId is the owner of activityId
+	 * Determine how the user is associated with the activity
 	 * @param unknown $userId
 	 * @param unknown $activityId
-	 * @return boolean
+	 * @return number Const in ActivityListAssociation: USER_IS_NOT_ASSOCIATED, USER_IS_ASSOCIATED, USER_IS_OWNER
 	 */
-	public static function isUserOwnerOfActivity($userId, $activityId){
+	public static function detUserAssociationWithActivity($userId, $activityId){
 		$conn = Propel::getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
 			select ala.is_owner from activity_list_assoc ala
@@ -109,21 +109,28 @@ EOT;
 EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
-			array(
-				':userid'	=> $userId,
-				':actid'	=> $activityId
-			));
+				array(
+						':userid'	=> $userId,
+						':actid'	=> $activityId
+				));
 		
 		// assess results
 		$results = $stmt->fetchAll();
 		if (count($results)==0)
-			return false;
+			return ActivityListAssociation::USER_IS_NOT_ASSOCIATED;
 		else
-			return ($results[0]['is_owner'] == 1);
+			return ($results[0]['is_owner'] == 1?
+				ActivityListAssociation::USER_IS_OWNER : ActivityListAssociation::USER_IS_ASSOCIATED);
 	}
 	
 	
-	
+	/**
+	 * Get a list of chronologically recent ActivityListAssociations for the given user ($userId).
+	 * Limit the number of results returned to $limit.
+	 * @param unknown $userId
+	 * @param unknown $limit
+	 * @return An array of ActivityListAssociations
+	 */
 	public static function getRecentActivityListAssociations($userId, $limit){
 		// search for friends
 		$conn = Propel::getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);

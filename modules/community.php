@@ -1,6 +1,6 @@
 <?php 
 	// set basic variables for layout
-	$_PAGE_TITLE = "Community"; 
+	$_PAGE_TITLE = Utilities::PAGE_COMMUNITY; 
 ?>
 
 <?php include "/layout/screen_header_start.php"; ?>
@@ -27,46 +27,50 @@
 				<a class="user_info">Phone: <?php echo $friend->getPhone();?></a>
 			</div>
 			
-			<?php $activityLists = $friend->getActivityLists(); ?>
-			<?php foreach ($activityLists as $list):?>
+			<?php $list = $friend->getDefaultActivityList() ?>
 			
-				<?php if ($list->countActivityListAssociations() == 0):?>
-					<p class="no_activity_msg">This person has no activity.</p>
-				<?php else:?>
-			
-					<ul class="activity_list">
-					
-						<?php $activities = $list->getActiveOrCompletedActivityAssociations(); ?>
-						<?php for ($i=0; $i<count($activities); $i++):?>
-							<?php $actAssoc = $activities[$i];?>
+			<?php if ($list->countActivityListAssociations() == 0):?>
+				<p class="no_activity_msg">This person has no activity.</p>
+			<?php else:?>
+		
+				<ul class="activity_list">
+				
+					<?php $activities = $list->getActiveOrCompletedActivityAssociations(); ?>
+					<?php for ($i=0; $i<count($activities); $i++):?>
+						<?php $actAssoc = $activities[$i];?>
+						
+						<li>
+							<h2><?php echo $actAssoc->getAlias();?></h2>
+							<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
+							<p class="post_body">
+								<?php echo $actAssoc->getDescription();?>
+							</p>
 							
-							<li>
-								<h2><?php echo $actAssoc->getAlias();?></h2>
-								<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
-								<p class="post_body">
-									<?php echo $actAssoc->getDescription();?>
-								</p>
+							<div class="interest_info">
+								<a class="interest_tally" id="interest_tally_<?php echo $actAssoc->getId()?>">
+									<?php echo ActivityListAssociationQuery::countInterestedFriends($friend->getId(), $actAssoc->getActivityId())?>
+									interests
+								</a>
 								
-								<div class="interest_info">
-									<a class="interest_tally" id="interest_tally_<?php echo $actAssoc->getActivityId()?>">
-										<?php echo ActivityListAssociationQuery::countInterestedFriends($_CUR_USER->getPrimaryKey(), $actAssoc->getActivityId())?>
-										interests
+								<?php $userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($_CUR_USER->getId(), $actAssoc->getActivityId())?>
+								
+								<!-- Leave/Onboard button -->
+								<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_OWNER):?>
+									<a class="onboard_leave_unavailable">You're an owner</a>
+								<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($_CUR_USER->getId(), $actAssoc->getActivityId())):?>
+									<a class="onboard_leave_unavailable">You're in discussion</a>
+								<?php else:?>
+									<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
+										onclick="likeActivity(this, <?php echo $actAssoc->getId()?>, <?php echo $friend->getId()?>);">
+										<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
 									</a>
-									
-									<?php if (ActivityListAssociationQuery::isUserOwnerOfActivity($_CUR_USER->getId(), $actAssoc->getActivityId())):?>
-										<a class="onboard_leave_unavailable">You're an owner</a>
-									<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($_CUR_USER->getId(), $actAssoc->getActivityId())):?>
-										<a class="onboard_leave_unavailable">You're in discussion</a>
-									<?php else:?>
-										<a class="onboard_leave" onclick="likeActivity(this,<?php echo $actAssoc->getActivityId()?>);">Onboard!</a>
-									<?php endif;?>
-									
-								</div>
-							</li>
-						<?php endfor;?>
-					</ul>
-				<?php endif;?>
-			<?php endforeach;?>
+								<?php endif;?>
+								
+							</div>
+						</li>
+					<?php endfor;?>
+				</ul>
+			<?php endif;?>
 		
 		<?php else:?>
 	

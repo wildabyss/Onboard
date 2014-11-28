@@ -31,6 +31,8 @@
 				ev.originalEvent.wheelDelta),
 			up = delta > 0;
 
+		$("#feed_content")[0].scrollLeft -= (delta * 2.08);
+
 		var prevent = function() {
 			ev.stopPropagation();
 			ev.preventDefault();

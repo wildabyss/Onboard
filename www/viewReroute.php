@@ -7,13 +7,16 @@
 	// URL router
 	$kleinRouter = new Klein();
 	
+	// FIXME time zone should vary with user location
+	date_default_timezone_set('America/Toronto');
+	
 	// FIXME check for login token
-	if (!isset($logged_in)) {
-		// FIXME: For development testing only
-		$_CUR_USER = UserQuery::create()
-			->filterByDisplayName('Jimmy Lu')
-			->findOne();		
-		
+	// FIXME: For development testing only
+	$_CUR_USER = UserQuery::create()
+		->filterByDisplayName('Jimmy Lu')
+		->findOne();
+	
+	if (isset($_CUR_USER)) {
 		// redirect to home
 		$kleinRouter->respond(array('GET','POST'), '/', function () use ($_CUR_USER) {
 			include "../modules/home.php";

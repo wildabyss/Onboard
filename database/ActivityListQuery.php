@@ -14,5 +14,5 @@ use Base\ActivityListQuery as BaseActivityListQuery;
  */
 class ActivityListQuery extends BaseActivityListQuery
 {
-
-} // ActivityListQuery
+	
+}

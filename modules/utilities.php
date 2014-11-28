@@ -1,6 +1,10 @@
 <?php
 
 class Utilities {
+	const PAGE_HOME = "Home";
+	const PAGE_COMMUNITY = "Community";
+	const PAGE_BROWSE = "Browse";
+	
 	public static function DeterminePlatform($user_agent){
 		$cap_user_agent = strtoupper($user_agent);
 		if (strpos($cap_user_agent, "WINDOWS")!==false)

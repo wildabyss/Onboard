@@ -74,6 +74,7 @@ input#global_search.search{
 	font-size: 14px;
 	position: relative;
 }
+
 #header_logo{
 	font: bold 20px Georgia;
 	width: 192px;
@@ -84,6 +85,7 @@ input#global_search.search{
 	position: absolute;
 	left: 0;
 	top: 10px;
+	z-index: 1000;
 }
 
 #header_options{

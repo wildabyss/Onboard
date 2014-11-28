@@ -15,6 +15,8 @@ use Map\ActivityListAssociationTableMap;
  */
 class ActivityList extends BaseActivityList
 {
+	const DEFAULT_LIST = "Default";
+	
 	/**
 	 * Get all the activity list associations that are associated with this list
 	 * @return array of ActivityListAssociation objects

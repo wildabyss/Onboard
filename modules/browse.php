@@ -1,3 +1,8 @@
+<?php 
+	// set basic variables for layout
+	$_PAGE_TITLE = Utilities::PAGE_BROWSE; 
+?>
+
 <?php include "/layout/screen_header_start.php"; ?>
 <?php include "/layout/screen_layout_start.php"; ?>
 				

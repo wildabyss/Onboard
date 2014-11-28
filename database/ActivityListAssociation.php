@@ -24,6 +24,10 @@ class ActivityListAssociation extends BaseActivityListAssociation
 	const COMPLETED_STATUS = 2;
 	const ARCHIVED_STATUS = 3;
 	
+	const USER_IS_NOT_ASSOCIATED = 0;
+	const USER_IS_ASSOCIATED = 1;
+	const USER_IS_OWNER =2;
+	
 	/**
 	 * Get a list of categories that the activity associated with this list association object belongs to
 	 * @return array of ActivityCategoryAssociation objects joined by Categories

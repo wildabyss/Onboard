@@ -4,6 +4,7 @@ use Base\UserQuery;
 use Base\User as BaseUser;
 use Propel\Runtime\Propel;
 use Map\UserTableMap;
+use Map\ActivityListTableMap;
 
 /**
  * Skeleton subclass for representing a row from the 'user' table.
@@ -62,5 +63,19 @@ EOT;
 		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$results[] = $row;
 		}
+	}
+	
+	
+	/**
+	 * Get the user's default ActivityList
+	 * @return ActivityList
+	 */
+	public function getDefaultActivityList(){
+		$criteria = $this->buildCriteria()
+			->addAnd(ActivityListTableMap::COL_NAME, ActivityList::DEFAULT_LIST)
+			->setLimit(1);
+		
+		$results = $this->getActivityLists($criteria);
+		return $results[0];
 	}
 }

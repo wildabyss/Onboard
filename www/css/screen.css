@@ -249,6 +249,7 @@ input#global_search.search{
 	display:block;
 	width: 100%;
 	overflow: auto;
+	margin-bottom: 5px;
 }
 
 #profile_pic{
@@ -289,10 +290,42 @@ ul.activity_list li{
 	border: 1px solid #d9d9d9;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
 }
+ul.activity_list li#adding_activity{
+	background-color: #E0ECF8;
+	display: none;
+	overflow: auto;
+}
 
-.modification_bar{
+#modification_bar{
 	overflow: auto;
 	padding: 5px;
+	margin-bottom: 20px;
+	cursor: pointer;
+	text-align: center;
+	border: 1px solid #d9d9d9;
+	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+}
+#modification_bar:hover{
+	background-color: #E0ECF8;
+}
+
+.new_activity_input{
+	width: 100%;
+	display: block;
+	margin-bottom: 5px;
+	box-sizing: border-box;
+	font: 13px sans-serif;
+}
+.new_activity_text{
+	width: 100%;
+	height: 3em;
+	display: block;
+	box-sizing: border-box;
+	font: 13px sans-serif;
+}
+.new_activity_buttons{
+	margin: 5px 0 0 5px;
+	float: right:
 }
 
 .details{
@@ -305,20 +338,6 @@ ul.activity_list li{
 	right: 5px;
 	top: 8px;
 	cursor: pointer;
-}
-
-.add{
-	display: inline-block;
-	padding-left: 20px;
-	height: 15px;
-	background-image: url(../images/add.png);
-	background-repeat: no-repeat;
-	float: right;
-	cursor: pointer;
-	line-height: 15px;
-}
-.add:hover{
-	color: #999;
 }
 
 .detail_box_item{
@@ -407,7 +426,7 @@ h2.activity_title{
 	background-image: url(../images/star.png);
 }
 
-.no_activity_msg{
+#no_activity_msg{
 	text-align: center;
 	margin-top: 30px;
 }

@@ -3,7 +3,7 @@
 <div id="global_wrapper">
 	<div id="header">
 		<a href="/home" id="header_logo"></a>
-		<input class="search" id="global_search" />
+		<input class="search" id="global_search" placeholder="search" />
 		<a id="header_options"></a>
 	</div>
 	

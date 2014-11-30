@@ -232,15 +232,22 @@ input#global_search.search{
 #column_wrapper_left.content_column_wrapper li a:hover{
 	background-color: #eee;
 }
-#column_wrapper_left.content_column_wrapper li a#button_home{
+
+#button_home{
 	background-image: url(../images/home.png);
 }
-#column_wrapper_left.content_column_wrapper li a#button_community{
+#button_community{
 	background-image: url(../images/friends.png);
 }
-#column_wrapper_left.content_column_wrapper li a#button_list{
+#button_list{
 	background-image: url(../images/list.png);
-	background-position: 7px;
+	background-position: 8px;
+}
+#button_browse{
+	background-image: url(../images/browse.png);
+}
+#button_recent{
+	background-image: url(../images/time.png);
 }
 
 /* profile info */
@@ -290,7 +297,7 @@ ul.activity_list li{
 	border: 1px solid #d9d9d9;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
 }
-ul.activity_list li#adding_activity{
+ul.activity_list li.adding_activity{
 	background-color: #E0ECF8;
 	display: none;
 	overflow: auto;
@@ -323,7 +330,7 @@ ul.activity_list li#adding_activity{
 	box-sizing: border-box;
 	font: 13px sans-serif;
 }
-.new_activity_buttons{
+input.new_activity_buttons{
 	margin: 5px 0 0 5px;
 	float: right:
 }
@@ -374,6 +381,15 @@ ul.activity_list li#adding_activity{
 	right: 4px;
 	background-color: #e9eaed;
 	display: none;
+}
+
+.delete_confirmation{
+	display:block;
+	margin-bottom: 10px;
+}
+
+input.confirmation_button{
+	margin: 0 5px 0 5px;
 }
 
 h2.activity_title{
@@ -485,6 +501,23 @@ a.comm_link:hover{
 }
 .onboard_leave:hover{
 	text-decoration: underline;
+}
+
+/* news feed page */
+
+.feed_page_block{
+	min-height:50px;
+	cursor: pointer;
+}
+.feed_page_block:hover{
+	background-color: #F0F0F0;
+}
+
+.feed_page_block_body{
+	display: inline-block;
+	margin-top: 2px;
+	margin-left: 8px;
+	white-space: normal;
 }
 
 /* news feed */

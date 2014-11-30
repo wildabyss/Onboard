@@ -17,15 +17,15 @@
 		->findOne();
 	
 	if (isset($_CUR_USER)) {
-		// redirect to home
+		// home page
 		$kleinRouter->respond(array('GET','POST'), '/', function () use ($_CUR_USER) {
-			include "../modules/home.php";
+			include "../modules/my_activities.php";
 			return;
 		});
 		
-		// redirect to home
-		$kleinRouter->respond(array('GET','POST'), '/home', function () use ($_CUR_USER) {
-			include "../modules/home.php";
+		// redirect to recent activities
+		$kleinRouter->respond(array('GET','POST'), '/recent', function () use ($_CUR_USER) {
+			include "../modules/recent.php";
 			return;
 		});
 		
@@ -44,6 +44,12 @@
 		// redirect to browse
 		$kleinRouter->respond(array('GET','POST'), '/browse', function () use ($_CUR_USER) {
 			include "../modules/browse.php";
+			return;
+		});
+		
+		// redirect to my activities
+		$kleinRouter->respond(array('GET','POST'), '/mylist', function () use ($_CUR_USER) {
+			include "../modules/my_activities.php";
 			return;
 		});
 		

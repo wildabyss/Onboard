@@ -18,8 +18,8 @@
 	
 	if (isset($_CUR_USER)) {
 		// redirect to home
-		$kleinRouter->respond('POST', '/ajaxLike', function () use ($_CUR_USER) {
-			include "../modules/ajax/ajaxLike.php";
+		$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () use ($_CUR_USER) {
+			include "../modules/ajax/ajaxActivityAssociation.php";
 			return;
 		});
 	

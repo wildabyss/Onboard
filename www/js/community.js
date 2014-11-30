@@ -4,7 +4,7 @@ var likeActivity = function (ele, activityAssocId, friendId){
 	}
 	
 	$.ajax({
-		url:	"ajaxLike",
+		url:	"ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_assoc: activityAssocId, friend_id: friendId, action: ele.type},
 		success: function(result){

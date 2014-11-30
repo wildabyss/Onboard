@@ -2,6 +2,8 @@
 
 class Utilities {
 	const PAGE_HOME = "Home";
+	const PAGE_RECENT = "News Feed";
+	const PAGE_MY_ACTIVITIES = "My Activities";
 	const PAGE_COMMUNITY = "Community";
 	const PAGE_BROWSE = "Browse";
 	

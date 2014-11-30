@@ -1,13 +1,13 @@
 <?php 
 	// set basic variables for layout
-	$_PAGE_TITLE = Utilities::PAGE_HOME; 
+	$_PAGE_TITLE = Utilities::PAGE_MY_ACTIVITIES; 
 ?>
 
 <?php include "layout/screen_header_start.php"; ?>
 <?php include "layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
-<script type="text/javascript" src="js/home.js"></script>
+<script type="text/javascript" src="js/mylist.js"></script>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
@@ -32,23 +32,17 @@
 		<?php endif;?>
 	
 		<ul class="activity_list" id="default_activity_list">
-			<li id="adding_activity">
-				<input type="text" class="new_activity_input" placeholder="Activity title" />
-				<input type="text" class="new_activity_input" placeholder="Tag Categories" />
-				<textarea class="new_activity_text" placeholder="Description"></textarea>
-				<span style="float:right"><input type="button" class="new_activity_buttons" value="Save" />
-				<input type="button" class="new_activity_buttons" value="Cancel" onclick="cancelNewActivity()" /></span>
-			</li>
+			<?php include "layout/activity_edit_view.php"?>
 		
 			<?php for ($i=0; $i<count($activities); $i++):?>
 				<?php $actAssoc = $activities[$i];?>
-				<li>
-					<h2 class="activity_title"><?php echo $actAssoc->getAlias();?></h2>
+				<li id="activity_section_<?php echo $actAssoc->getId()?>">
+					<h2 class="activity_title"><?php echo $actAssoc->getAlias()?></h2>
 					<a class="details" id="activity_drop_<?php echo $i?>" onclick="displayDetailsBox(event, 'activity_edit_<?php echo $i?>')"></a>
 					<div class="details_box" id="activity_edit_<?php echo $i?>">
 						<a class="checked detail_box_item">Mark as completed</a>
-						<a class="edit detail_box_item">Edit</a>
-						<a class="delete detail_box_item">Delete</a>
+						<a class="edit detail_box_item" onclick="editActivity('<?php echo $actAssoc->getId()?>')">Edit</a>
+						<a class="delete detail_box_item" onclick="deleteActivity('<?php echo $actAssoc->getId()?>')">Delete</a>
 					</div>
 					
 					<?php $cats = $actAssoc->getActivityCategories();?>
@@ -80,7 +74,5 @@
 </div>
 
 <?php include "layout/screen_layout_end.php"; ?>
-
-<?php include "newsfeed.php"; ?>
 
 <?php include "layout/screen_header_end.php"; ?>

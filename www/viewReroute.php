@@ -13,7 +13,7 @@
 	// FIXME check for login token
 	// FIXME: For development testing only
 	$_CUR_USER = UserQuery::create()
-		->filterByDisplayName('Jimmy Lu')
+		->filterByDisplayName('Kiah Bransch')
 		->findOne();
 	
 	if (isset($_CUR_USER)) {

@@ -12,7 +12,7 @@ var likeActivity = function (ele, activityAssocId, friendId){
 				// successful request 
 				
 				// change interest tally
-				document.getElementById("interest_tally_"+activityAssocId).innerHTML = result + " interests";
+				$("#interest_tally_"+activityAssocId).html(result + " interests");
 				
 				// change button
 				if (ele.type == "onboard"){

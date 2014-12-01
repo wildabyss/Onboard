@@ -15,62 +15,32 @@
 	
 		<?php 
 			if (isset($_GET['id'])) 
-				$friend = UserQuery::create()->findOneById($_GET['id']); 
+				$_FRIEND = UserQuery::create()->findOneById($_GET['id']); 
 		?>
 		
-		<?php if (isset($friend)):?>
+		<?php if (isset($_FRIEND)):?>
 		
 			<div id="profile_section">
 				<a id="profile_pic"></a>
-				<h1 class="profile_name"><?php echo $friend->getDisplayName();?></h1>
-				<a class="user_info">Email: <?php echo $friend->getEmail();?></a>
-				<a class="user_info">Phone: <?php echo $friend->getPhone();?></a>
+				<h1 class="profile_name"><?php echo $_FRIEND->getDisplayName();?></h1>
+				<a class="user_info">Email: <?php echo $_FRIEND->getEmail();?></a>
+				<a class="user_info">Phone: <?php echo $_FRIEND->getPhone();?></a>
 			</div>
 			
-			<?php $list = $friend->getDefaultActivityList() ?>
+			<?php $_ACTIVITY_LIST = $_FRIEND->getDefaultActivityList() ?>
 			
-			<?php if ($list->countActivityListAssociations() == 0):?>
+			<?php $activities = $_ACTIVITY_LIST->getActiveOrCompletedActivityAssociations() ?>
+			<?php if (count($activities) == 0):?>
 				<p class="no_activity_msg">This person has no activity.</p>
 			<?php else:?>
 		
 				<ul class="activity_list">
-				
-					<?php $activities = $list->getActiveOrCompletedActivityAssociations(); ?>
 					<?php for ($i=0; $i<count($activities); $i++):?>
-						<?php $actAssoc = $activities[$i];?>
-						
-						<li>
-							<h2><?php echo $actAssoc->getAlias();?></h2>
-							<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
-							<p class="post_body">
-								<?php echo $actAssoc->getDescription();?>
-							</p>
-							
-							<div class="interest_info">
-								<a class="interest_tally" id="interest_tally_<?php echo $actAssoc->getId()?>">
-									<?php echo ActivityListAssociationQuery::countInterestedFriends($friend->getId(), $actAssoc->getActivityId())?>
-									interests
-								</a>
-								
-								<?php $userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($_CUR_USER->getId(), $actAssoc->getActivityId())?>
-								
-								<!-- Leave/Onboard button -->
-								<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_OWNER):?>
-									<a class="onboard_leave_unavailable">You're an owner</a>
-								<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($_CUR_USER->getId(), $actAssoc->getActivityId())):?>
-									<a class="onboard_leave_unavailable">You're in discussion</a>
-								<?php else:?>
-									<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
-										onclick="likeActivity(this, <?php echo $actAssoc->getId()?>, <?php echo $friend->getId()?>);">
-										<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
-									</a>
-								<?php endif;?>
-								
-							</div>
-						</li>
-					<?php endfor;?>
+						<?php $_ACT_OBJ_VIEW = $activities[$i]?>
+						<?php include "layout/activity_section_view.php"?>
+					<?php endfor?>
 				</ul>
-			<?php endif;?>
+			<?php endif?>
 		
 		<?php else:?>
 	
@@ -83,9 +53,9 @@
 					<div style="vertical-align: middle; display:inline-block; height:100px; margin:0;"></div>
 					<a class="friend_name comm_link" href="community?id=<?php echo $friend['id']?>"><?php echo $friend['display_name']?></a>
 				</div>
-			<?php endforeach; ?>
+			<?php endforeach ?>
 		
-		<?php endif;?>
+		<?php endif?>
 	</div>
 	
 	<?php include "/layout/screen_footer.php"?>

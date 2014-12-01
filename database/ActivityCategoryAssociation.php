@@ -14,5 +14,5 @@ use Base\ActivityCategoryAssociation as BaseActivityCategoryAssociation;
  */
 class ActivityCategoryAssociation extends BaseActivityCategoryAssociation
 {
-
+	
 }

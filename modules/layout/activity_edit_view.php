@@ -1,38 +1,59 @@
-<li id="<?php if (isset($_ACT_EDIT['id'])):?>edit_activity_<?php echo $_ACT_EDIT['id'] ?>
-	<?php else:?>adding_activity
-	<?php endif?>" class="adding_activity">
+<?php 
+	if (isset($_ACT_EDIT['id'])){
+		$liId = "edit_activity_".$_ACT_EDIT['id']; 
+	} else {
+		$liId = "adding_activity";
+	}
+?>
+<li id="<?php echo $liId?>" class="adding_activity">
 	
-	<input type="text" class="new_activity_input" 
-		id="<?php if (isset($_ACT_EDIT['alias'])):?>edit_activity_alias_<?php echo $_ACT_EDIT['id']?>
-		<?php else:?>new_activity_alias
-		<?php endif?>" placeholder="Activity title"
-		value = "<?php if (isset($_ACT_EDIT['alias'])):?>
-			<?php echo $_ACT_EDIT['alias']?>
-		<?php endif?>"
-	/>
+	<?php 
+		if (isset($_ACT_EDIT['alias'])){
+			$titleInputId = "edit_activity_alias_".$_ACT_EDIT['id'];
+		} else {
+			$titleInputId = "new_activity_alias";
+		}
+		
+		$titleInputValue = "";
+		if (isset($_ACT_EDIT['alias']))
+			$titleInputValue = $_ACT_EDIT['alias'];
+	?>
+	<input type="text" class="new_activity_input" id="<?php echo $titleInputId?>" placeholder="Activity title" value = "<?php echo $titleInputValue?>" />
 	
-	<input type="text" class="new_activity_input" 
-		id="<?php if (isset($_ACT_EDIT['categories'])):?>edit_activity_categories_<?php echo $_ACT_EDIT['id']?>
-		<?php else:?>new_activity_categories
-		<?php endif?>" placeholder="Tag Categories" 
-		value = "<?php if (isset($_ACT_EDIT['categories'])):?>
-			<?php for ($i=0; $i<count($_ACT_EDIT['categories']); $i++):?>
-				<?php if ($i>0):?>,<?php endif?>
-				<?php echo $_ACT_EDIT['categories'][$i]?>
-			<?php endfor?>
-		<?php endif?>"
-	/>
+	<?php
+		if (isset($_ACT_EDIT['categories'])){
+			$categoryInputId = "edit_activity_categories_".$_ACT_EDIT['id'];
+		} else {
+			$categoryInputId = "new_activity_categories";
+		}
 	
-	<textarea class="new_activity_text" 
-		id="<?php if (isset($_ACT_EDIT['description'])):?>edit_activity_description_<?php echo $_ACT_EDIT['description']?>
-		<?php else:?>new_activity_description
-		<?php endif?>" placeholder="Description">
-		<?php if (isset($_ACT_EDIT['description'])):?>
-			<?php echo $_ACT_EDIT['description']?>
-		<?php endif?>
-	</textarea>
+		$categoryInputValue = "";		
+		if (isset($_ACT_EDIT['categories'])){
+			for ($i=0; $i<count($_ACT_EDIT['categories']); $i++){
+				if ($i>0)
+					$categoryInputValue .= ", ";
+				$categoryInputValue .= $_ACT_EDIT['categories'][$i];
+			}
+		}
+	?>
+	<input type="text" class="new_activity_input" id="<?php echo $categoryInputId?>" placeholder="Tag Categories" value = "<?php echo $categoryInputValue?>" />
 	
-	<span style="float:right"><input type="button" class="new_activity_buttons" value="Save" onclick="saveNewActivity()" />
+	<?php 
+		if (isset($_ACT_EDIT['description'])){
+			$descrInputId = "edit_activity_description_".$_ACT_EDIT['id'];
+		} else {
+			$descrInputId = "new_activity_description";
+		}
+		
+		$descrInputValue = "";
+		if (isset($_ACT_EDIT['description']))
+			$descrInputValue = $_ACT_EDIT['description'];
+	?>
+	<textarea class="new_activity_text" id="<?php echo $descrInputId?>" placeholder="Description"><?php echo $descrInputValue?></textarea>
 	
-	<input type="button" class="new_activity_buttons" value="Cancel" onclick="cancelNewActivity()" /></span>
+	<span style="float:right"><input type="button" class="new_activity_buttons" value="Save" 
+		onclick="<?php if (isset($_ACT_EDIT['id'])):?>saveActivity('<?php echo $_ACT_EDIT['id']?>')<?php else:?>saveNewActivity('<?php echo $_ACTIVITY_LIST->getId()?>')<?php endif?>" />
+	
+	<input type="button" class="new_activity_buttons" value="Cancel" 
+		onclick="<?php if (isset($_ACT_EDIT['id'])):?>cancelSaveActivity('<?php echo $_ACT_EDIT['id']?>')<?php else:?>cancelNewActivity()<?php endif?>" /></span>
 </li>

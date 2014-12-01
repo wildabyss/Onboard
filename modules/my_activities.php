@@ -24,47 +24,20 @@
 			<a>Add new activity</a>
 		</div>
 		
-		<?php $list = $_CUR_USER->getDefaultActivityList(); ?>
-		<?php $activities = $list->getActiveOrCompletedActivityAssociations(); ?>
+		<?php $_ACTIVITY_LIST = $_CUR_USER->getDefaultActivityList(); ?>
+		<?php $activities = $_ACTIVITY_LIST->getActiveOrCompletedActivityAssociations(); ?>
 		
 		<?php if (count($activities) == 0):?>
 			<p id="no_activity_msg">You currently have no activity. Add one to get started.</p>
 		<?php endif;?>
 	
+		<?php $_MY_LIST = true ?>
 		<ul class="activity_list" id="default_activity_list">
 			<?php include "layout/activity_edit_view.php"?>
 		
 			<?php for ($i=0; $i<count($activities); $i++):?>
-				<?php $actAssoc = $activities[$i];?>
-				<li id="activity_section_<?php echo $actAssoc->getId()?>">
-					<h2 class="activity_title"><?php echo $actAssoc->getAlias()?></h2>
-					<a class="details" id="activity_drop_<?php echo $i?>" onclick="displayDetailsBox(event, 'activity_edit_<?php echo $i?>')"></a>
-					<div class="details_box" id="activity_edit_<?php echo $i?>">
-						<a class="checked detail_box_item">Mark as completed</a>
-						<a class="edit detail_box_item" onclick="editActivity('<?php echo $actAssoc->getId()?>')">Edit</a>
-						<a class="delete detail_box_item" onclick="deleteActivity('<?php echo $actAssoc->getId()?>')">Delete</a>
-					</div>
-					
-					<?php $cats = $actAssoc->getActivityCategories();?>
-					<span class="category_info">
-						<?php for ($j=0; $j<count($cats); $j++):?>
-							[<?php echo $cats[$j]->getCategory()->getName();?>]
-						<?php endfor;?>
-					</span>
-					
-					<a class="datetime">Added: <?php echo $actAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
-					<p class="post_body">
-						<?php echo $actAssoc->getDescription();?>
-					</p>
-					
-					<div class="interest_info">
-						<a class="interest_tally">
-							<?php echo ActivityListAssociationQuery::countInterestedFriends($_CUR_USER->getPrimaryKey(), $actAssoc->getActivityId());?>
-							interests
-						</a>
-					</div>
-					<div class="expand">...</div>
-				</li>
+				<?php $_ACT_OBJ_VIEW = $activities[$i];?>
+				<?php include "layout/activity_section_view.php"?>
 			<?php endfor;?>
 		</ul>
 		

@@ -99,7 +99,7 @@ EOT;
 	public static function detUserAssociationWithActivity($userId, $activityId){
 		$conn = Propel::getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
-			select ala.is_owner from activity_list_assoc ala
+			select ala.is_owner, ala.status from activity_list_assoc ala
 				left join activity_list list
 					on list.id = ala.list_id
 				where
@@ -116,7 +116,7 @@ EOT;
 		
 		// assess results
 		$results = $stmt->fetchAll();
-		if (count($results)==0)
+		if (count($results)==0 || $results[0]['status'] == ActivityListAssociation::ARCHIVED_STATUS)
 			return ActivityListAssociation::USER_IS_NOT_ASSOCIATED;
 		else
 			return ($results[0]['is_owner'] == 1?

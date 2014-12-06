@@ -3,6 +3,8 @@
 if (!isset($_POST['action']))
 	exit();
 
+$curUser = $_SESSION['current_user'];
+
 switch ($_POST['action']){
 	// onboard/leave action
 	case 'onboard':
@@ -16,9 +18,9 @@ switch ($_POST['action']){
 			->filterById($_POST['activity_assoc'])
 			->findOne();
 			// current user's (i.e. my) association level with the activity
-			$userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($_CUR_USER->getId(), $friendActivityListAssoc->getActivityId());
+			$userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $friendActivityListAssoc->getActivityId());
 			// retrieve my default ActivityList
-			$userList = $_CUR_USER->getDefaultActivityList();
+			$userList = $curUser->getDefaultActivityList();
 		
 			if ($userAssocLevel == ActivityListAssociation::USER_IS_NOT_ASSOCIATED && $_POST['action']=="onboard"){
 				// find the archived version if exist

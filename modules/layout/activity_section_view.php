@@ -1,3 +1,5 @@
+<?php $curUser = $_SESSION['current_user'];?>
+
 <li id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 	<h2 class="activity_title" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo $_ACT_OBJ_VIEW->getAlias()?></h2>
 	
@@ -24,7 +26,7 @@
 	
 	<?php 
 		if (isset($_MY_LIST) && $_MY_LIST)
-			$numberOfInterests = ActivityListAssociationQuery::countInterestedFriends($_CUR_USER->getPrimaryKey(), $_ACT_OBJ_VIEW->getActivityId());
+			$numberOfInterests = ActivityListAssociationQuery::countInterestedFriends($curUser->getPrimaryKey(), $_ACT_OBJ_VIEW->getActivityId());
 		else
 			$numberOfInterests = ActivityListAssociationQuery::countInterestedFriends($_FRIEND->getPrimaryKey(), $_ACT_OBJ_VIEW->getActivityId());
 	?>
@@ -33,10 +35,10 @@
 		
 		<?php if (!isset($_MY_LIST) || !$_MY_LIST):?>
 			<!-- Leave/Onboard button -->
-			<?php $userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($_CUR_USER->getId(), $_ACT_OBJ_VIEW->getActivityId())?>
+			<?php $userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())?>
 			<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_OWNER):?>
 				<a class="onboard_leave_unavailable">You're an owner</a>
-			<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($_CUR_USER->getId(), $_ACT_OBJ_VIEW->getActivityId())):?>
+			<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())):?>
 				<a class="onboard_leave_unavailable">You're in discussion</a>
 			<?php else:?>
 				<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 

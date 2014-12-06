@@ -1,54 +1,62 @@
 <?php 
 
+	// PHP error reporting
+	ini_set('display_errors',1);
+	ini_set('display_startup_errors',1);
+	error_reporting(-1);
+
 	use Klein\Klein;
 	
 	require_once "../loading.php";
 	
+	// begin PHP session
+	session_start();
+
 	// URL router
 	$kleinRouter = new Klein();
 	
 	// FIXME time zone should vary with user location
 	date_default_timezone_set('America/Toronto');
 	
-	// FIXME check for login token
-	// FIXME: For development testing only
-	$_CUR_USER = UserQuery::create()
-		->filterByDisplayName('Kiah Bransch')
-		->findOne();
-	
-	if (isset($_CUR_USER)) {
+	if (isset($_SESSION['current_user'])) {
 		// home page
-		$kleinRouter->respond(array('GET','POST'), '/', function () use ($_CUR_USER) {
+		$kleinRouter->respond(array('GET','POST'), '/', function () {
 			include "../modules/my_activities.php";
 			return;
 		});
 		
 		// redirect to recent activities
-		$kleinRouter->respond(array('GET','POST'), '/recent', function () use ($_CUR_USER) {
+		$kleinRouter->respond(array('GET','POST'), '/recent', function () {
 			include "../modules/recent.php";
 			return;
 		});
 		
 		// redirect to community
-		$kleinRouter->respond(array('GET','POST'), '/community', function () use ($_CUR_USER) {
+		$kleinRouter->respond(array('GET','POST'), '/community', function () {
 			include "../modules/community.php";
 			return;
 		});
 		
 		// redirect to login
-		$kleinRouter->respond(array('GET','POST'), '/login', function () use ($_CUR_USER) {
+		$kleinRouter->respond(array('GET','POST'), '/login', function () {
 			include "../modules/login.php";
 			return;
 		});
 		
+		// redirect to login
+		$kleinRouter->respond(array('GET','POST'), '/logout', function () {
+			include "../modules/logout.php";
+			return;
+		});
+		
 		// redirect to browse
-		$kleinRouter->respond(array('GET','POST'), '/browse', function () use ($_CUR_USER) {
+		$kleinRouter->respond(array('GET','POST'), '/browse', function () {
 			include "../modules/browse.php";
 			return;
 		});
 		
 		// redirect to my activities
-		$kleinRouter->respond(array('GET','POST'), '/mylist', function () use ($_CUR_USER) {
+		$kleinRouter->respond(array('GET','POST'), '/mylist', function () {
 			include "../modules/my_activities.php";
 			return;
 		});

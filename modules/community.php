@@ -1,6 +1,8 @@
 <?php 
 	// set basic variables for layout
 	$_PAGE_TITLE = Utilities::PAGE_COMMUNITY; 
+	
+	$curUser = $_SESSION['current_user'];
 ?>
 
 <?php include "/layout/screen_header_start.php"; ?>
@@ -44,16 +46,20 @@
 		
 		<?php else:?>
 	
-			<?php $_CUR_USER->getFriends($friends); ?>
+			<?php $curUser->getFriends($friends); ?>
 			
 			<h1 class="page_title">My Community</h1>
-			<?php foreach ($friends as $friend):?>
-				<div class="friend">
-					<a class="friend_profile_pic"></a>
-					<div style="vertical-align: middle; display:inline-block; height:100px; margin:0;"></div>
-					<a class="friend_name comm_link" href="community?id=<?php echo $friend['id']?>"><?php echo $friend['display_name']?></a>
-				</div>
-			<?php endforeach ?>
+			<?php if (count($friends)==0):?>
+				<p id="no_activity_msg">None of your friends is currently using <i>onboard</i>.</p>
+			<?php else:?>
+				<?php foreach ($friends as $friend):?>
+					<div class="friend">
+						<a class="friend_profile_pic"></a>
+						<div style="vertical-align: middle; display:inline-block; height:100px; margin:0;"></div>
+						<a class="friend_name comm_link" href="community?id=<?php echo $friend['id']?>"><?php echo $friend['display_name']?></a>
+					</div>
+				<?php endforeach ?>
+			<?php endif?>
 		
 		<?php endif?>
 	</div>

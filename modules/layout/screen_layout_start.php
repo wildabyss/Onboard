@@ -4,7 +4,7 @@
 	<div id="header">
 		<a href="/mylist" id="header_logo"></a>
 		<input class="search" id="global_search" placeholder="search" />
-		<a id="header_options"></a>
+		<a href="logout" id="header_options">Log Out</a>
 	</div>
 	
 	<div id="content_wrapper">

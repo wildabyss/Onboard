@@ -4,6 +4,20 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
+-- enum
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `enum`;
+
+CREATE TABLE `enum`
+(
+    `id` smallint unsigned NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255),
+    `value` VARCHAR(255),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- activity
 -- ---------------------------------------------------------------------
 

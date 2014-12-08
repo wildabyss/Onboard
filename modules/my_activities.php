@@ -14,9 +14,8 @@
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
-
 		<div id="profile_section">
-			<a id="profile_pic"></a>
+			<a id="profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $curUser->getId()?>_large.jpg)"></a>
 			<h1 class="profile_name"><?php echo $curUser->getDisplayName();?></h1>
 			<a class="user_info">Email: <?php echo $curUser->getEmail();?></a>
 			<a class="user_info">Phone: <?php echo $curUser->getPhone();?></a>

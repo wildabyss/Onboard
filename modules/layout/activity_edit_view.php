@@ -52,8 +52,10 @@
 	<textarea class="new_activity_text" id="<?php echo $descrInputId?>" placeholder="Description"><?php echo $descrInputValue?></textarea>
 	
 	<span style="float:right"><input type="button" class="new_activity_buttons" value="Save" 
+		id="<?php if (isset($_ACT_EDIT['id'])):?>save_activity_button_<?php echo $_ACT_EDIT['id']?><?php else:?>save_activity_button_new<?php endif?>"
 		onclick="<?php if (isset($_ACT_EDIT['id'])):?>saveActivity('<?php echo $_ACT_EDIT['id']?>')<?php else:?>saveNewActivity('<?php echo $_ACTIVITY_LIST->getId()?>')<?php endif?>" />
 	
 	<input type="button" class="new_activity_buttons" value="Cancel" 
+		id="<?php if (isset($_ACT_EDIT['id'])):?>cancel_activity_button_<?php echo $_ACT_EDIT['id']?><?php else:?>cancel_activity_button_new<?php endif?>"
 		onclick="<?php if (isset($_ACT_EDIT['id'])):?>cancelSaveActivity('<?php echo $_ACT_EDIT['id']?>')<?php else:?>cancelNewActivity()<?php endif?>" /></span>
 </li>

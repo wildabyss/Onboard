@@ -23,7 +23,7 @@
 		<?php if (isset($_FRIEND)):?>
 		
 			<div id="profile_section">
-				<a id="profile_pic"></a>
+				<a id="profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $_FRIEND->getId()?>_large.jpg)"></a>
 				<h1 class="profile_name"><?php echo $_FRIEND->getDisplayName();?></h1>
 				<a class="user_info">Email: <?php echo $_FRIEND->getEmail();?></a>
 				<a class="user_info">Phone: <?php echo $_FRIEND->getPhone();?></a>
@@ -54,7 +54,7 @@
 			<?php else:?>
 				<?php foreach ($friends as $friend):?>
 					<div class="friend">
-						<a class="friend_profile_pic"></a>
+						<a class="friend_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $friend['id']?>_large.jpg)"></a>
 						<div style="vertical-align: middle; display:inline-block; height:100px; margin:0;"></div>
 						<a class="friend_name comm_link" href="community?id=<?php echo $friend['id']?>"><?php echo $friend['display_name']?></a>
 					</div>

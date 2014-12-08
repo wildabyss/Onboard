@@ -1,26 +1,34 @@
 <?php 
 use Facebook\FacebookSession;
 use Facebook\FacebookRedirectLoginHelper;
+use Facebook\FacebookAuthorizationException;
 
 // set basic variables for layout
 $_PAGE_TITLE = "Sign In"; 
 
 // Facebook app info
-$fb_app_id = Utilities::GetFacebookAppId();
-$fb_app_secret = Utilities::GetFacebookAppSecret();
-FacebookSession::setDefaultApplication($fb_app_id, $fb_app_secret);
 $fbLoginHelper = new FacebookRedirectLoginHelper('http://192.168.1.126/login');
 
 // if a valid session already exists, redirect to home
-if (isset($_SESSION['fb_session']) && $_SESSION['fb_session']) {
-	header("Location: mylist");
-	die();
+if (isset($_SESSION['current_user']) && $_SESSION['fb_token']) {
+	// get active facebook session
+	$fbSession = new FacebookSession($_SESSION['fb_token']);
+	try {
+		// validate Facebook session, if outdated or invalid, will throw exception
+		$fbSession->validate();
+
+		// redirect
+		header("Location: mylist");
+		die();
+	} catch (FacebookAuthorizationException $ex){
+		$fbSession = false;
+	}
 }
 
 
 // get access token and finalize facebook login
 try {
-	$session = $fbLoginHelper->getSessionFromRedirect();
+	$fbSession = $fbLoginHelper->getSessionFromRedirect();
 } catch(FacebookRequestException $ex) {
 	// Facebook login error
 	header("Location: login");
@@ -33,24 +41,27 @@ try {
 
 ?>
 
-<?php if ($session):?>
+<?php if ($fbSession):?>
 
 	<?php 
 	
 	// verify that the user profile is in the database
-	$curUserObj = UserQuery::ValidateFacebookLogin($session);
+	$curUserObj = FacebookUtilities::ValidateFacebookLogin($fbSession);
 	if ($curUserObj == false){
 		// register user in database
-		$curUserObj = UserQuery::RegisterFacebookUser($session);
+		$curUserObj = FacebookUtilities::RegisterFacebookUser($fbSession);
 	}
 	
 	// try again
 	if ($curUserObj != false) {
 		// refresh his community based on Facebook friends
-		UserCommunityAssociationQuery::PopulateCommunityFromFacebook($session, $curUserObj);
+		UserCommunityAssociationQuery::PopulateCommunityFromFacebook($fbSession, $curUserObj);
 		
 		// finalize authenticated session
-		UserQuery::FinalizeFacebookLogin($session, $curUserObj);
+		FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
+		
+		// get profile picture
+		FacebookUtilities::GetProfilePicture($fbSession, $_SESSION['current_user']);
 		
 		// redirect to home page
 		header("Location: mylist");
@@ -72,7 +83,7 @@ try {
 			<div id="column_login" class="content_column_wrapper">
 				<h1>Sign in/Register</h1>
 				<div class="center">
-					<a id="facebook_signin" href="<?php echo $fbLoginHelper->getLoginUrl(Utilities::FACEBOOK_PRIVILEGES)?>"></a>
+					<a id="facebook_signin" href="<?php echo $fbLoginHelper->getLoginUrl(FacebookUtilities::FACEBOOK_PRIVILEGES)?>"></a>
 					<p>or</p>
 					<a id="google_signin"></a>
 				</div>

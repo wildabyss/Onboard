@@ -22,11 +22,20 @@ var saveNewActivity = function(listId){
 	var inputActDescr = $.trim($('#new_activity_description').val());
 	var inputActCats = $.trim($('#new_activity_categories').val());
 	
+	// validate the fields prior to submitting
+	if (inputActAlias == "")
+		return;
+
 	$.ajax({
 		url:	"ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_alias: inputActAlias, activity_descr: inputActDescr, activity_cats: inputActCats, 
 			activity_list: listId, action: 'save_new'},
+		beforeSend: function(){
+			// disable buttons
+			$('#save_activity_button_new').attr("disabled", true);
+			$('#cancel_activity_button_new').attr("disabled", true);
+		},
 		success: function(result){
 			$('#adding_activity').hide();
 			$("#modification_bar").show();
@@ -105,11 +114,20 @@ var saveActivity = function(activityAssocId){
 	var inputActDescr = $.trim($('#edit_activity_description_'+activityAssocId).val());
 	var inputActCats = $.trim($('#edit_activity_categories_'+activityAssocId).val());
 	
+	// validate the fields prior to submitting
+	if (inputActAlias == "")
+		return;
+	
 	$.ajax({
 		url:	"ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_assoc: activityAssocId, activity_alias: inputActAlias, 
 			activity_descr: inputActDescr, activity_cats: inputActCats, action: 'save'},
+		beforeSend: function(){
+			// disable buttons
+			$('#save_activity_button_'+activityAssocId).attr("disabled", true);
+			$('#cancel_activity_button_'+activityAssocId).attr("disabled", true);
+		},
 		success: function(result){
 			$('#edit_activity_'+activityAssocId).remove();
 			

@@ -1,6 +1,6 @@
 <?php
 
-UserQuery::Logout();
+FacebookUtilities::Logout();
 header("Location: login");
 die();
 

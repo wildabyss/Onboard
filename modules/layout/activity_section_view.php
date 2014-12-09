@@ -1,12 +1,28 @@
 <?php $curUser = $_SESSION['current_user'];?>
 
+<?php 
+	// completed status
+	if ($_ACT_OBJ_VIEW->getStatus()==ActivityListAssociation::COMPLETED_STATUS){
+		$markAsCompletedClick = "$('#mark_complete_".$_ACT_OBJ_VIEW->getId()."').on('click', {actAssocId:'".$_ACT_OBJ_VIEW->getId()."'}, markAsActive);";
+		$markAsCompletedText = "Mark as active";
+		$liClass = "completed_activity";
+	} else {
+		$markAsCompletedClick = "$('#mark_complete_".$_ACT_OBJ_VIEW->getId()."').on('click', {actAssocId:'".$_ACT_OBJ_VIEW->getId()."'}, markAsCompleted);";
+		$markAsCompletedText = "Mark as completed";
+		$liClass = "";
+	}
+?>
+
 <li id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-	<h2 class="activity_title" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo $_ACT_OBJ_VIEW->getAlias()?></h2>
+	<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo $_ACT_OBJ_VIEW->getAlias()?></h2>
 	
 	<?php if (isset($_MY_LIST) && $_MY_LIST):?>
 		<a class="details" id="activity_drop_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="displayDetailsBox(event, 'activity_edit_<?php echo $_ACT_OBJ_VIEW->getId()?>')"></a>
 		<div class="details_box" id="activity_edit_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-			<a class="checked detail_box_item">Mark as completed</a>
+			<a class="checked detail_box_item" id="mark_complete_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo $markAsCompletedText?></a>
+			<script type="text/javascript">
+				<?php echo $markAsCompletedClick?>
+			</script>
 			<a class="edit detail_box_item" onclick="editActivity('<?php echo $_ACT_OBJ_VIEW->getId()?>')">Edit</a>
 			<a class="delete detail_box_item" onclick="deleteActivity('<?php echo $_ACT_OBJ_VIEW->getId()?>')">Delete</a>
 		</div>

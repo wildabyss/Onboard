@@ -29,9 +29,9 @@
 				<a class="user_info">Phone: <?php echo $_FRIEND->getPhone();?></a>
 			</div>
 			
-			<?php $_ACTIVITY_LIST = $_FRIEND->getDefaultActivityList() ?>
+			<?php $defaultList = $_FRIEND->getDefaultActivityList() ?>
 			
-			<?php $activities = $_ACTIVITY_LIST->getActiveOrCompletedActivityAssociations() ?>
+			<?php $activities = $defaultList->getActiveOrCompletedActivityAssociations() ?>
 			<?php if (count($activities) == 0):?>
 				<p class="no_activity_msg">This person has no activity.</p>
 			<?php else:?>

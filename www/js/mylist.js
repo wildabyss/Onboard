@@ -58,6 +58,9 @@ var saveNewActivity = function(listId){
 			}
 			
 			activity_being_added = false;
+			// enable buttons
+			$('#save_activity_button_new').attr("disabled", false);
+			$('#cancel_activity_button_new').attr("disabled", false);
 		}
 	});
 }
@@ -178,6 +181,48 @@ var confirmDeleteActivity = function(actAssocId){
 var cancelDeleteActivity = function(actAssocId){
 	$('#delete_confirmation_'+actAssocId).remove();
 	$('#activity_section_'+actAssocId).show();
+}
+
+var markAsCompleted = function(event){
+	var actAssocId = event.data.actAssocId;
+	
+	$.ajax({
+		url:	"ajaxActivityAssociation",
+		type: 	"post",
+		data:	{activity_assoc: actAssocId, action: 'mark_complete'},
+		success: function(result){
+			if (result == 1){
+				// successful request 
+				
+				$('#activity_title_'+actAssocId).addClass('completed_activity');
+				$('#mark_complete_'+actAssocId).html('Mark as active');
+				
+				// bind a new click handler
+				$('#mark_complete_'+actAssocId).off('click').on("click", {actAssocId:actAssocId}, markAsActive);
+			}
+		}
+	});
+}
+
+var markAsActive = function(event){
+	var actAssocId = event.data.actAssocId;
+	
+	$.ajax({
+		url:	"ajaxActivityAssociation",
+		type: 	"post",
+		data:	{activity_assoc: actAssocId, action: 'mark_active'},
+		success: function(result){
+			if (result == 1){
+				// successful request 
+				
+				$('#activity_title_'+actAssocId).removeClass('completed_activity');
+				$('#mark_complete_'+actAssocId).html('Mark as completed');
+
+				// bind a new click handler
+				$('#mark_complete_'+actAssocId).off('click').on("click", {actAssocId:actAssocId}, markAsCompleted);
+			}
+		}
+	});
 }
 
 

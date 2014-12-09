@@ -63,7 +63,7 @@ switch ($_POST['action']){
 			exit();
 		
 		$actAssocObj = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
-		if ($actAssocObj === false)
+		if ($actAssocObj == false)
 			exit();
 		$actCategories = $actAssocObj->getActivityCategories();
 		
@@ -86,7 +86,7 @@ switch ($_POST['action']){
 			exit();
 		
 		$actAssocObj = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
-		if ($actAssocObj === false)
+		if ($actAssocObj == false)
 			exit();
 		
 		// change status of ActivityListAssociation object to archived (deleted)
@@ -137,7 +137,7 @@ switch ($_POST['action']){
 		// retrieve the existing ActivityListAssociation object
 		$_MY_LIST = true;
 		$_ACT_OBJ_VIEW = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
-		if ($_ACT_OBJ_VIEW === false)
+		if ($_ACT_OBJ_VIEW == false)
 			exit();
 		
 		// save the changes
@@ -148,6 +148,27 @@ switch ($_POST['action']){
 		
 		// output new HTML for client parsing
 		include '../modules/layout/activity_section_view.php';
+		
+		break;
+	case "mark_complete":
+	case "mark_active":
+		if (!isset($_POST['activity_assoc']))
+			exit();
+		
+		// fetch associated activity
+		$actAssocObj = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		if ($actAssocObj == false)
+			exit();
+		
+		// set activityassoc status
+		if ($_POST['action'] == "mark_complete")
+			$actAssocObj->setStatus(ActivityListAssociation::COMPLETED_STATUS);
+		elseif ($_POST['action'] == "mark_active")
+			$actAssocObj->setStatus(ActivityListAssociation::ACTIVE_STATUS);
+		
+		// save change
+		if ($actAssocObj->save() > 0)
+			echo 1;
 		
 		break;
 }

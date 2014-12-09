@@ -24,7 +24,7 @@
 				<?php foreach ($recentActivityAssocs as $recentActivityAssoc):?>
 					<?php $assocUser = $recentActivityAssoc->getUser() ?>
 					
-					<li class="feed_page_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>';">
+					<li class="feed_page_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>#activity_section_<?php echo $recentActivityAssoc->getId()?>';">
 						<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $assocUser->getId()?>_small.jpg)"></a>
 						<span class="feed_page_block_body">
 							<a class="feed_title">

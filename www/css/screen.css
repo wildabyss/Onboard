@@ -431,7 +431,7 @@ h2.activity_title{
 .interested_friends_summary_container{
 	position:relative;
 }
-ul.interested_friends_summary{
+.interested_friends_summary{
 	display: none;
 	bottom: 0;
 	margin-left: 20px;
@@ -449,6 +449,16 @@ ul.interested_friends_summary li{
 	font-size: 12px;
 	background-color: transparent;
 	border: none;
+}
+a.interested_friends_summary{
+	line-height: 14px;
+	margin-left: 0;
+	bottom: auto;
+	top: 0;
+	min-width: 0;
+	white-space: nowrap;
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
 .expand{
@@ -624,6 +634,7 @@ a.comm_link:hover{
 	width: 50px;
 	margin: 0;
 	background-color: gray;
+	position: relative;
 }
 
 .feed_block_body{

@@ -18,8 +18,8 @@
 						class="<?php if ($_PAGE_TITLE==Utilities::PAGE_RECENT) echo "selected"?>">News Feed</a></li>
 					<li class="button_middle"><a id="button_community" href="/community"
 						class="<?php if ($_PAGE_TITLE==Utilities::PAGE_COMMUNITY) echo "selected"?>">Community</a></li>
-					<li><a id="button_browse" href="/browse"
-						class="<?php if ($_PAGE_TITLE==Utilities::PAGE_BROWSE) echo "selected"?>">Browse</a></li>
+					<!-- <li><a id="button_browse" href="/browse"
+						class="<?php if ($_PAGE_TITLE==Utilities::PAGE_BROWSE) echo "selected"?>">Browse</a></li>-->
 				</ul>
 			</div>
 		</div>

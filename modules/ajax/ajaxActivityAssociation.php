@@ -119,7 +119,7 @@ switch ($_POST['action']){
 		$_ACT_OBJ_VIEW->setDescription(trim($_POST['activity_descr']));
 		$_ACT_OBJ_VIEW->setDateAdded(time());
 		$_ACT_OBJ_VIEW->setStatus(ActivityListAssociation::ACTIVE_STATUS);
-		$_ACT_OBJ_VIEW->setIsOwner(ActivityListAssociation::USER_IS_OWNER);
+		$_ACT_OBJ_VIEW->setIsOwner(1);
 		$rawCategories = explode(',', $_POST['activity_cats']);
 		$_ACT_OBJ_VIEW->saveWithCategories($_ACT_OBJ_VIEW, $rawCategories);
 		
@@ -170,6 +170,19 @@ switch ($_POST['action']){
 		if ($actAssocObj->save() > 0)
 			echo 1;
 		
+		break;
+	case "expand_activity_details":
+		if (!isset($_POST['activity_assoc']))
+			exit();
+		
+		// verify the activity association id that's passed in
+		$_ACT_OBJ_VIEW = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		if ($_ACT_OBJ_VIEW == false)
+			exit();
+		
+		// output interested friends
+		$_INTERESTED_FRIENDS = ActivityListAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
+		include "../modules/layout/interested_friends_view.php";
 		break;
 }
 

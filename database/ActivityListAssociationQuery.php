@@ -17,20 +17,21 @@ use Propel\Runtime\Formatter\ObjectFormatter;
  */
 class ActivityListAssociationQuery extends BaseActivityListAssociationQuery
 {
+	
 	/**
 	 * Get all the friends associated with userId who are interested in activityId
 	 * Only active users with active activities are be counted
 	 * @param unknown $userId
 	 * @param unknown $activityId
-	 * @param unknown $results
+	 * @return array of Users
 	 */
-	public static function getInterestedFriends($userId, $activityId, &$results){
+	public static function getInterestedFriends($userId, $activityId){
 		$results = array();
 		
 		// search for friends
 		$conn = Propel::getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
-			select distinct user.id, user.display_name 
+			select distinct user.*
 				from activity_list_assoc ala
 				left join 
 					activity_list al
@@ -70,10 +71,10 @@ EOT;
 				':myid2' 	=> $userId
 				));
 		
-		// populate results array
-		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$results[] = $row;
-		}
+		$con = Propel::getWriteConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+		$formatter = new ObjectFormatter();
+		$formatter->setClass('\User'); //full qualified class name
+		return $formatter->format($con->getDataFetcher($stmt));
 	}
 	
 	
@@ -85,8 +86,8 @@ EOT;
 	 * @return number
 	 */
 	public static function countInterestedFriends($userId, $activityId){
-		self::getInterestedFriends($userId, $activityId, $results);
-		return count($results);
+		$intFriends = self::getInterestedFriends($userId, $activityId);
+		return count($intFriends);
 	}
 	
 	

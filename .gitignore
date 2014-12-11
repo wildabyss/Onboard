@@ -1,0 +1,6 @@
+.buildpath
+.project
+
+vendor/*
+discussions/*
+www/profile_pic_cache/*

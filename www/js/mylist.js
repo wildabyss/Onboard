@@ -225,6 +225,33 @@ var markAsActive = function(event){
 	});
 }
 
+var expandActivity = function(actAssocId) {
+	var expandButton = $('#expand_'+actAssocId);
+	if (expandButton.attr('action') == "expand"){
+		if ($('#interest_details_'+actAssocId).length){
+			$('#interest_details_'+actAssocId).show();
+			expandButton.attr('action', 'hide');
+		} else {
+			$.ajax({
+				url:	"ajaxActivityAssociation",
+				type: 	"post",
+				data:	{activity_assoc: actAssocId, action: 'expand_activity_details'},
+				success: function(result){
+					if (result != ""){
+						// successful request 
+
+						$('#interest_info_'+actAssocId).append(result);
+						expandButton.attr('action', 'hide');
+					}
+				}
+			});
+		}
+	} else if (expandButton.attr('action') == "hide"){
+		$('#interest_details_'+actAssocId).hide();
+		expandButton.attr('action', 'expand');
+	}
+}
+
 
 /* loads when document finishes loading */
 

@@ -14,5 +14,5 @@ use Base\DiscussionUserAssociation as BaseDiscussionUserAssociation;
  */
 class DiscussionUserAssociation extends BaseDiscussionUserAssociation
 {
-
+	
 }

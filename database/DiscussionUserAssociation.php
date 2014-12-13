@@ -14,5 +14,6 @@ use Base\DiscussionUserAssociation as BaseDiscussionUserAssociation;
  */
 class DiscussionUserAssociation extends BaseDiscussionUserAssociation
 {
-	
+	const ACTIVE_STATUS = 1;
+	const INACTIVE_STATUS = 2;
 }

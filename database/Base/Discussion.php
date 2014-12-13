@@ -8,8 +8,6 @@ use \Discussion as ChildDiscussion;
 use \DiscussionQuery as ChildDiscussionQuery;
 use \DiscussionUserAssociation as ChildDiscussionUserAssociation;
 use \DiscussionUserAssociationQuery as ChildDiscussionUserAssociationQuery;
-use \User as ChildUser;
-use \UserQuery as ChildUserQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
@@ -88,12 +86,6 @@ abstract class Discussion implements ActiveRecordInterface
     protected $activity_id;
 
     /**
-     * The value for the owner_id field.
-     * @var        int
-     */
-    protected $owner_id;
-
-    /**
      * The value for the status field.
      * @var        int
      */
@@ -115,11 +107,6 @@ abstract class Discussion implements ActiveRecordInterface
      * @var        ChildActivity
      */
     protected $aActivity;
-
-    /**
-     * @var        ChildUser
-     */
-    protected $aUser;
 
     /**
      * @var        ObjectCollection|ChildDiscussionUserAssociation[] Collection to store aggregation of ChildDiscussionUserAssociation objects.
@@ -389,16 +376,6 @@ abstract class Discussion implements ActiveRecordInterface
     }
 
     /**
-     * Get the [owner_id] column value.
-     *
-     * @return int
-     */
-    public function getOwnerId()
-    {
-        return $this->owner_id;
-    }
-
-    /**
      * Get the [status] column value.
      *
      * @return int
@@ -501,30 +478,6 @@ abstract class Discussion implements ActiveRecordInterface
 
         return $this;
     } // setActivityId()
-
-    /**
-     * Set the value of [owner_id] column.
-     *
-     * @param  int $v new value
-     * @return $this|\Discussion The current object (for fluent API support)
-     */
-    public function setOwnerId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->owner_id !== $v) {
-            $this->owner_id = $v;
-            $this->modifiedColumns[DiscussionTableMap::COL_OWNER_ID] = true;
-        }
-
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
-        }
-
-        return $this;
-    } // setOwnerId()
 
     /**
      * Set the value of [status] column.
@@ -631,19 +584,16 @@ abstract class Discussion implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DiscussionTableMap::translateFieldName('ActivityId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->activity_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DiscussionTableMap::translateFieldName('OwnerId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->owner_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DiscussionTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DiscussionTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
             $this->status = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DiscussionTableMap::translateFieldName('DateCreated', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DiscussionTableMap::translateFieldName('DateCreated', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->date_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : DiscussionTableMap::translateFieldName('FileName', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DiscussionTableMap::translateFieldName('FileName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_name = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -653,7 +603,7 @@ abstract class Discussion implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = DiscussionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = DiscussionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Discussion'), 0, $e);
@@ -677,9 +627,6 @@ abstract class Discussion implements ActiveRecordInterface
     {
         if ($this->aActivity !== null && $this->activity_id !== $this->aActivity->getId()) {
             $this->aActivity = null;
-        }
-        if ($this->aUser !== null && $this->owner_id !== $this->aUser->getId()) {
-            $this->aUser = null;
         }
     } // ensureConsistency
 
@@ -721,7 +668,6 @@ abstract class Discussion implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aActivity = null;
-            $this->aUser = null;
             $this->collDiscussionUserAssociations = null;
 
         } // if (deep)
@@ -835,13 +781,6 @@ abstract class Discussion implements ActiveRecordInterface
                 $this->setActivity($this->aActivity);
             }
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
-                }
-                $this->setUser($this->aUser);
-            }
-
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -905,9 +844,6 @@ abstract class Discussion implements ActiveRecordInterface
         if ($this->isColumnModified(DiscussionTableMap::COL_ACTIVITY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'activity_id';
         }
-        if ($this->isColumnModified(DiscussionTableMap::COL_OWNER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'owner_id';
-        }
         if ($this->isColumnModified(DiscussionTableMap::COL_STATUS)) {
             $modifiedColumns[':p' . $index++]  = 'status';
         }
@@ -936,9 +872,6 @@ abstract class Discussion implements ActiveRecordInterface
                         break;
                     case 'activity_id':
                         $stmt->bindValue($identifier, $this->activity_id, PDO::PARAM_INT);
-                        break;
-                    case 'owner_id':
-                        $stmt->bindValue($identifier, $this->owner_id, PDO::PARAM_INT);
                         break;
                     case 'status':
                         $stmt->bindValue($identifier, $this->status, PDO::PARAM_INT);
@@ -1021,15 +954,12 @@ abstract class Discussion implements ActiveRecordInterface
                 return $this->getActivityId();
                 break;
             case 3:
-                return $this->getOwnerId();
-                break;
-            case 4:
                 return $this->getStatus();
                 break;
-            case 5:
+            case 4:
                 return $this->getDateCreated();
                 break;
-            case 6:
+            case 5:
                 return $this->getFileName();
                 break;
             default:
@@ -1065,10 +995,9 @@ abstract class Discussion implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
             $keys[2] => $this->getActivityId(),
-            $keys[3] => $this->getOwnerId(),
-            $keys[4] => $this->getStatus(),
-            $keys[5] => $this->getDateCreated(),
-            $keys[6] => $this->getFileName(),
+            $keys[3] => $this->getStatus(),
+            $keys[4] => $this->getDateCreated(),
+            $keys[5] => $this->getFileName(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1090,21 +1019,6 @@ abstract class Discussion implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aActivity->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aUser) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'user';
-                        break;
-                    default:
-                        $key = 'User';
-                }
-
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collDiscussionUserAssociations) {
 
@@ -1165,15 +1079,12 @@ abstract class Discussion implements ActiveRecordInterface
                 $this->setActivityId($value);
                 break;
             case 3:
-                $this->setOwnerId($value);
-                break;
-            case 4:
                 $this->setStatus($value);
                 break;
-            case 5:
+            case 4:
                 $this->setDateCreated($value);
                 break;
-            case 6:
+            case 5:
                 $this->setFileName($value);
                 break;
         } // switch()
@@ -1212,16 +1123,13 @@ abstract class Discussion implements ActiveRecordInterface
             $this->setActivityId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setOwnerId($arr[$keys[3]]);
+            $this->setStatus($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setStatus($arr[$keys[4]]);
+            $this->setDateCreated($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setDateCreated($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setFileName($arr[$keys[6]]);
+            $this->setFileName($arr[$keys[5]]);
         }
     }
 
@@ -1272,9 +1180,6 @@ abstract class Discussion implements ActiveRecordInterface
         }
         if ($this->isColumnModified(DiscussionTableMap::COL_ACTIVITY_ID)) {
             $criteria->add(DiscussionTableMap::COL_ACTIVITY_ID, $this->activity_id);
-        }
-        if ($this->isColumnModified(DiscussionTableMap::COL_OWNER_ID)) {
-            $criteria->add(DiscussionTableMap::COL_OWNER_ID, $this->owner_id);
         }
         if ($this->isColumnModified(DiscussionTableMap::COL_STATUS)) {
             $criteria->add(DiscussionTableMap::COL_STATUS, $this->status);
@@ -1373,7 +1278,6 @@ abstract class Discussion implements ActiveRecordInterface
     {
         $copyObj->setName($this->getName());
         $copyObj->setActivityId($this->getActivityId());
-        $copyObj->setOwnerId($this->getOwnerId());
         $copyObj->setStatus($this->getStatus());
         $copyObj->setDateCreated($this->getDateCreated());
         $copyObj->setFileName($this->getFileName());
@@ -1468,57 +1372,6 @@ abstract class Discussion implements ActiveRecordInterface
         }
 
         return $this->aActivity;
-    }
-
-    /**
-     * Declares an association between this object and a ChildUser object.
-     *
-     * @param  ChildUser $v
-     * @return $this|\Discussion The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setUser(ChildUser $v = null)
-    {
-        if ($v === null) {
-            $this->setOwnerId(NULL);
-        } else {
-            $this->setOwnerId($v->getId());
-        }
-
-        $this->aUser = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
-        if ($v !== null) {
-            $v->addDiscussion($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildUser object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildUser The associated ChildUser object.
-     * @throws PropelException
-     */
-    public function getUser(ConnectionInterface $con = null)
-    {
-        if ($this->aUser === null && ($this->owner_id !== null)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->owner_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUser->addDiscussions($this);
-             */
-        }
-
-        return $this->aUser;
     }
 
 
@@ -1772,10 +1625,10 @@ abstract class Discussion implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildDiscussionUserAssociation[] List of ChildDiscussionUserAssociation objects
      */
-    public function getDiscussionUserAssociationsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getDiscussionUserAssociationsJoinActivityListAssociation(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildDiscussionUserAssociationQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('ActivityListAssociation', $joinBehavior);
 
         return $this->getDiscussionUserAssociations($query, $con);
     }
@@ -1790,13 +1643,9 @@ abstract class Discussion implements ActiveRecordInterface
         if (null !== $this->aActivity) {
             $this->aActivity->removeDiscussion($this);
         }
-        if (null !== $this->aUser) {
-            $this->aUser->removeDiscussion($this);
-        }
         $this->id = null;
         $this->name = null;
         $this->activity_id = null;
-        $this->owner_id = null;
         $this->status = null;
         $this->date_created = null;
         $this->file_name = null;
@@ -1827,7 +1676,6 @@ abstract class Discussion implements ActiveRecordInterface
 
         $this->collDiscussionUserAssociations = null;
         $this->aActivity = null;
-        $this->aUser = null;
     }
 
     /**

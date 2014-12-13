@@ -51,9 +51,4 @@ EOT;
 		$results = $stmt->fetchAll();
 		return count($results)>0;
 	}
-	
-	
-	public static function createNew(ActivityList $actList, array $arrParticipantsId){
-		
-	}
 }

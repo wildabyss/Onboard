@@ -178,7 +178,17 @@ class ActivityListAssociationTableMap extends TableMap
     {
         $this->addRelation('Activity', '\\Activity', RelationMap::MANY_TO_ONE, array('activity_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('ActivityList', '\\ActivityList', RelationMap::MANY_TO_ONE, array('list_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('DiscussionUserAssociation', '\\DiscussionUserAssociation', RelationMap::ONE_TO_MANY, array('id' => 'activity_list_assoc_id', ), 'CASCADE', null, 'DiscussionUserAssociations');
     } // buildRelations()
+    /**
+     * Method to invalidate the instance pool of all tables related to activity_list_assoc     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DiscussionUserAssociationTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.

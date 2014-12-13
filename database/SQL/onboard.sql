@@ -126,20 +126,14 @@ CREATE TABLE `discussion`
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
     `activity_id` int(10) unsigned NOT NULL,
-    `owner_id` int(10) unsigned NOT NULL,
     `status` tinyint(3) unsigned NOT NULL,
     `date_created` DATETIME NOT NULL,
     `file_name` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `activity_id` (`activity_id`),
-    INDEX `owner_id` (`owner_id`),
     CONSTRAINT `discussion_ibfk_1`
         FOREIGN KEY (`activity_id`)
         REFERENCES `activity` (`id`)
-        ON DELETE CASCADE,
-    CONSTRAINT `discussion_ibfk_2`
-        FOREIGN KEY (`owner_id`)
-        REFERENCES `user` (`id`)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -153,17 +147,18 @@ CREATE TABLE `discussion_user_assoc`
 (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `discussion_id` int(10) unsigned NOT NULL,
-    `user_id` int(10) unsigned NOT NULL,
+    `activity_list_assoc_id` bigint(20) unsigned NOT NULL,
+    `status` tinyint(3) unsigned NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `discussion_id` (`discussion_id`),
-    INDEX `user_id` (`user_id`),
+    INDEX `activity_list_assoc_id` (`activity_list_assoc_id`),
     CONSTRAINT `discussion_user_assoc_ibfk_1`
         FOREIGN KEY (`discussion_id`)
         REFERENCES `discussion` (`id`)
         ON DELETE CASCADE,
-    CONSTRAINT `discussion_user_assoc_ibfk_2`
-        FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`id`)
+    CONSTRAINT `activity_list_assoc_ibfk_2`
+        FOREIGN KEY (`activity_list_assoc_id`)
+        REFERENCES `activity_list_assoc` (`id`)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 

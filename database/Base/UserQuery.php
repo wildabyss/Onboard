@@ -46,14 +46,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinActivityList($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityList relation
  * @method     ChildUserQuery innerJoinActivityList($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityList relation
  *
- * @method     ChildUserQuery leftJoinDiscussion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Discussion relation
- * @method     ChildUserQuery rightJoinDiscussion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Discussion relation
- * @method     ChildUserQuery innerJoinDiscussion($relationAlias = null) Adds a INNER JOIN clause to the query using the Discussion relation
- *
- * @method     ChildUserQuery leftJoinDiscussionUserAssociation($relationAlias = null) Adds a LEFT JOIN clause to the query using the DiscussionUserAssociation relation
- * @method     ChildUserQuery rightJoinDiscussionUserAssociation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DiscussionUserAssociation relation
- * @method     ChildUserQuery innerJoinDiscussionUserAssociation($relationAlias = null) Adds a INNER JOIN clause to the query using the DiscussionUserAssociation relation
- *
  * @method     ChildUserQuery leftJoinUserCommunityAssociationRelatedByUserIdLeft($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserCommunityAssociationRelatedByUserIdLeft relation
  * @method     ChildUserQuery rightJoinUserCommunityAssociationRelatedByUserIdLeft($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserCommunityAssociationRelatedByUserIdLeft relation
  * @method     ChildUserQuery innerJoinUserCommunityAssociationRelatedByUserIdLeft($relationAlias = null) Adds a INNER JOIN clause to the query using the UserCommunityAssociationRelatedByUserIdLeft relation
@@ -62,7 +54,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinUserCommunityAssociationRelatedByUserIdRight($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserCommunityAssociationRelatedByUserIdRight relation
  * @method     ChildUserQuery innerJoinUserCommunityAssociationRelatedByUserIdRight($relationAlias = null) Adds a INNER JOIN clause to the query using the UserCommunityAssociationRelatedByUserIdRight relation
  *
- * @method     \ActivityListQuery|\DiscussionQuery|\DiscussionUserAssociationQuery|\UserCommunityAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \ActivityListQuery|\UserCommunityAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -607,152 +599,6 @@ abstract class UserQuery extends ModelCriteria
         return $this
             ->joinActivityList($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'ActivityList', '\ActivityListQuery');
-    }
-
-    /**
-     * Filter the query by a related \Discussion object
-     *
-     * @param \Discussion|ObjectCollection $discussion  the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByDiscussion($discussion, $comparison = null)
-    {
-        if ($discussion instanceof \Discussion) {
-            return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $discussion->getOwnerId(), $comparison);
-        } elseif ($discussion instanceof ObjectCollection) {
-            return $this
-                ->useDiscussionQuery()
-                ->filterByPrimaryKeys($discussion->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByDiscussion() only accepts arguments of type \Discussion or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Discussion relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildUserQuery The current query, for fluid interface
-     */
-    public function joinDiscussion($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Discussion');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Discussion');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Discussion relation Discussion object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \DiscussionQuery A secondary query class using the current class as primary query
-     */
-    public function useDiscussionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinDiscussion($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Discussion', '\DiscussionQuery');
-    }
-
-    /**
-     * Filter the query by a related \DiscussionUserAssociation object
-     *
-     * @param \DiscussionUserAssociation|ObjectCollection $discussionUserAssociation  the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByDiscussionUserAssociation($discussionUserAssociation, $comparison = null)
-    {
-        if ($discussionUserAssociation instanceof \DiscussionUserAssociation) {
-            return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $discussionUserAssociation->getUserId(), $comparison);
-        } elseif ($discussionUserAssociation instanceof ObjectCollection) {
-            return $this
-                ->useDiscussionUserAssociationQuery()
-                ->filterByPrimaryKeys($discussionUserAssociation->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByDiscussionUserAssociation() only accepts arguments of type \DiscussionUserAssociation or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the DiscussionUserAssociation relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildUserQuery The current query, for fluid interface
-     */
-    public function joinDiscussionUserAssociation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('DiscussionUserAssociation');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'DiscussionUserAssociation');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the DiscussionUserAssociation relation DiscussionUserAssociation object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \DiscussionUserAssociationQuery A secondary query class using the current class as primary query
-     */
-    public function useDiscussionUserAssociationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinDiscussionUserAssociation($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'DiscussionUserAssociation', '\DiscussionUserAssociationQuery');
     }
 
     /**

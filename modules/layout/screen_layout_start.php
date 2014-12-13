@@ -1,5 +1,3 @@
-<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-
 <div id="global_wrapper">
 	<div id="header">
 		<a href="/mylist" id="header_logo"></a>

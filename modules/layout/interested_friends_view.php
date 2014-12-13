@@ -5,7 +5,7 @@
 				<li onclick="window.location.href = 'community?id=<?php echo $friend->getId()?>';">
 					<a class="interested_friends_summary" id="interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>"><?php echo $friend->getDisplayName()?></a>
 					<a class="feed_profile_pic" 
-						onmouseover="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').show('fast')" 
+						onmouseover="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').show()" 
 						onmouseout="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').hide()"
 						style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
 				</li>

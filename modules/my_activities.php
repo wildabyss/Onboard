@@ -11,7 +11,9 @@
 <!-- js inclusions -->
 <script type="text/javascript" src="js/mylist.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
-				
+
+<?php DiscussionQuery::createNew("hello", 1, array(1))?>
+
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">

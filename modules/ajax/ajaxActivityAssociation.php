@@ -15,8 +15,8 @@ switch ($_POST['action']){
 		try {
 			// the friend's ActivityListAssociation
 			$friendActivityListAssoc = ActivityListAssociationQuery::create()
-			->filterById($_POST['activity_assoc'])
-			->findOne();
+				->filterById($_POST['activity_assoc'])
+				->findOne();
 			// current user's (i.e. my) association level with the activity
 			$userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $friendActivityListAssoc->getActivityId());
 			// retrieve my default ActivityList

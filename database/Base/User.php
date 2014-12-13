@@ -4,10 +4,6 @@ namespace Base;
 
 use \ActivityList as ChildActivityList;
 use \ActivityListQuery as ChildActivityListQuery;
-use \Discussion as ChildDiscussion;
-use \DiscussionQuery as ChildDiscussionQuery;
-use \DiscussionUserAssociation as ChildDiscussionUserAssociation;
-use \DiscussionUserAssociationQuery as ChildDiscussionUserAssociationQuery;
 use \User as ChildUser;
 use \UserCommunityAssociation as ChildUserCommunityAssociation;
 use \UserCommunityAssociationQuery as ChildUserCommunityAssociationQuery;
@@ -126,18 +122,6 @@ abstract class User implements ActiveRecordInterface
     protected $collActivityListsPartial;
 
     /**
-     * @var        ObjectCollection|ChildDiscussion[] Collection to store aggregation of ChildDiscussion objects.
-     */
-    protected $collDiscussions;
-    protected $collDiscussionsPartial;
-
-    /**
-     * @var        ObjectCollection|ChildDiscussionUserAssociation[] Collection to store aggregation of ChildDiscussionUserAssociation objects.
-     */
-    protected $collDiscussionUserAssociations;
-    protected $collDiscussionUserAssociationsPartial;
-
-    /**
      * @var        ObjectCollection|ChildUserCommunityAssociation[] Collection to store aggregation of ChildUserCommunityAssociation objects.
      */
     protected $collUserCommunityAssociationsRelatedByUserIdLeft;
@@ -162,18 +146,6 @@ abstract class User implements ActiveRecordInterface
      * @var ObjectCollection|ChildActivityList[]
      */
     protected $activityListsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildDiscussion[]
-     */
-    protected $discussionsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildDiscussionUserAssociation[]
-     */
-    protected $discussionUserAssociationsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -787,10 +759,6 @@ abstract class User implements ActiveRecordInterface
 
             $this->collActivityLists = null;
 
-            $this->collDiscussions = null;
-
-            $this->collDiscussionUserAssociations = null;
-
             $this->collUserCommunityAssociationsRelatedByUserIdLeft = null;
 
             $this->collUserCommunityAssociationsRelatedByUserIdRight = null;
@@ -916,40 +884,6 @@ abstract class User implements ActiveRecordInterface
 
             if ($this->collActivityLists !== null) {
                 foreach ($this->collActivityLists as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->discussionsScheduledForDeletion !== null) {
-                if (!$this->discussionsScheduledForDeletion->isEmpty()) {
-                    \DiscussionQuery::create()
-                        ->filterByPrimaryKeys($this->discussionsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->discussionsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collDiscussions !== null) {
-                foreach ($this->collDiscussions as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->discussionUserAssociationsScheduledForDeletion !== null) {
-                if (!$this->discussionUserAssociationsScheduledForDeletion->isEmpty()) {
-                    \DiscussionUserAssociationQuery::create()
-                        ->filterByPrimaryKeys($this->discussionUserAssociationsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->discussionUserAssociationsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collDiscussionUserAssociations !== null) {
-                foreach ($this->collDiscussionUserAssociations as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1220,36 +1154,6 @@ abstract class User implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collActivityLists->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collDiscussions) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'discussions';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'discussions';
-                        break;
-                    default:
-                        $key = 'Discussions';
-                }
-
-                $result[$key] = $this->collDiscussions->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collDiscussionUserAssociations) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'discussionUserAssociations';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'discussion_user_assocs';
-                        break;
-                    default:
-                        $key = 'DiscussionUserAssociations';
-                }
-
-                $result[$key] = $this->collDiscussionUserAssociations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserCommunityAssociationsRelatedByUserIdLeft) {
 
@@ -1559,18 +1463,6 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getDiscussions() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addDiscussion($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getDiscussionUserAssociations() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addDiscussionUserAssociation($relObj->copy($deepCopy));
-                }
-            }
-
             foreach ($this->getUserCommunityAssociationsRelatedByUserIdLeft() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addUserCommunityAssociationRelatedByUserIdLeft($relObj->copy($deepCopy));
@@ -1626,12 +1518,6 @@ abstract class User implements ActiveRecordInterface
     {
         if ('ActivityList' == $relationName) {
             return $this->initActivityLists();
-        }
-        if ('Discussion' == $relationName) {
-            return $this->initDiscussions();
-        }
-        if ('DiscussionUserAssociation' == $relationName) {
-            return $this->initDiscussionUserAssociations();
         }
         if ('UserCommunityAssociationRelatedByUserIdLeft' == $relationName) {
             return $this->initUserCommunityAssociationsRelatedByUserIdLeft();
@@ -1857,492 +1743,6 @@ abstract class User implements ActiveRecordInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Clears out the collDiscussions collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addDiscussions()
-     */
-    public function clearDiscussions()
-    {
-        $this->collDiscussions = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collDiscussions collection loaded partially.
-     */
-    public function resetPartialDiscussions($v = true)
-    {
-        $this->collDiscussionsPartial = $v;
-    }
-
-    /**
-     * Initializes the collDiscussions collection.
-     *
-     * By default this just sets the collDiscussions collection to an empty array (like clearcollDiscussions());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initDiscussions($overrideExisting = true)
-    {
-        if (null !== $this->collDiscussions && !$overrideExisting) {
-            return;
-        }
-        $this->collDiscussions = new ObjectCollection();
-        $this->collDiscussions->setModel('\Discussion');
-    }
-
-    /**
-     * Gets an array of ChildDiscussion objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildUser is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildDiscussion[] List of ChildDiscussion objects
-     * @throws PropelException
-     */
-    public function getDiscussions(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDiscussionsPartial && !$this->isNew();
-        if (null === $this->collDiscussions || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collDiscussions) {
-                // return empty collection
-                $this->initDiscussions();
-            } else {
-                $collDiscussions = ChildDiscussionQuery::create(null, $criteria)
-                    ->filterByUser($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collDiscussionsPartial && count($collDiscussions)) {
-                        $this->initDiscussions(false);
-
-                        foreach ($collDiscussions as $obj) {
-                            if (false == $this->collDiscussions->contains($obj)) {
-                                $this->collDiscussions->append($obj);
-                            }
-                        }
-
-                        $this->collDiscussionsPartial = true;
-                    }
-
-                    return $collDiscussions;
-                }
-
-                if ($partial && $this->collDiscussions) {
-                    foreach ($this->collDiscussions as $obj) {
-                        if ($obj->isNew()) {
-                            $collDiscussions[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collDiscussions = $collDiscussions;
-                $this->collDiscussionsPartial = false;
-            }
-        }
-
-        return $this->collDiscussions;
-    }
-
-    /**
-     * Sets a collection of ChildDiscussion objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $discussions A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function setDiscussions(Collection $discussions, ConnectionInterface $con = null)
-    {
-        /** @var ChildDiscussion[] $discussionsToDelete */
-        $discussionsToDelete = $this->getDiscussions(new Criteria(), $con)->diff($discussions);
-
-
-        $this->discussionsScheduledForDeletion = $discussionsToDelete;
-
-        foreach ($discussionsToDelete as $discussionRemoved) {
-            $discussionRemoved->setUser(null);
-        }
-
-        $this->collDiscussions = null;
-        foreach ($discussions as $discussion) {
-            $this->addDiscussion($discussion);
-        }
-
-        $this->collDiscussions = $discussions;
-        $this->collDiscussionsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related Discussion objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related Discussion objects.
-     * @throws PropelException
-     */
-    public function countDiscussions(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDiscussionsPartial && !$this->isNew();
-        if (null === $this->collDiscussions || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collDiscussions) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getDiscussions());
-            }
-
-            $query = ChildDiscussionQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByUser($this)
-                ->count($con);
-        }
-
-        return count($this->collDiscussions);
-    }
-
-    /**
-     * Method called to associate a ChildDiscussion object to this object
-     * through the ChildDiscussion foreign key attribute.
-     *
-     * @param  ChildDiscussion $l ChildDiscussion
-     * @return $this|\User The current object (for fluent API support)
-     */
-    public function addDiscussion(ChildDiscussion $l)
-    {
-        if ($this->collDiscussions === null) {
-            $this->initDiscussions();
-            $this->collDiscussionsPartial = true;
-        }
-
-        if (!$this->collDiscussions->contains($l)) {
-            $this->doAddDiscussion($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildDiscussion $discussion The ChildDiscussion object to add.
-     */
-    protected function doAddDiscussion(ChildDiscussion $discussion)
-    {
-        $this->collDiscussions[]= $discussion;
-        $discussion->setUser($this);
-    }
-
-    /**
-     * @param  ChildDiscussion $discussion The ChildDiscussion object to remove.
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function removeDiscussion(ChildDiscussion $discussion)
-    {
-        if ($this->getDiscussions()->contains($discussion)) {
-            $pos = $this->collDiscussions->search($discussion);
-            $this->collDiscussions->remove($pos);
-            if (null === $this->discussionsScheduledForDeletion) {
-                $this->discussionsScheduledForDeletion = clone $this->collDiscussions;
-                $this->discussionsScheduledForDeletion->clear();
-            }
-            $this->discussionsScheduledForDeletion[]= clone $discussion;
-            $discussion->setUser(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this User is new, it will return
-     * an empty collection; or if this User has previously
-     * been saved, it will retrieve related Discussions from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in User.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildDiscussion[] List of ChildDiscussion objects
-     */
-    public function getDiscussionsJoinActivity(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildDiscussionQuery::create(null, $criteria);
-        $query->joinWith('Activity', $joinBehavior);
-
-        return $this->getDiscussions($query, $con);
-    }
-
-    /**
-     * Clears out the collDiscussionUserAssociations collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addDiscussionUserAssociations()
-     */
-    public function clearDiscussionUserAssociations()
-    {
-        $this->collDiscussionUserAssociations = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collDiscussionUserAssociations collection loaded partially.
-     */
-    public function resetPartialDiscussionUserAssociations($v = true)
-    {
-        $this->collDiscussionUserAssociationsPartial = $v;
-    }
-
-    /**
-     * Initializes the collDiscussionUserAssociations collection.
-     *
-     * By default this just sets the collDiscussionUserAssociations collection to an empty array (like clearcollDiscussionUserAssociations());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initDiscussionUserAssociations($overrideExisting = true)
-    {
-        if (null !== $this->collDiscussionUserAssociations && !$overrideExisting) {
-            return;
-        }
-        $this->collDiscussionUserAssociations = new ObjectCollection();
-        $this->collDiscussionUserAssociations->setModel('\DiscussionUserAssociation');
-    }
-
-    /**
-     * Gets an array of ChildDiscussionUserAssociation objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildUser is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildDiscussionUserAssociation[] List of ChildDiscussionUserAssociation objects
-     * @throws PropelException
-     */
-    public function getDiscussionUserAssociations(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDiscussionUserAssociationsPartial && !$this->isNew();
-        if (null === $this->collDiscussionUserAssociations || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collDiscussionUserAssociations) {
-                // return empty collection
-                $this->initDiscussionUserAssociations();
-            } else {
-                $collDiscussionUserAssociations = ChildDiscussionUserAssociationQuery::create(null, $criteria)
-                    ->filterByUser($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collDiscussionUserAssociationsPartial && count($collDiscussionUserAssociations)) {
-                        $this->initDiscussionUserAssociations(false);
-
-                        foreach ($collDiscussionUserAssociations as $obj) {
-                            if (false == $this->collDiscussionUserAssociations->contains($obj)) {
-                                $this->collDiscussionUserAssociations->append($obj);
-                            }
-                        }
-
-                        $this->collDiscussionUserAssociationsPartial = true;
-                    }
-
-                    return $collDiscussionUserAssociations;
-                }
-
-                if ($partial && $this->collDiscussionUserAssociations) {
-                    foreach ($this->collDiscussionUserAssociations as $obj) {
-                        if ($obj->isNew()) {
-                            $collDiscussionUserAssociations[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collDiscussionUserAssociations = $collDiscussionUserAssociations;
-                $this->collDiscussionUserAssociationsPartial = false;
-            }
-        }
-
-        return $this->collDiscussionUserAssociations;
-    }
-
-    /**
-     * Sets a collection of ChildDiscussionUserAssociation objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $discussionUserAssociations A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function setDiscussionUserAssociations(Collection $discussionUserAssociations, ConnectionInterface $con = null)
-    {
-        /** @var ChildDiscussionUserAssociation[] $discussionUserAssociationsToDelete */
-        $discussionUserAssociationsToDelete = $this->getDiscussionUserAssociations(new Criteria(), $con)->diff($discussionUserAssociations);
-
-
-        $this->discussionUserAssociationsScheduledForDeletion = $discussionUserAssociationsToDelete;
-
-        foreach ($discussionUserAssociationsToDelete as $discussionUserAssociationRemoved) {
-            $discussionUserAssociationRemoved->setUser(null);
-        }
-
-        $this->collDiscussionUserAssociations = null;
-        foreach ($discussionUserAssociations as $discussionUserAssociation) {
-            $this->addDiscussionUserAssociation($discussionUserAssociation);
-        }
-
-        $this->collDiscussionUserAssociations = $discussionUserAssociations;
-        $this->collDiscussionUserAssociationsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related DiscussionUserAssociation objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related DiscussionUserAssociation objects.
-     * @throws PropelException
-     */
-    public function countDiscussionUserAssociations(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDiscussionUserAssociationsPartial && !$this->isNew();
-        if (null === $this->collDiscussionUserAssociations || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collDiscussionUserAssociations) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getDiscussionUserAssociations());
-            }
-
-            $query = ChildDiscussionUserAssociationQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByUser($this)
-                ->count($con);
-        }
-
-        return count($this->collDiscussionUserAssociations);
-    }
-
-    /**
-     * Method called to associate a ChildDiscussionUserAssociation object to this object
-     * through the ChildDiscussionUserAssociation foreign key attribute.
-     *
-     * @param  ChildDiscussionUserAssociation $l ChildDiscussionUserAssociation
-     * @return $this|\User The current object (for fluent API support)
-     */
-    public function addDiscussionUserAssociation(ChildDiscussionUserAssociation $l)
-    {
-        if ($this->collDiscussionUserAssociations === null) {
-            $this->initDiscussionUserAssociations();
-            $this->collDiscussionUserAssociationsPartial = true;
-        }
-
-        if (!$this->collDiscussionUserAssociations->contains($l)) {
-            $this->doAddDiscussionUserAssociation($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildDiscussionUserAssociation $discussionUserAssociation The ChildDiscussionUserAssociation object to add.
-     */
-    protected function doAddDiscussionUserAssociation(ChildDiscussionUserAssociation $discussionUserAssociation)
-    {
-        $this->collDiscussionUserAssociations[]= $discussionUserAssociation;
-        $discussionUserAssociation->setUser($this);
-    }
-
-    /**
-     * @param  ChildDiscussionUserAssociation $discussionUserAssociation The ChildDiscussionUserAssociation object to remove.
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function removeDiscussionUserAssociation(ChildDiscussionUserAssociation $discussionUserAssociation)
-    {
-        if ($this->getDiscussionUserAssociations()->contains($discussionUserAssociation)) {
-            $pos = $this->collDiscussionUserAssociations->search($discussionUserAssociation);
-            $this->collDiscussionUserAssociations->remove($pos);
-            if (null === $this->discussionUserAssociationsScheduledForDeletion) {
-                $this->discussionUserAssociationsScheduledForDeletion = clone $this->collDiscussionUserAssociations;
-                $this->discussionUserAssociationsScheduledForDeletion->clear();
-            }
-            $this->discussionUserAssociationsScheduledForDeletion[]= clone $discussionUserAssociation;
-            $discussionUserAssociation->setUser(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this User is new, it will return
-     * an empty collection; or if this User has previously
-     * been saved, it will retrieve related DiscussionUserAssociations from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in User.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildDiscussionUserAssociation[] List of ChildDiscussionUserAssociation objects
-     */
-    public function getDiscussionUserAssociationsJoinDiscussion(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildDiscussionUserAssociationQuery::create(null, $criteria);
-        $query->joinWith('Discussion', $joinBehavior);
-
-        return $this->getDiscussionUserAssociations($query, $con);
     }
 
     /**
@@ -2819,16 +2219,6 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collDiscussions) {
-                foreach ($this->collDiscussions as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
-            if ($this->collDiscussionUserAssociations) {
-                foreach ($this->collDiscussionUserAssociations as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collUserCommunityAssociationsRelatedByUserIdLeft) {
                 foreach ($this->collUserCommunityAssociationsRelatedByUserIdLeft as $o) {
                     $o->clearAllReferences($deep);
@@ -2842,8 +2232,6 @@ abstract class User implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collActivityLists = null;
-        $this->collDiscussions = null;
-        $this->collDiscussionUserAssociations = null;
         $this->collUserCommunityAssociationsRelatedByUserIdLeft = null;
         $this->collUserCommunityAssociationsRelatedByUserIdRight = null;
     }

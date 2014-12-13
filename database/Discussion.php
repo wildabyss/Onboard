@@ -14,5 +14,6 @@ use Base\Discussion as BaseDiscussion;
  */
 class Discussion extends BaseDiscussion
 {
-
+	const ACTIVE_STATUS = 1;
+	const ARCHIVED_STATUS = 2;
 }

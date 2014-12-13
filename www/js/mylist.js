@@ -251,14 +251,3 @@ var expandActivity = function(actAssocId) {
 		expandButton.attr('action', 'expand');
 	}
 }
-
-
-/* loads when document finishes loading */
-
-$(document).ready(function () {
-	// hide all activity drop downs when user clicks anywhere in the window
-	$(document).click(function (e) {
-		if ($(e.target).closest('[id^=activity_drop_]').length > 0) return;
-		$("[id^=activity_edit_]").hide();
-    });
-});

@@ -2,11 +2,11 @@
 
 namespace Base;
 
+use \ActivityListAssociation as ChildActivityListAssociation;
+use \ActivityListAssociationQuery as ChildActivityListAssociationQuery;
 use \Discussion as ChildDiscussion;
 use \DiscussionQuery as ChildDiscussionQuery;
 use \DiscussionUserAssociationQuery as ChildDiscussionUserAssociationQuery;
-use \User as ChildUser;
-use \UserQuery as ChildUserQuery;
 use \Exception;
 use \PDO;
 use Map\DiscussionUserAssociationTableMap;
@@ -76,10 +76,16 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
     protected $discussion_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the activity_list_assoc_id field.
+     * @var        string
+     */
+    protected $activity_list_assoc_id;
+
+    /**
+     * The value for the status field.
      * @var        int
      */
-    protected $user_id;
+    protected $status;
 
     /**
      * @var        ChildDiscussion
@@ -87,9 +93,9 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
     protected $aDiscussion;
 
     /**
-     * @var        ChildUser
+     * @var        ChildActivityListAssociation
      */
-    protected $aUser;
+    protected $aActivityListAssociation;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -337,13 +343,23 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [activity_list_assoc_id] column value.
+     *
+     * @return string
+     */
+    public function getActivityListAssociationId()
+    {
+        return $this->activity_list_assoc_id;
+    }
+
+    /**
+     * Get the [status] column value.
      *
      * @return int
      */
-    public function getUserId()
+    public function getStatus()
     {
-        return $this->user_id;
+        return $this->status;
     }
 
     /**
@@ -391,28 +407,48 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
     } // setDiscussionId()
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [activity_list_assoc_id] column.
+     *
+     * @param  string $v new value
+     * @return $this|\DiscussionUserAssociation The current object (for fluent API support)
+     */
+    public function setActivityListAssociationId($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->activity_list_assoc_id !== $v) {
+            $this->activity_list_assoc_id = $v;
+            $this->modifiedColumns[DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID] = true;
+        }
+
+        if ($this->aActivityListAssociation !== null && $this->aActivityListAssociation->getId() !== $v) {
+            $this->aActivityListAssociation = null;
+        }
+
+        return $this;
+    } // setActivityListAssociationId()
+
+    /**
+     * Set the value of [status] column.
      *
      * @param  int $v new value
      * @return $this|\DiscussionUserAssociation The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setStatus($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[DiscussionUserAssociationTableMap::COL_USER_ID] = true;
-        }
-
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
+        if ($this->status !== $v) {
+            $this->status = $v;
+            $this->modifiedColumns[DiscussionUserAssociationTableMap::COL_STATUS] = true;
         }
 
         return $this;
-    } // setUserId()
+    } // setStatus()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -456,8 +492,11 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DiscussionUserAssociationTableMap::translateFieldName('DiscussionId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->discussion_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DiscussionUserAssociationTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DiscussionUserAssociationTableMap::translateFieldName('ActivityListAssociationId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->activity_list_assoc_id = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DiscussionUserAssociationTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->status = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -466,7 +505,7 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = DiscussionUserAssociationTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = DiscussionUserAssociationTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\DiscussionUserAssociation'), 0, $e);
@@ -491,8 +530,8 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
         if ($this->aDiscussion !== null && $this->discussion_id !== $this->aDiscussion->getId()) {
             $this->aDiscussion = null;
         }
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
-            $this->aUser = null;
+        if ($this->aActivityListAssociation !== null && $this->activity_list_assoc_id !== $this->aActivityListAssociation->getId()) {
+            $this->aActivityListAssociation = null;
         }
     } // ensureConsistency
 
@@ -534,7 +573,7 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aDiscussion = null;
-            $this->aUser = null;
+            $this->aActivityListAssociation = null;
         } // if (deep)
     }
 
@@ -646,11 +685,11 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
                 $this->setDiscussion($this->aDiscussion);
             }
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
+            if ($this->aActivityListAssociation !== null) {
+                if ($this->aActivityListAssociation->isModified() || $this->aActivityListAssociation->isNew()) {
+                    $affectedRows += $this->aActivityListAssociation->save($con);
                 }
-                $this->setUser($this->aUser);
+                $this->setActivityListAssociation($this->aActivityListAssociation);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -696,8 +735,11 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
         if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_DISCUSSION_ID)) {
             $modifiedColumns[':p' . $index++]  = 'discussion_id';
         }
-        if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'activity_list_assoc_id';
+        }
+        if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_STATUS)) {
+            $modifiedColumns[':p' . $index++]  = 'status';
         }
 
         $sql = sprintf(
@@ -716,8 +758,11 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
                     case 'discussion_id':
                         $stmt->bindValue($identifier, $this->discussion_id, PDO::PARAM_INT);
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'activity_list_assoc_id':
+                        $stmt->bindValue($identifier, $this->activity_list_assoc_id, PDO::PARAM_INT);
+                        break;
+                    case 'status':
+                        $stmt->bindValue($identifier, $this->status, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -788,7 +833,10 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
                 return $this->getDiscussionId();
                 break;
             case 2:
-                return $this->getUserId();
+                return $this->getActivityListAssociationId();
+                break;
+            case 3:
+                return $this->getStatus();
                 break;
             default:
                 return null;
@@ -822,7 +870,8 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getDiscussionId(),
-            $keys[2] => $this->getUserId(),
+            $keys[2] => $this->getActivityListAssociationId(),
+            $keys[3] => $this->getStatus(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -845,20 +894,20 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
 
                 $result[$key] = $this->aDiscussion->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aUser) {
+            if (null !== $this->aActivityListAssociation) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
+                        $key = 'activityListAssociation';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'user';
+                        $key = 'activity_list_assoc';
                         break;
                     default:
-                        $key = 'User';
+                        $key = 'ActivityListAssociation';
                 }
 
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aActivityListAssociation->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -901,7 +950,10 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
                 $this->setDiscussionId($value);
                 break;
             case 2:
-                $this->setUserId($value);
+                $this->setActivityListAssociationId($value);
+                break;
+            case 3:
+                $this->setStatus($value);
                 break;
         } // switch()
 
@@ -936,7 +988,10 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
             $this->setDiscussionId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setUserId($arr[$keys[2]]);
+            $this->setActivityListAssociationId($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setStatus($arr[$keys[3]]);
         }
     }
 
@@ -985,8 +1040,11 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
         if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_DISCUSSION_ID)) {
             $criteria->add(DiscussionUserAssociationTableMap::COL_DISCUSSION_ID, $this->discussion_id);
         }
-        if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_USER_ID)) {
-            $criteria->add(DiscussionUserAssociationTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID)) {
+            $criteria->add(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID, $this->activity_list_assoc_id);
+        }
+        if ($this->isColumnModified(DiscussionUserAssociationTableMap::COL_STATUS)) {
+            $criteria->add(DiscussionUserAssociationTableMap::COL_STATUS, $this->status);
         }
 
         return $criteria;
@@ -1075,7 +1133,8 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setDiscussionId($this->getDiscussionId());
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setActivityListAssociationId($this->getActivityListAssociationId());
+        $copyObj->setStatus($this->getStatus());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1156,24 +1215,24 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildUser object.
+     * Declares an association between this object and a ChildActivityListAssociation object.
      *
-     * @param  ChildUser $v
+     * @param  ChildActivityListAssociation $v
      * @return $this|\DiscussionUserAssociation The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setUser(ChildUser $v = null)
+    public function setActivityListAssociation(ChildActivityListAssociation $v = null)
     {
         if ($v === null) {
-            $this->setUserId(NULL);
+            $this->setActivityListAssociationId(NULL);
         } else {
-            $this->setUserId($v->getId());
+            $this->setActivityListAssociationId($v->getId());
         }
 
-        $this->aUser = $v;
+        $this->aActivityListAssociation = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
+        // If this object has already been added to the ChildActivityListAssociation object, it will not be re-added.
         if ($v !== null) {
             $v->addDiscussionUserAssociation($this);
         }
@@ -1184,26 +1243,26 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildUser object
+     * Get the associated ChildActivityListAssociation object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildUser The associated ChildUser object.
+     * @return ChildActivityListAssociation The associated ChildActivityListAssociation object.
      * @throws PropelException
      */
-    public function getUser(ConnectionInterface $con = null)
+    public function getActivityListAssociation(ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->user_id !== null)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+        if ($this->aActivityListAssociation === null && (($this->activity_list_assoc_id !== "" && $this->activity_list_assoc_id !== null))) {
+            $this->aActivityListAssociation = ChildActivityListAssociationQuery::create()->findPk($this->activity_list_assoc_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUser->addDiscussionUserAssociations($this);
+                $this->aActivityListAssociation->addDiscussionUserAssociations($this);
              */
         }
 
-        return $this->aUser;
+        return $this->aActivityListAssociation;
     }
 
     /**
@@ -1216,12 +1275,13 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
         if (null !== $this->aDiscussion) {
             $this->aDiscussion->removeDiscussionUserAssociation($this);
         }
-        if (null !== $this->aUser) {
-            $this->aUser->removeDiscussionUserAssociation($this);
+        if (null !== $this->aActivityListAssociation) {
+            $this->aActivityListAssociation->removeDiscussionUserAssociation($this);
         }
         $this->id = null;
         $this->discussion_id = null;
-        $this->user_id = null;
+        $this->activity_list_assoc_id = null;
+        $this->status = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1243,7 +1303,7 @@ abstract class DiscussionUserAssociation implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aDiscussion = null;
-        $this->aUser = null;
+        $this->aActivityListAssociation = null;
     }
 
     /**

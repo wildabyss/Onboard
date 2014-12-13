@@ -23,3 +23,17 @@ Must have the following rewrite rules implemented to enable Klein re-router:
      ^ajax.*$
      
 Configuration for IIS7 is included in the web.config file under www/ directory
+
+
+Application Configuration:
+-------
+
+1. Install the required vendor packages using Composer, using 
+   /composer.json and versions as specified in /composer.lock.
+2. Configure the web server as per above. Install MySQL.
+3. Modify /database/propel.yml and /database/SQL/db_setup.sql for database username and password.
+4. Setup the SQL database using /database/SQL/db_setup.sql and /database/SQL/onboard.sql.
+   Note that onboard.sql can be replicated using /database/schema.xml from Propel.
+5. Populate initial data with /database/SQL/test_data.sql.
+   Modify the values accordingly.
+6. Set up Propel using /database/propel.yml.

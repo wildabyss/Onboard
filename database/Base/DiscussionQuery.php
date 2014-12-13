@@ -23,7 +23,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussionQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildDiscussionQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildDiscussionQuery orderByActivityId($order = Criteria::ASC) Order by the activity_id column
- * @method     ChildDiscussionQuery orderByOwnerId($order = Criteria::ASC) Order by the owner_id column
  * @method     ChildDiscussionQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     ChildDiscussionQuery orderByDateCreated($order = Criteria::ASC) Order by the date_created column
  * @method     ChildDiscussionQuery orderByFileName($order = Criteria::ASC) Order by the file_name column
@@ -31,7 +30,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussionQuery groupById() Group by the id column
  * @method     ChildDiscussionQuery groupByName() Group by the name column
  * @method     ChildDiscussionQuery groupByActivityId() Group by the activity_id column
- * @method     ChildDiscussionQuery groupByOwnerId() Group by the owner_id column
  * @method     ChildDiscussionQuery groupByStatus() Group by the status column
  * @method     ChildDiscussionQuery groupByDateCreated() Group by the date_created column
  * @method     ChildDiscussionQuery groupByFileName() Group by the file_name column
@@ -44,15 +42,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussionQuery rightJoinActivity($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Activity relation
  * @method     ChildDiscussionQuery innerJoinActivity($relationAlias = null) Adds a INNER JOIN clause to the query using the Activity relation
  *
- * @method     ChildDiscussionQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildDiscussionQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildDiscussionQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
- *
  * @method     ChildDiscussionQuery leftJoinDiscussionUserAssociation($relationAlias = null) Adds a LEFT JOIN clause to the query using the DiscussionUserAssociation relation
  * @method     ChildDiscussionQuery rightJoinDiscussionUserAssociation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DiscussionUserAssociation relation
  * @method     ChildDiscussionQuery innerJoinDiscussionUserAssociation($relationAlias = null) Adds a INNER JOIN clause to the query using the DiscussionUserAssociation relation
  *
- * @method     \ActivityQuery|\UserQuery|\DiscussionUserAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \ActivityQuery|\DiscussionUserAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildDiscussion findOne(ConnectionInterface $con = null) Return the first ChildDiscussion matching the query
  * @method     ChildDiscussion findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDiscussion matching the query, or a new ChildDiscussion object populated from the query conditions when no match is found
@@ -60,7 +54,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussion findOneById(int $id) Return the first ChildDiscussion filtered by the id column
  * @method     ChildDiscussion findOneByName(string $name) Return the first ChildDiscussion filtered by the name column
  * @method     ChildDiscussion findOneByActivityId(int $activity_id) Return the first ChildDiscussion filtered by the activity_id column
- * @method     ChildDiscussion findOneByOwnerId(int $owner_id) Return the first ChildDiscussion filtered by the owner_id column
  * @method     ChildDiscussion findOneByStatus(int $status) Return the first ChildDiscussion filtered by the status column
  * @method     ChildDiscussion findOneByDateCreated(string $date_created) Return the first ChildDiscussion filtered by the date_created column
  * @method     ChildDiscussion findOneByFileName(string $file_name) Return the first ChildDiscussion filtered by the file_name column
@@ -69,7 +62,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussion[]|ObjectCollection findById(int $id) Return ChildDiscussion objects filtered by the id column
  * @method     ChildDiscussion[]|ObjectCollection findByName(string $name) Return ChildDiscussion objects filtered by the name column
  * @method     ChildDiscussion[]|ObjectCollection findByActivityId(int $activity_id) Return ChildDiscussion objects filtered by the activity_id column
- * @method     ChildDiscussion[]|ObjectCollection findByOwnerId(int $owner_id) Return ChildDiscussion objects filtered by the owner_id column
  * @method     ChildDiscussion[]|ObjectCollection findByStatus(int $status) Return ChildDiscussion objects filtered by the status column
  * @method     ChildDiscussion[]|ObjectCollection findByDateCreated(string $date_created) Return ChildDiscussion objects filtered by the date_created column
  * @method     ChildDiscussion[]|ObjectCollection findByFileName(string $file_name) Return ChildDiscussion objects filtered by the file_name column
@@ -164,7 +156,7 @@ abstract class DiscussionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, activity_id, owner_id, status, date_created, file_name FROM discussion WHERE id = :p0';
+        $sql = 'SELECT id, name, activity_id, status, date_created, file_name FROM discussion WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -368,49 +360,6 @@ abstract class DiscussionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the owner_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByOwnerId(1234); // WHERE owner_id = 1234
-     * $query->filterByOwnerId(array(12, 34)); // WHERE owner_id IN (12, 34)
-     * $query->filterByOwnerId(array('min' => 12)); // WHERE owner_id > 12
-     * </code>
-     *
-     * @see       filterByUser()
-     *
-     * @param     mixed $ownerId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildDiscussionQuery The current query, for fluid interface
-     */
-    public function filterByOwnerId($ownerId = null, $comparison = null)
-    {
-        if (is_array($ownerId)) {
-            $useMinMax = false;
-            if (isset($ownerId['min'])) {
-                $this->addUsingAlias(DiscussionTableMap::COL_OWNER_ID, $ownerId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($ownerId['max'])) {
-                $this->addUsingAlias(DiscussionTableMap::COL_OWNER_ID, $ownerId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(DiscussionTableMap::COL_OWNER_ID, $ownerId, $comparison);
-    }
-
-    /**
      * Filter the query on the status column
      *
      * Example usage:
@@ -598,83 +547,6 @@ abstract class DiscussionQuery extends ModelCriteria
         return $this
             ->joinActivity($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Activity', '\ActivityQuery');
-    }
-
-    /**
-     * Filter the query by a related \User object
-     *
-     * @param \User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildDiscussionQuery The current query, for fluid interface
-     */
-    public function filterByUser($user, $comparison = null)
-    {
-        if ($user instanceof \User) {
-            return $this
-                ->addUsingAlias(DiscussionTableMap::COL_OWNER_ID, $user->getId(), $comparison);
-        } elseif ($user instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(DiscussionTableMap::COL_OWNER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByUser() only accepts arguments of type \User or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the User relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildDiscussionQuery The current query, for fluid interface
-     */
-    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('User');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'User');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the User relation User object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \UserQuery A secondary query class using the current class as primary query
-     */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinUser($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'User', '\UserQuery');
     }
 
     /**

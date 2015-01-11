@@ -22,12 +22,12 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildDiscussionUserAssociationQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildDiscussionUserAssociationQuery orderByDiscussionId($order = Criteria::ASC) Order by the discussion_id column
- * @method     ChildDiscussionUserAssociationQuery orderByActivityListAssociationId($order = Criteria::ASC) Order by the activity_list_assoc_id column
+ * @method     ChildDiscussionUserAssociationQuery orderByActivityUserAssociationId($order = Criteria::ASC) Order by the activity_user_assoc_id column
  * @method     ChildDiscussionUserAssociationQuery orderByStatus($order = Criteria::ASC) Order by the status column
  *
  * @method     ChildDiscussionUserAssociationQuery groupById() Group by the id column
  * @method     ChildDiscussionUserAssociationQuery groupByDiscussionId() Group by the discussion_id column
- * @method     ChildDiscussionUserAssociationQuery groupByActivityListAssociationId() Group by the activity_list_assoc_id column
+ * @method     ChildDiscussionUserAssociationQuery groupByActivityUserAssociationId() Group by the activity_user_assoc_id column
  * @method     ChildDiscussionUserAssociationQuery groupByStatus() Group by the status column
  *
  * @method     ChildDiscussionUserAssociationQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -38,24 +38,24 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussionUserAssociationQuery rightJoinDiscussion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Discussion relation
  * @method     ChildDiscussionUserAssociationQuery innerJoinDiscussion($relationAlias = null) Adds a INNER JOIN clause to the query using the Discussion relation
  *
- * @method     ChildDiscussionUserAssociationQuery leftJoinActivityListAssociation($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivityListAssociation relation
- * @method     ChildDiscussionUserAssociationQuery rightJoinActivityListAssociation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityListAssociation relation
- * @method     ChildDiscussionUserAssociationQuery innerJoinActivityListAssociation($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityListAssociation relation
+ * @method     ChildDiscussionUserAssociationQuery leftJoinActivityUserAssociation($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivityUserAssociation relation
+ * @method     ChildDiscussionUserAssociationQuery rightJoinActivityUserAssociation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityUserAssociation relation
+ * @method     ChildDiscussionUserAssociationQuery innerJoinActivityUserAssociation($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityUserAssociation relation
  *
- * @method     \DiscussionQuery|\ActivityListAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \DiscussionQuery|\ActivityUserAssociationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildDiscussionUserAssociation findOne(ConnectionInterface $con = null) Return the first ChildDiscussionUserAssociation matching the query
  * @method     ChildDiscussionUserAssociation findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDiscussionUserAssociation matching the query, or a new ChildDiscussionUserAssociation object populated from the query conditions when no match is found
  *
  * @method     ChildDiscussionUserAssociation findOneById(string $id) Return the first ChildDiscussionUserAssociation filtered by the id column
  * @method     ChildDiscussionUserAssociation findOneByDiscussionId(int $discussion_id) Return the first ChildDiscussionUserAssociation filtered by the discussion_id column
- * @method     ChildDiscussionUserAssociation findOneByActivityListAssociationId(string $activity_list_assoc_id) Return the first ChildDiscussionUserAssociation filtered by the activity_list_assoc_id column
+ * @method     ChildDiscussionUserAssociation findOneByActivityUserAssociationId(string $activity_user_assoc_id) Return the first ChildDiscussionUserAssociation filtered by the activity_user_assoc_id column
  * @method     ChildDiscussionUserAssociation findOneByStatus(int $status) Return the first ChildDiscussionUserAssociation filtered by the status column
  *
  * @method     ChildDiscussionUserAssociation[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDiscussionUserAssociation objects based on current ModelCriteria
  * @method     ChildDiscussionUserAssociation[]|ObjectCollection findById(string $id) Return ChildDiscussionUserAssociation objects filtered by the id column
  * @method     ChildDiscussionUserAssociation[]|ObjectCollection findByDiscussionId(int $discussion_id) Return ChildDiscussionUserAssociation objects filtered by the discussion_id column
- * @method     ChildDiscussionUserAssociation[]|ObjectCollection findByActivityListAssociationId(string $activity_list_assoc_id) Return ChildDiscussionUserAssociation objects filtered by the activity_list_assoc_id column
+ * @method     ChildDiscussionUserAssociation[]|ObjectCollection findByActivityUserAssociationId(string $activity_user_assoc_id) Return ChildDiscussionUserAssociation objects filtered by the activity_user_assoc_id column
  * @method     ChildDiscussionUserAssociation[]|ObjectCollection findByStatus(int $status) Return ChildDiscussionUserAssociation objects filtered by the status column
  * @method     ChildDiscussionUserAssociation[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -148,7 +148,7 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, discussion_id, activity_list_assoc_id, status FROM discussion_user_assoc WHERE id = :p0';
+        $sql = 'SELECT id, discussion_id, activity_user_assoc_id, status FROM discussion_user_assoc WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -323,18 +323,18 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the activity_list_assoc_id column
+     * Filter the query on the activity_user_assoc_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByActivityListAssociationId(1234); // WHERE activity_list_assoc_id = 1234
-     * $query->filterByActivityListAssociationId(array(12, 34)); // WHERE activity_list_assoc_id IN (12, 34)
-     * $query->filterByActivityListAssociationId(array('min' => 12)); // WHERE activity_list_assoc_id > 12
+     * $query->filterByActivityUserAssociationId(1234); // WHERE activity_user_assoc_id = 1234
+     * $query->filterByActivityUserAssociationId(array(12, 34)); // WHERE activity_user_assoc_id IN (12, 34)
+     * $query->filterByActivityUserAssociationId(array('min' => 12)); // WHERE activity_user_assoc_id > 12
      * </code>
      *
-     * @see       filterByActivityListAssociation()
+     * @see       filterByActivityUserAssociation()
      *
-     * @param     mixed $activityListAssociationId The value to use as filter.
+     * @param     mixed $activityUserAssociationId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -342,16 +342,16 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
      *
      * @return $this|ChildDiscussionUserAssociationQuery The current query, for fluid interface
      */
-    public function filterByActivityListAssociationId($activityListAssociationId = null, $comparison = null)
+    public function filterByActivityUserAssociationId($activityUserAssociationId = null, $comparison = null)
     {
-        if (is_array($activityListAssociationId)) {
+        if (is_array($activityUserAssociationId)) {
             $useMinMax = false;
-            if (isset($activityListAssociationId['min'])) {
-                $this->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID, $activityListAssociationId['min'], Criteria::GREATER_EQUAL);
+            if (isset($activityUserAssociationId['min'])) {
+                $this->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID, $activityUserAssociationId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($activityListAssociationId['max'])) {
-                $this->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID, $activityListAssociationId['max'], Criteria::LESS_EQUAL);
+            if (isset($activityUserAssociationId['max'])) {
+                $this->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID, $activityUserAssociationId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -362,7 +362,7 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID, $activityListAssociationId, $comparison);
+        return $this->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID, $activityUserAssociationId, $comparison);
     }
 
     /**
@@ -484,44 +484,44 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \ActivityListAssociation object
+     * Filter the query by a related \ActivityUserAssociation object
      *
-     * @param \ActivityListAssociation|ObjectCollection $activityListAssociation The related object(s) to use as filter
+     * @param \ActivityUserAssociation|ObjectCollection $activityUserAssociation The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildDiscussionUserAssociationQuery The current query, for fluid interface
      */
-    public function filterByActivityListAssociation($activityListAssociation, $comparison = null)
+    public function filterByActivityUserAssociation($activityUserAssociation, $comparison = null)
     {
-        if ($activityListAssociation instanceof \ActivityListAssociation) {
+        if ($activityUserAssociation instanceof \ActivityUserAssociation) {
             return $this
-                ->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID, $activityListAssociation->getId(), $comparison);
-        } elseif ($activityListAssociation instanceof ObjectCollection) {
+                ->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID, $activityUserAssociation->getId(), $comparison);
+        } elseif ($activityUserAssociation instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID, $activityListAssociation->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID, $activityUserAssociation->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByActivityListAssociation() only accepts arguments of type \ActivityListAssociation or Collection');
+            throw new PropelException('filterByActivityUserAssociation() only accepts arguments of type \ActivityUserAssociation or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the ActivityListAssociation relation
+     * Adds a JOIN clause to the query using the ActivityUserAssociation relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildDiscussionUserAssociationQuery The current query, for fluid interface
      */
-    public function joinActivityListAssociation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinActivityUserAssociation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('ActivityListAssociation');
+        $relationMap = $tableMap->getRelation('ActivityUserAssociation');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -536,14 +536,14 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'ActivityListAssociation');
+            $this->addJoinObject($join, 'ActivityUserAssociation');
         }
 
         return $this;
     }
 
     /**
-     * Use the ActivityListAssociation relation ActivityListAssociation object
+     * Use the ActivityUserAssociation relation ActivityUserAssociation object
      *
      * @see useQuery()
      *
@@ -551,13 +551,13 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \ActivityListAssociationQuery A secondary query class using the current class as primary query
+     * @return \ActivityUserAssociationQuery A secondary query class using the current class as primary query
      */
-    public function useActivityListAssociationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useActivityUserAssociationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinActivityListAssociation($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'ActivityListAssociation', '\ActivityListAssociationQuery');
+            ->joinActivityUserAssociation($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ActivityUserAssociation', '\ActivityUserAssociationQuery');
     }
 
     /**

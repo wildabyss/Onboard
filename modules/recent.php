@@ -15,7 +15,7 @@
 	<div class="content_column_wrapper" id="column_wrapper_middle">
 		<h1 class="page_title">Recent Activities</h1>
 		
-		<?php $recentActivityAssocs = ActivityListAssociationQuery::getRecentActivityListAssociations($curUser->getId(),50)?>
+		<?php $recentActivityAssocs = ActivityUserAssociationQuery::getRecentActivityUserAssociations($curUser->getId(),50)?>
 		<?php if (count($recentActivityAssocs)==0):?>
 			<p id="no_activity_msg">No recent activity from your friends.</p>
 		<?php else:?>

@@ -1,15 +1,9 @@
 <?php
 
-use Base\ActivityListAssociationQuery;
-
-use Base\DiscussionUserAssociationQuery;
-use Base\ActivityListAssociation as BaseActivityListAssociation;
-use Map\CategoryTableMap as CategoryTableMap;
-use Map\UserTableMap as UserTableMap;
-use Map\ActivityListTableMap as ActivityListTableMap;
+use Base\ActivityUserAssociation as BaseActivityUserAssociation;
 
 /**
- * Skeleton subclass for representing a row from the 'activity_list_assoc' table.
+ * Skeleton subclass for representing a row from the 'activity_user_assoc' table.
  *
  *
  *
@@ -18,7 +12,7 @@ use Map\ActivityListTableMap as ActivityListTableMap;
  * long as it does not already exist in the output directory.
  *
  */
-class ActivityListAssociation extends BaseActivityListAssociation
+class ActivityUserAssociation extends BaseActivityUserAssociation
 {
 	const ACTIVE_STATUS = 1;
 	const COMPLETED_STATUS = 2;
@@ -28,8 +22,9 @@ class ActivityListAssociation extends BaseActivityListAssociation
 	const USER_IS_ASSOCIATED = 1;
 	const USER_IS_OWNER =2;
 	
+	
 	/**
-	 * Get a list of categories that the activity associated with this list association object belongs to
+	 * Get a list of categories that the activity associated with this user association object belongs to
 	 * @return array of ActivityCategoryAssociation objects joined by Categories
 	 */
 	public function getActivityCategories(){
@@ -38,31 +33,15 @@ class ActivityListAssociation extends BaseActivityListAssociation
 	
 	
 	/**
-	 * Get the user associated with this ActivityListAssociation object
-	 * @return User
-	 */
-	public function getUser(){
-		$list = $this->getActivityList();
-		return $list->getUser();
-		
-		/*return $user = ActivityListAssociationQuery::create()
-			->joinActivityList()
-			->join(UserTableMap::COL_ID, UserQuery::LEFT_JOIN)
-			->filterBy(ActivityListTableMap::COL_ID, $this->getListId())
-			->findOne();*/
-	}
-	
-	
-	/**
-	 * Save the ActivityListAssociation object with tagged categories
-	 * @param ActivityListAssociation $activityAssociationObj
+	 * Save the ActivityUserAssociation object with tagged categories
+	 * @param ActivityUserAssociation $activityAssociationObj
 	 * @param array of strings $rawCategories
 	 * @param Propel\Runtime\Connection\ConnectionInterface $con
 	 */
-	public function saveWithCategories(ActivityListAssociation $activityAssociationObj, $rawCategories,
+	public function saveWithCategories(ActivityUserAssociation $activityAssociationObj, $rawCategories,
 			Propel\Runtime\Connection\ConnectionInterface $con=NULL) {
 	
-		// save ActivityListAssociation object itself
+		// save ActivityUserAssociation object itself
 		parent::save($con);
 	
 		// get existing categories

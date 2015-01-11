@@ -6,7 +6,7 @@
 <!-- news feed -->
 <div id="feed_wrapper">
 	<ul id="feed_content">
-		<?php $recentActivityAssocs = ActivityListAssociationQuery::getRecentActivityListAssociations($curUser->getId(), 20)?>
+		<?php $recentActivityAssocs = ActivityUserAssociationQuery::getRecentActivityUserAssociations($curUser->getId(), 20)?>
 		<?php foreach ($recentActivityAssocs as $recentActivityAssoc):?>
 			<?php $assocUser = $recentActivityAssoc->getUser() ?>
 			<li class="feed_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>';">

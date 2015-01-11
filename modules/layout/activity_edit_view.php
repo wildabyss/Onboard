@@ -53,7 +53,7 @@
 	
 	<span style="float:right"><input type="button" class="new_activity_buttons" value="Save" 
 		id="<?php if (isset($_ACT_EDIT['id'])):?>save_activity_button_<?php echo $_ACT_EDIT['id']?><?php else:?>save_activity_button_new<?php endif?>"
-		onclick="<?php if (isset($_ACT_EDIT['id'])):?>saveActivity('<?php echo $_ACT_EDIT['id']?>')<?php else:?>saveNewActivity('<?php echo $_ACTIVITY_LIST->getId()?>')<?php endif?>" />
+		onclick="<?php if (isset($_ACT_EDIT['id'])):?>saveActivity('<?php echo $_ACT_EDIT['id']?>')<?php else:?>saveNewActivity()<?php endif?>" />
 	
 	<input type="button" class="new_activity_buttons" value="Cancel" 
 		id="<?php if (isset($_ACT_EDIT['id'])):?>cancel_activity_button_<?php echo $_ACT_EDIT['id']?><?php else:?>cancel_activity_button_new<?php endif?>"

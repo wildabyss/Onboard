@@ -5,6 +5,7 @@ use Base\User as BaseUser;
 use Propel\Runtime\Propel;
 use Map\UserTableMap;
 use Map\ActivityListTableMap;
+use Map\ActivityUserAssociationTableMap;
 
 /**
  * Skeleton subclass for representing a row from the 'user' table.
@@ -63,6 +64,19 @@ EOT;
 		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$results[] = $row;
 		}
+	}
+	
+	
+	/**
+	 * Get all the activity list associations that are associated with this user
+	 * @return array of ActivityUserAssociation objects
+	 */
+	public function getActiveOrCompletedActivityAssociations(){
+		$criteria = $this->buildCriteria()
+			->addOr(ActivityUserAssociationTableMap::COL_STATUS, ActivityUserAssociation::COMPLETED_STATUS)
+			->addOr(ActivityUserAssociationTableMap::COL_STATUS, ActivityUserAssociation::ACTIVE_STATUS)
+			->addAscendingOrderByColumn(ActivityUserAssociationTableMap::COL_ALIAS);
+		return $this->getActivityUserAssociations($criteria);
 	}
 	
 	

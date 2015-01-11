@@ -53,10 +53,10 @@
 		</vendor>
 	</table>
 	
-	<table name="activity_list_assoc" idMethod="native" phpName="ActivityListAssociation">
+	<table name="activity_user_assoc" idMethod="native" phpName="ActivityUserAssociation">
 		<column name="id" phpName="Id" type="BIGINT" sqlType="bigint(20) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
 		<column name="activity_id" phpName="ActivityId" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
-		<column name="list_id" phpName="ListId" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
+		<column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
 		<column name="status" phpName="Status" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" required="true"/>
 		<column name="date_added" phpName="DateAdded" type="TIMESTAMP" required="true"/>
 		<column name="alias" phpName="Alias" type="VARCHAR" size="255"/>
@@ -65,14 +65,14 @@
 		<foreign-key foreignTable="activity" name="activity_user_assoc_ibfk_1" onDelete="CASCADE">
 			<reference local="activity_id" foreign="id"/>
 		</foreign-key>
-		<foreign-key foreignTable="activity_list" name="activity_user_assoc_ibfk_3" onDelete="CASCADE">
-			<reference local="list_id" foreign="id"/>
+		<foreign-key foreignTable="user" name="user_ibfk_3" onDelete="CASCADE">
+			<reference local="user_id" foreign="id"/>
 		</foreign-key>
 		<index name="activity_id">
 			<index-column name="activity_id"/>
 		</index>
-		<index name="list_id">
-			<index-column name="list_id"/>
+		<index name="user_id">
+			<index-column name="user_id"/>
 		</index>
 		<vendor type="mysql">
 			<parameter name="Engine" value="InnoDB"/>
@@ -108,19 +108,19 @@
 	<table name="discussion_user_assoc" idMethod="native" phpName="DiscussionUserAssociation">
 		<column name="id" phpName="Id" type="BIGINT" sqlType="bigint(20) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
 		<column name="discussion_id" phpName="DiscussionId" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
-		<column name="activity_list_assoc_id" phpName="ActivityListAssociationId" type="BIGINT" sqlType="bigint(20) unsigned" required="true"/>
+		<column name="activity_user_assoc_id" phpName="ActivityUserAssociationId" type="BIGINT" sqlType="bigint(20) unsigned" required="true"/>
 		<column name="status" phpName="Status" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" required="true"/>
 		<foreign-key foreignTable="discussion" name="discussion_user_assoc_ibfk_1" onDelete="CASCADE">
 			<reference local="discussion_id" foreign="id"/>
 		</foreign-key>
-		<foreign-key foreignTable="activity_list_assoc" name="activity_list_assoc_ibfk_2" onDelete="CASCADE">
-			<reference local="activity_list_assoc_id" foreign="id"/>
+		<foreign-key foreignTable="activity_user_assoc" name="activity_user_assoc_ibfk_2" onDelete="CASCADE">
+			<reference local="activity_user_assoc_id" foreign="id"/>
 		</foreign-key>
 		<index name="discussion_id">
 			<index-column name="discussion_id"/>
 		</index>
-		<index name="activity_list_assoc_id">
-			<index-column name="activity_list_assoc_id"/>
+		<index name="activity_user_assoc_id">
+			<index-column name="activity_user_assoc_id"/>
 		</index>
 		<vendor type="mysql">
 			<parameter name="Engine" value="InnoDB"/>

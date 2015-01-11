@@ -3,17 +3,17 @@
 namespace Base;
 
 use \Activity as ChildActivity;
-use \ActivityList as ChildActivityList;
-use \ActivityListAssociation as ChildActivityListAssociation;
-use \ActivityListAssociationQuery as ChildActivityListAssociationQuery;
-use \ActivityListQuery as ChildActivityListQuery;
 use \ActivityQuery as ChildActivityQuery;
+use \ActivityUserAssociation as ChildActivityUserAssociation;
+use \ActivityUserAssociationQuery as ChildActivityUserAssociationQuery;
 use \DiscussionUserAssociation as ChildDiscussionUserAssociation;
 use \DiscussionUserAssociationQuery as ChildDiscussionUserAssociationQuery;
+use \User as ChildUser;
+use \UserQuery as ChildUserQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Map\ActivityListAssociationTableMap;
+use Map\ActivityUserAssociationTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -29,18 +29,18 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'activity_list_assoc' table.
+ * Base class that represents a row from the 'activity_user_assoc' table.
  *
  *
  *
 * @package    propel.generator..Base
 */
-abstract class ActivityListAssociation implements ActiveRecordInterface
+abstract class ActivityUserAssociation implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\ActivityListAssociationTableMap';
+    const TABLE_MAP = '\\Map\\ActivityUserAssociationTableMap';
 
 
     /**
@@ -82,10 +82,10 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     protected $activity_id;
 
     /**
-     * The value for the list_id field.
+     * The value for the user_id field.
      * @var        int
      */
-    protected $list_id;
+    protected $user_id;
 
     /**
      * The value for the status field.
@@ -123,9 +123,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     protected $aActivity;
 
     /**
-     * @var        ChildActivityList
+     * @var        ChildUser
      */
-    protected $aActivityList;
+    protected $aUser;
 
     /**
      * @var        ObjectCollection|ChildDiscussionUserAssociation[] Collection to store aggregation of ChildDiscussionUserAssociation objects.
@@ -148,7 +148,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     protected $discussionUserAssociationsScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Base\ActivityListAssociation object.
+     * Initializes internal state of Base\ActivityUserAssociation object.
      */
     public function __construct()
     {
@@ -243,9 +243,9 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>ActivityListAssociation</code> instance.  If
-     * <code>obj</code> is an instance of <code>ActivityListAssociation</code>, delegates to
-     * <code>equals(ActivityListAssociation)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>ActivityUserAssociation</code> instance.  If
+     * <code>obj</code> is an instance of <code>ActivityUserAssociation</code>, delegates to
+     * <code>equals(ActivityUserAssociation)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -311,7 +311,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|ActivityListAssociation The current object, for fluid interface
+     * @return $this|ActivityUserAssociation The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -385,13 +385,13 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     }
 
     /**
-     * Get the [list_id] column value.
+     * Get the [user_id] column value.
      *
      * @return int
      */
-    public function getListId()
+    public function getUserId()
     {
-        return $this->list_id;
+        return $this->user_id;
     }
 
     /**
@@ -458,7 +458,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * Set the value of [id] column.
      *
      * @param  string $v new value
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -468,7 +468,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[ActivityListAssociationTableMap::COL_ID] = true;
+            $this->modifiedColumns[ActivityUserAssociationTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -478,7 +478,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * Set the value of [activity_id] column.
      *
      * @param  int $v new value
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function setActivityId($v)
     {
@@ -488,7 +488,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
         if ($this->activity_id !== $v) {
             $this->activity_id = $v;
-            $this->modifiedColumns[ActivityListAssociationTableMap::COL_ACTIVITY_ID] = true;
+            $this->modifiedColumns[ActivityUserAssociationTableMap::COL_ACTIVITY_ID] = true;
         }
 
         if ($this->aActivity !== null && $this->aActivity->getId() !== $v) {
@@ -499,34 +499,34 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     } // setActivityId()
 
     /**
-     * Set the value of [list_id] column.
+     * Set the value of [user_id] column.
      *
      * @param  int $v new value
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
-    public function setListId($v)
+    public function setUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->list_id !== $v) {
-            $this->list_id = $v;
-            $this->modifiedColumns[ActivityListAssociationTableMap::COL_LIST_ID] = true;
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[ActivityUserAssociationTableMap::COL_USER_ID] = true;
         }
 
-        if ($this->aActivityList !== null && $this->aActivityList->getId() !== $v) {
-            $this->aActivityList = null;
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
-    } // setListId()
+    } // setUserId()
 
     /**
      * Set the value of [status] column.
      *
      * @param  int $v new value
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function setStatus($v)
     {
@@ -536,7 +536,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
         if ($this->status !== $v) {
             $this->status = $v;
-            $this->modifiedColumns[ActivityListAssociationTableMap::COL_STATUS] = true;
+            $this->modifiedColumns[ActivityUserAssociationTableMap::COL_STATUS] = true;
         }
 
         return $this;
@@ -547,7 +547,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTime value.
      *               Empty strings are treated as NULL.
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function setDateAdded($v)
     {
@@ -555,7 +555,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         if ($this->date_added !== null || $dt !== null) {
             if ($dt !== $this->date_added) {
                 $this->date_added = $dt;
-                $this->modifiedColumns[ActivityListAssociationTableMap::COL_DATE_ADDED] = true;
+                $this->modifiedColumns[ActivityUserAssociationTableMap::COL_DATE_ADDED] = true;
             }
         } // if either are not null
 
@@ -566,7 +566,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * Set the value of [alias] column.
      *
      * @param  string $v new value
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function setAlias($v)
     {
@@ -576,7 +576,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
         if ($this->alias !== $v) {
             $this->alias = $v;
-            $this->modifiedColumns[ActivityListAssociationTableMap::COL_ALIAS] = true;
+            $this->modifiedColumns[ActivityUserAssociationTableMap::COL_ALIAS] = true;
         }
 
         return $this;
@@ -586,7 +586,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * Set the value of [description] column.
      *
      * @param  string $v new value
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function setDescription($v)
     {
@@ -596,7 +596,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
         if ($this->description !== $v) {
             $this->description = $v;
-            $this->modifiedColumns[ActivityListAssociationTableMap::COL_DESCRIPTION] = true;
+            $this->modifiedColumns[ActivityUserAssociationTableMap::COL_DESCRIPTION] = true;
         }
 
         return $this;
@@ -606,7 +606,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * Set the value of [is_owner] column.
      *
      * @param  int $v new value
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function setIsOwner($v)
     {
@@ -616,7 +616,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
         if ($this->is_owner !== $v) {
             $this->is_owner = $v;
-            $this->modifiedColumns[ActivityListAssociationTableMap::COL_IS_OWNER] = true;
+            $this->modifiedColumns[ActivityUserAssociationTableMap::COL_IS_OWNER] = true;
         }
 
         return $this;
@@ -658,31 +658,31 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : ActivityListAssociationTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : ActivityUserAssociationTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ActivityListAssociationTableMap::translateFieldName('ActivityId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ActivityUserAssociationTableMap::translateFieldName('ActivityId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->activity_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ActivityListAssociationTableMap::translateFieldName('ListId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->list_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ActivityUserAssociationTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ActivityListAssociationTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ActivityUserAssociationTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
             $this->status = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ActivityListAssociationTableMap::translateFieldName('DateAdded', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ActivityUserAssociationTableMap::translateFieldName('DateAdded', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->date_added = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ActivityListAssociationTableMap::translateFieldName('Alias', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ActivityUserAssociationTableMap::translateFieldName('Alias', TableMap::TYPE_PHPNAME, $indexType)];
             $this->alias = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ActivityListAssociationTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ActivityUserAssociationTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ActivityListAssociationTableMap::translateFieldName('IsOwner', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ActivityUserAssociationTableMap::translateFieldName('IsOwner', TableMap::TYPE_PHPNAME, $indexType)];
             $this->is_owner = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -692,10 +692,10 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = ActivityListAssociationTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = ActivityUserAssociationTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\ActivityListAssociation'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\ActivityUserAssociation'), 0, $e);
         }
     }
 
@@ -717,8 +717,8 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         if ($this->aActivity !== null && $this->activity_id !== $this->aActivity->getId()) {
             $this->aActivity = null;
         }
-        if ($this->aActivityList !== null && $this->list_id !== $this->aActivityList->getId()) {
-            $this->aActivityList = null;
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
         }
     } // ensureConsistency
 
@@ -743,13 +743,13 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildActivityListAssociationQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildActivityUserAssociationQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -760,7 +760,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aActivity = null;
-            $this->aActivityList = null;
+            $this->aUser = null;
             $this->collDiscussionUserAssociations = null;
 
         } // if (deep)
@@ -772,8 +772,8 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see ActivityListAssociation::setDeleted()
-     * @see ActivityListAssociation::isDeleted()
+     * @see ActivityUserAssociation::setDeleted()
+     * @see ActivityUserAssociation::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -782,11 +782,11 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildActivityListAssociationQuery::create()
+            $deleteQuery = ChildActivityUserAssociationQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -817,7 +817,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -836,7 +836,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                ActivityListAssociationTableMap::addInstanceToPool($this);
+                ActivityUserAssociationTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -874,11 +874,11 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 $this->setActivity($this->aActivity);
             }
 
-            if ($this->aActivityList !== null) {
-                if ($this->aActivityList->isModified() || $this->aActivityList->isNew()) {
-                    $affectedRows += $this->aActivityList->save($con);
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
                 }
-                $this->setActivityList($this->aActivityList);
+                $this->setUser($this->aUser);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -929,39 +929,39 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[ActivityListAssociationTableMap::COL_ID] = true;
+        $this->modifiedColumns[ActivityUserAssociationTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ActivityListAssociationTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ActivityUserAssociationTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_ID)) {
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_ACTIVITY_ID)) {
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_ACTIVITY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'activity_id';
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_LIST_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'list_id';
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_STATUS)) {
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_STATUS)) {
             $modifiedColumns[':p' . $index++]  = 'status';
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_DATE_ADDED)) {
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_DATE_ADDED)) {
             $modifiedColumns[':p' . $index++]  = 'date_added';
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_ALIAS)) {
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_ALIAS)) {
             $modifiedColumns[':p' . $index++]  = 'alias';
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_DESCRIPTION)) {
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'description';
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_IS_OWNER)) {
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_IS_OWNER)) {
             $modifiedColumns[':p' . $index++]  = 'is_owner';
         }
 
         $sql = sprintf(
-            'INSERT INTO activity_list_assoc (%s) VALUES (%s)',
+            'INSERT INTO activity_user_assoc (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -976,8 +976,8 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                     case 'activity_id':
                         $stmt->bindValue($identifier, $this->activity_id, PDO::PARAM_INT);
                         break;
-                    case 'list_id':
-                        $stmt->bindValue($identifier, $this->list_id, PDO::PARAM_INT);
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
                     case 'status':
                         $stmt->bindValue($identifier, $this->status, PDO::PARAM_INT);
@@ -1040,7 +1040,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = ActivityListAssociationTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = ActivityUserAssociationTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1063,7 +1063,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 return $this->getActivityId();
                 break;
             case 2:
-                return $this->getListId();
+                return $this->getUserId();
                 break;
             case 3:
                 return $this->getStatus();
@@ -1104,15 +1104,15 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['ActivityListAssociation'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['ActivityUserAssociation'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['ActivityListAssociation'][$this->hashCode()] = true;
-        $keys = ActivityListAssociationTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['ActivityUserAssociation'][$this->hashCode()] = true;
+        $keys = ActivityUserAssociationTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getActivityId(),
-            $keys[2] => $this->getListId(),
+            $keys[2] => $this->getUserId(),
             $keys[3] => $this->getStatus(),
             $keys[4] => $this->getDateAdded(),
             $keys[5] => $this->getAlias(),
@@ -1140,20 +1140,20 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
                 $result[$key] = $this->aActivity->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aActivityList) {
+            if (null !== $this->aUser) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'activityList';
+                        $key = 'user';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'activity_list';
+                        $key = 'user';
                         break;
                     default:
-                        $key = 'ActivityList';
+                        $key = 'User';
                 }
 
-                $result[$key] = $this->aActivityList->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collDiscussionUserAssociations) {
 
@@ -1184,11 +1184,11 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\ActivityListAssociation
+     * @return $this|\ActivityUserAssociation
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = ActivityListAssociationTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = ActivityUserAssociationTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1199,7 +1199,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\ActivityListAssociation
+     * @return $this|\ActivityUserAssociation
      */
     public function setByPosition($pos, $value)
     {
@@ -1211,7 +1211,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 $this->setActivityId($value);
                 break;
             case 2:
-                $this->setListId($value);
+                $this->setUserId($value);
                 break;
             case 3:
                 $this->setStatus($value);
@@ -1252,7 +1252,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = ActivityListAssociationTableMap::getFieldNames($keyType);
+        $keys = ActivityUserAssociationTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1261,7 +1261,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
             $this->setActivityId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setListId($arr[$keys[2]]);
+            $this->setUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setStatus($arr[$keys[3]]);
@@ -1297,7 +1297,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\ActivityListAssociation The current object, for fluid interface
+     * @return $this|\ActivityUserAssociation The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1317,31 +1317,31 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(ActivityListAssociationTableMap::DATABASE_NAME);
+        $criteria = new Criteria(ActivityUserAssociationTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_ID)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_ID)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_ACTIVITY_ID)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_ACTIVITY_ID, $this->activity_id);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_ACTIVITY_ID)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_ACTIVITY_ID, $this->activity_id);
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_LIST_ID)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_LIST_ID, $this->list_id);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_USER_ID)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_USER_ID, $this->user_id);
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_STATUS)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_STATUS, $this->status);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_STATUS)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_STATUS, $this->status);
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_DATE_ADDED)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_DATE_ADDED, $this->date_added);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_DATE_ADDED)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_DATE_ADDED, $this->date_added);
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_ALIAS)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_ALIAS, $this->alias);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_ALIAS)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_ALIAS, $this->alias);
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_DESCRIPTION)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_DESCRIPTION, $this->description);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_DESCRIPTION)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_DESCRIPTION, $this->description);
         }
-        if ($this->isColumnModified(ActivityListAssociationTableMap::COL_IS_OWNER)) {
-            $criteria->add(ActivityListAssociationTableMap::COL_IS_OWNER, $this->is_owner);
+        if ($this->isColumnModified(ActivityUserAssociationTableMap::COL_IS_OWNER)) {
+            $criteria->add(ActivityUserAssociationTableMap::COL_IS_OWNER, $this->is_owner);
         }
 
         return $criteria;
@@ -1359,8 +1359,8 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildActivityListAssociationQuery::create();
-        $criteria->add(ActivityListAssociationTableMap::COL_ID, $this->id);
+        $criteria = ChildActivityUserAssociationQuery::create();
+        $criteria->add(ActivityUserAssociationTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1422,7 +1422,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \ActivityListAssociation (or compatible) type.
+     * @param      object $copyObj An object of \ActivityUserAssociation (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1430,7 +1430,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setActivityId($this->getActivityId());
-        $copyObj->setListId($this->getListId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setStatus($this->getStatus());
         $copyObj->setDateAdded($this->getDateAdded());
         $copyObj->setAlias($this->getAlias());
@@ -1465,7 +1465,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \ActivityListAssociation Clone of current object.
+     * @return \ActivityUserAssociation Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1482,7 +1482,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * Declares an association between this object and a ChildActivity object.
      *
      * @param  ChildActivity $v
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      * @throws PropelException
      */
     public function setActivity(ChildActivity $v = null)
@@ -1498,7 +1498,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildActivity object, it will not be re-added.
         if ($v !== null) {
-            $v->addActivityListAssociation($this);
+            $v->addActivityUserAssociation($this);
         }
 
 
@@ -1522,7 +1522,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aActivity->addActivityListAssociations($this);
+                $this->aActivity->addActivityUserAssociations($this);
              */
         }
 
@@ -1530,26 +1530,26 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildActivityList object.
+     * Declares an association between this object and a ChildUser object.
      *
-     * @param  ChildActivityList $v
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @param  ChildUser $v
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setActivityList(ChildActivityList $v = null)
+    public function setUser(ChildUser $v = null)
     {
         if ($v === null) {
-            $this->setListId(NULL);
+            $this->setUserId(NULL);
         } else {
-            $this->setListId($v->getId());
+            $this->setUserId($v->getId());
         }
 
-        $this->aActivityList = $v;
+        $this->aUser = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildActivityList object, it will not be re-added.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
         if ($v !== null) {
-            $v->addActivityListAssociation($this);
+            $v->addActivityUserAssociation($this);
         }
 
 
@@ -1558,26 +1558,26 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildActivityList object
+     * Get the associated ChildUser object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildActivityList The associated ChildActivityList object.
+     * @return ChildUser The associated ChildUser object.
      * @throws PropelException
      */
-    public function getActivityList(ConnectionInterface $con = null)
+    public function getUser(ConnectionInterface $con = null)
     {
-        if ($this->aActivityList === null && ($this->list_id !== null)) {
-            $this->aActivityList = ChildActivityListQuery::create()->findPk($this->list_id, $con);
+        if ($this->aUser === null && ($this->user_id !== null)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aActivityList->addActivityListAssociations($this);
+                $this->aUser->addActivityUserAssociations($this);
              */
         }
 
-        return $this->aActivityList;
+        return $this->aUser;
     }
 
 
@@ -1645,7 +1645,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildActivityListAssociation is new, it will return
+     * If this ChildActivityUserAssociation is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
@@ -1662,7 +1662,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 $this->initDiscussionUserAssociations();
             } else {
                 $collDiscussionUserAssociations = ChildDiscussionUserAssociationQuery::create(null, $criteria)
-                    ->filterByActivityListAssociation($this)
+                    ->filterByActivityUserAssociation($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -1705,7 +1705,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      *
      * @param      Collection $discussionUserAssociations A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildActivityListAssociation The current object (for fluent API support)
+     * @return $this|ChildActivityUserAssociation The current object (for fluent API support)
      */
     public function setDiscussionUserAssociations(Collection $discussionUserAssociations, ConnectionInterface $con = null)
     {
@@ -1716,7 +1716,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
         $this->discussionUserAssociationsScheduledForDeletion = $discussionUserAssociationsToDelete;
 
         foreach ($discussionUserAssociationsToDelete as $discussionUserAssociationRemoved) {
-            $discussionUserAssociationRemoved->setActivityListAssociation(null);
+            $discussionUserAssociationRemoved->setActivityUserAssociation(null);
         }
 
         $this->collDiscussionUserAssociations = null;
@@ -1757,7 +1757,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByActivityListAssociation($this)
+                ->filterByActivityUserAssociation($this)
                 ->count($con);
         }
 
@@ -1769,7 +1769,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      * through the ChildDiscussionUserAssociation foreign key attribute.
      *
      * @param  ChildDiscussionUserAssociation $l ChildDiscussionUserAssociation
-     * @return $this|\ActivityListAssociation The current object (for fluent API support)
+     * @return $this|\ActivityUserAssociation The current object (for fluent API support)
      */
     public function addDiscussionUserAssociation(ChildDiscussionUserAssociation $l)
     {
@@ -1791,12 +1791,12 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     protected function doAddDiscussionUserAssociation(ChildDiscussionUserAssociation $discussionUserAssociation)
     {
         $this->collDiscussionUserAssociations[]= $discussionUserAssociation;
-        $discussionUserAssociation->setActivityListAssociation($this);
+        $discussionUserAssociation->setActivityUserAssociation($this);
     }
 
     /**
      * @param  ChildDiscussionUserAssociation $discussionUserAssociation The ChildDiscussionUserAssociation object to remove.
-     * @return $this|ChildActivityListAssociation The current object (for fluent API support)
+     * @return $this|ChildActivityUserAssociation The current object (for fluent API support)
      */
     public function removeDiscussionUserAssociation(ChildDiscussionUserAssociation $discussionUserAssociation)
     {
@@ -1808,7 +1808,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
                 $this->discussionUserAssociationsScheduledForDeletion->clear();
             }
             $this->discussionUserAssociationsScheduledForDeletion[]= clone $discussionUserAssociation;
-            $discussionUserAssociation->setActivityListAssociation(null);
+            $discussionUserAssociation->setActivityUserAssociation(null);
         }
 
         return $this;
@@ -1818,13 +1818,13 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this ActivityListAssociation is new, it will return
-     * an empty collection; or if this ActivityListAssociation has previously
+     * Otherwise if this ActivityUserAssociation is new, it will return
+     * an empty collection; or if this ActivityUserAssociation has previously
      * been saved, it will retrieve related DiscussionUserAssociations from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in ActivityListAssociation.
+     * actually need in ActivityUserAssociation.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
@@ -1847,14 +1847,14 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aActivity) {
-            $this->aActivity->removeActivityListAssociation($this);
+            $this->aActivity->removeActivityUserAssociation($this);
         }
-        if (null !== $this->aActivityList) {
-            $this->aActivityList->removeActivityListAssociation($this);
+        if (null !== $this->aUser) {
+            $this->aUser->removeActivityUserAssociation($this);
         }
         $this->id = null;
         $this->activity_id = null;
-        $this->list_id = null;
+        $this->user_id = null;
         $this->status = null;
         $this->date_added = null;
         $this->alias = null;
@@ -1887,7 +1887,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
 
         $this->collDiscussionUserAssociations = null;
         $this->aActivity = null;
-        $this->aActivityList = null;
+        $this->aUser = null;
     }
 
     /**
@@ -1897,7 +1897,7 @@ abstract class ActivityListAssociation implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(ActivityListAssociationTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(ActivityUserAssociationTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

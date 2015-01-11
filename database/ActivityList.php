@@ -1,7 +1,6 @@
 <?php
 
 use Base\ActivityList as BaseActivityList;
-use Map\ActivityListAssociationTableMap;
 
 /**
  * Skeleton subclass for representing a row from the 'activity_list' table.
@@ -16,16 +15,4 @@ use Map\ActivityListAssociationTableMap;
 class ActivityList extends BaseActivityList
 {
 	const DEFAULT_LIST = "Default";
-	
-	/**
-	 * Get all the activity list associations that are associated with this list
-	 * @return array of ActivityListAssociation objects
-	 */
-	public function getActiveOrCompletedActivityAssociations(){
-		$criteria = $this->buildCriteria()
-			->addOr(ActivityListAssociationTableMap::COL_STATUS, ActivityListAssociation::COMPLETED_STATUS)
-			->addOr(ActivityListAssociationTableMap::COL_STATUS, ActivityListAssociation::ACTIVE_STATUS)
-			->addAscendingOrderByColumn(ActivityListAssociationTableMap::COL_ALIAS);
-		return $this->getActivityListAssociations($criteria);
-	}
 }

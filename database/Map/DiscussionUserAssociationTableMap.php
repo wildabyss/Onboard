@@ -82,9 +82,9 @@ class DiscussionUserAssociationTableMap extends TableMap
     const COL_DISCUSSION_ID = 'discussion_user_assoc.discussion_id';
 
     /**
-     * the column name for the activity_list_assoc_id field
+     * the column name for the activity_user_assoc_id field
      */
-    const COL_ACTIVITY_LIST_ASSOC_ID = 'discussion_user_assoc.activity_list_assoc_id';
+    const COL_ACTIVITY_USER_ASSOC_ID = 'discussion_user_assoc.activity_user_assoc_id';
 
     /**
      * the column name for the status field
@@ -103,10 +103,10 @@ class DiscussionUserAssociationTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'DiscussionId', 'ActivityListAssociationId', 'Status', ),
-        self::TYPE_CAMELNAME     => array('id', 'discussionId', 'activityListAssociationId', 'status', ),
-        self::TYPE_COLNAME       => array(DiscussionUserAssociationTableMap::COL_ID, DiscussionUserAssociationTableMap::COL_DISCUSSION_ID, DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID, DiscussionUserAssociationTableMap::COL_STATUS, ),
-        self::TYPE_FIELDNAME     => array('id', 'discussion_id', 'activity_list_assoc_id', 'status', ),
+        self::TYPE_PHPNAME       => array('Id', 'DiscussionId', 'ActivityUserAssociationId', 'Status', ),
+        self::TYPE_CAMELNAME     => array('id', 'discussionId', 'activityUserAssociationId', 'status', ),
+        self::TYPE_COLNAME       => array(DiscussionUserAssociationTableMap::COL_ID, DiscussionUserAssociationTableMap::COL_DISCUSSION_ID, DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID, DiscussionUserAssociationTableMap::COL_STATUS, ),
+        self::TYPE_FIELDNAME     => array('id', 'discussion_id', 'activity_user_assoc_id', 'status', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -117,10 +117,10 @@ class DiscussionUserAssociationTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'DiscussionId' => 1, 'ActivityListAssociationId' => 2, 'Status' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'discussionId' => 1, 'activityListAssociationId' => 2, 'status' => 3, ),
-        self::TYPE_COLNAME       => array(DiscussionUserAssociationTableMap::COL_ID => 0, DiscussionUserAssociationTableMap::COL_DISCUSSION_ID => 1, DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID => 2, DiscussionUserAssociationTableMap::COL_STATUS => 3, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'discussion_id' => 1, 'activity_list_assoc_id' => 2, 'status' => 3, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'DiscussionId' => 1, 'ActivityUserAssociationId' => 2, 'Status' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'discussionId' => 1, 'activityUserAssociationId' => 2, 'status' => 3, ),
+        self::TYPE_COLNAME       => array(DiscussionUserAssociationTableMap::COL_ID => 0, DiscussionUserAssociationTableMap::COL_DISCUSSION_ID => 1, DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID => 2, DiscussionUserAssociationTableMap::COL_STATUS => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'discussion_id' => 1, 'activity_user_assoc_id' => 2, 'status' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -143,7 +143,7 @@ class DiscussionUserAssociationTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
         $this->addForeignKey('discussion_id', 'DiscussionId', 'INTEGER', 'discussion', 'id', true, 10, null);
-        $this->addForeignKey('activity_list_assoc_id', 'ActivityListAssociationId', 'BIGINT', 'activity_list_assoc', 'id', true, null, null);
+        $this->addForeignKey('activity_user_assoc_id', 'ActivityUserAssociationId', 'BIGINT', 'activity_user_assoc', 'id', true, null, null);
         $this->addColumn('status', 'Status', 'TINYINT', true, 3, null);
     } // initialize()
 
@@ -153,7 +153,7 @@ class DiscussionUserAssociationTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Discussion', '\\Discussion', RelationMap::MANY_TO_ONE, array('discussion_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('ActivityListAssociation', '\\ActivityListAssociation', RelationMap::MANY_TO_ONE, array('activity_list_assoc_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('ActivityUserAssociation', '\\ActivityUserAssociation', RelationMap::MANY_TO_ONE, array('activity_user_assoc_id' => 'id', ), 'CASCADE', null);
     } // buildRelations()
 
     /**
@@ -299,12 +299,12 @@ class DiscussionUserAssociationTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_ID);
             $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_DISCUSSION_ID);
-            $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_ACTIVITY_LIST_ASSOC_ID);
+            $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID);
             $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_STATUS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.discussion_id');
-            $criteria->addSelectColumn($alias . '.activity_list_assoc_id');
+            $criteria->addSelectColumn($alias . '.activity_user_assoc_id');
             $criteria->addSelectColumn($alias . '.status');
         }
     }

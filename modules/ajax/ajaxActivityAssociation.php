@@ -13,56 +13,53 @@ switch ($_POST['action']){
 			exit();
 		
 		try {
-			// the friend's ActivityListAssociation
-			$friendActivityListAssoc = ActivityListAssociationQuery::create()
+			// the friend's ActivityUserAssociation
+			$friendActivityUserAssoc = ActivityUserAssociationQuery::create()
 				->filterById($_POST['activity_assoc'])
 				->findOne();
 			// current user's (i.e. my) association level with the activity
-			$userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $friendActivityListAssoc->getActivityId());
-			// retrieve my default ActivityList
-			$userList = $curUser->getDefaultActivityList();
-		
-			if ($userAssocLevel == ActivityListAssociation::USER_IS_NOT_ASSOCIATED && $_POST['action']=="onboard"){
+			$userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $friendActivityUserAssoc->getActivityId());
+			if ($userAssocLevel == ActivityUserAssociation::USER_IS_NOT_ASSOCIATED && $_POST['action']=="onboard"){
 				// find the archived version if exist
-				$newActivityListAssoc = ActivityListAssociationQuery::create()
-					->filterByActivityId($friendActivityListAssoc->getActivityId())
-					->filterByActivityList($userList)
+				$newActivityUserAssoc = ActivityUserAssociationQuery::create()
+					->filterByActivityId($friendActivityUserAssoc->getActivityId())
+					->filterByUserId($curUser->getId())
 					->findOneOrCreate();
 				
 				// associate user
-				$newActivityListAssoc->setActivityId($friendActivityListAssoc->getActivityId());
-				$newActivityListAssoc->setActivityList($userList);
-				$newActivityListAssoc->setStatus(ActivityListAssociation::ACTIVE_STATUS);
-				$newActivityListAssoc->setIsOwner(0);
-				$newActivityListAssoc->setDateAdded(time());
-				$newActivityListAssoc->setAlias($friendActivityListAssoc->getAlias());
-				$newActivityListAssoc->setDescription($friendActivityListAssoc->getDescription());
-				$newActivityListAssoc->save();
+				$newActivityUserAssoc->setActivityId($friendActivityUserAssoc->getActivityId());
+				$newActivityUserAssoc->setUserId($curUser->getId());
+				$newActivityUserAssoc->setStatus(ActivityUserAssociation::ACTIVE_STATUS);
+				$newActivityUserAssoc->setIsOwner(0);
+				$newActivityUserAssoc->setDateAdded(time());
+				$newActivityUserAssoc->setAlias($friendActivityUserAssoc->getAlias());
+				$newActivityUserAssoc->setDescription($friendActivityUserAssoc->getDescription());
+				$newActivityUserAssoc->save();
 		
-			} elseif ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED && $_POST['action']=="leave"){
+			} elseif ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED && $_POST['action']=="leave"){
 				// dissociate user
-				$userActivityListAssoc = ActivityListAssociationQuery::create()
-					->filterByActivityId($friendActivityListAssoc->getActivityId())
-					->filterByActivityList($userList)
+				$userActivityUserAssoc = ActivityUserAssociationQuery::create()
+					->filterByActivityId($friendActivityUserAssoc->getActivityId())
+					->filterByUserId($curUser->getId())
 					->findOne();
-				$userActivityListAssoc->setStatus(ActivityListAssociation::ARCHIVED_STATUS);
-				$userActivityListAssoc->save();
+				$userActivityUserAssoc->setStatus(ActivityUserAssociation::ARCHIVED_STATUS);
+				$userActivityUserAssoc->save();
 			}
 		
 			// send the new interest tally for this friend
-			echo ActivityListAssociationQuery::countInterestedFriends($_POST['friend_id'], $friendActivityListAssoc->getActivityId());
+			echo ActivityUserAssociationQuery::countInterestedFriends($_POST['friend_id'], $friendActivityUserAssoc->getActivityId());
 		} catch (Exception $e){
 			exit();
 		}
 		
 		break;
 	
-	// get ActivityListAssociation info
+	// get ActivityUserAssociation info
 	case 'get':
 		if (!isset($_POST['activity_assoc']))
 			exit();
 		
-		$actAssocObj = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		$actAssocObj = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($actAssocObj == false)
 			exit();
 		$actCategories = $actAssocObj->getActivityCategories();
@@ -85,12 +82,12 @@ switch ($_POST['action']){
 		if (!isset($_POST['activity_assoc']))
 			exit();
 		
-		$actAssocObj = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		$actAssocObj = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($actAssocObj == false)
 			exit();
 		
-		// change status of ActivityListAssociation object to archived (deleted)
-		$actAssocObj->setStatus(ActivityListAssociation::ARCHIVED_STATUS);
+		// change status of ActivityUserAssociation object to archived (deleted)
+		$actAssocObj->setStatus(ActivityUserAssociation::ARCHIVED_STATUS);
 		if ($actAssocObj->save() > 0)
 			echo 1;
 		
@@ -98,8 +95,7 @@ switch ($_POST['action']){
 
 	// save new activity
 	case 'save_new':
-		if (!isset($_POST['activity_alias']) || !isset($_POST['activity_descr']) || !isset($_POST['activity_cats'])
-			|| !isset($_POST['activity_list']))
+		if (!isset($_POST['activity_alias']) || !isset($_POST['activity_descr']) || !isset($_POST['activity_cats']))
 			exit();
 		
 		// set variables required for view generation
@@ -111,14 +107,14 @@ switch ($_POST['action']){
 		$actObj->setName(trim($_POST['activity_alias']));
 		$actObj->save();
 		
-		// create the ActivityListAssociation object
-		$_ACT_OBJ_VIEW = new ActivityListAssociation();
+		// create the ActivityUserAssociation object
+		$_ACT_OBJ_VIEW = new ActivityUserAssociation();
 		$_ACT_OBJ_VIEW->setActivityId($actObj->getId());
-		$_ACT_OBJ_VIEW->setListId($_POST['activity_list']);
+		$_ACT_OBJ_VIEW->setUserId($curUser->getId());
 		$_ACT_OBJ_VIEW->setAlias(trim($_POST['activity_alias']));
 		$_ACT_OBJ_VIEW->setDescription(trim($_POST['activity_descr']));
 		$_ACT_OBJ_VIEW->setDateAdded(time());
-		$_ACT_OBJ_VIEW->setStatus(ActivityListAssociation::ACTIVE_STATUS);
+		$_ACT_OBJ_VIEW->setStatus(ActivityUserAssociation::ACTIVE_STATUS);
 		$_ACT_OBJ_VIEW->setIsOwner(1);
 		$rawCategories = explode(',', $_POST['activity_cats']);
 		$_ACT_OBJ_VIEW->saveWithCategories($_ACT_OBJ_VIEW, $rawCategories);
@@ -134,9 +130,9 @@ switch ($_POST['action']){
 			|| !isset($_POST['activity_descr']) || !isset($_POST['activity_cats']))
 			exit();
 
-		// retrieve the existing ActivityListAssociation object
+		// retrieve the existing ActivityUserAssociation object
 		$_MY_LIST = true;
-		$_ACT_OBJ_VIEW = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
 			exit();
 		
@@ -156,15 +152,15 @@ switch ($_POST['action']){
 			exit();
 		
 		// fetch associated activity
-		$actAssocObj = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		$actAssocObj = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($actAssocObj == false)
 			exit();
 		
 		// set activityassoc status
 		if ($_POST['action'] == "mark_complete")
-			$actAssocObj->setStatus(ActivityListAssociation::COMPLETED_STATUS);
+			$actAssocObj->setStatus(ActivityUserAssociation::COMPLETED_STATUS);
 		elseif ($_POST['action'] == "mark_active")
-			$actAssocObj->setStatus(ActivityListAssociation::ACTIVE_STATUS);
+			$actAssocObj->setStatus(ActivityUserAssociation::ACTIVE_STATUS);
 		
 		// save change
 		if ($actAssocObj->save() > 0)
@@ -176,12 +172,12 @@ switch ($_POST['action']){
 			exit();
 		
 		// verify the activity association id that's passed in
-		$_ACT_OBJ_VIEW = ActivityListAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
 			exit();
 		
 		// output interested friends
-		$_INTERESTED_FRIENDS = ActivityListAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
+		$_INTERESTED_FRIENDS = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
 		include "../modules/layout/interested_friends_view.php";
 		break;
 }

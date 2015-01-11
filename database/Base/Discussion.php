@@ -1625,10 +1625,10 @@ abstract class Discussion implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildDiscussionUserAssociation[] List of ChildDiscussionUserAssociation objects
      */
-    public function getDiscussionUserAssociationsJoinActivityListAssociation(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getDiscussionUserAssociationsJoinActivityUserAssociation(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildDiscussionUserAssociationQuery::create(null, $criteria);
-        $query->joinWith('ActivityListAssociation', $joinBehavior);
+        $query->joinWith('ActivityUserAssociation', $joinBehavior);
 
         return $this->getDiscussionUserAssociations($query, $con);
     }

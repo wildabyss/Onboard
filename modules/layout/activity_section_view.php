@@ -2,7 +2,7 @@
 
 <?php 
 	// completed status
-	if ($_ACT_OBJ_VIEW->getStatus()==ActivityListAssociation::COMPLETED_STATUS){
+	if ($_ACT_OBJ_VIEW->getStatus()==ActivityUserAssociation::COMPLETED_STATUS){
 		$markAsCompletedClick = "$('#mark_complete_".$_ACT_OBJ_VIEW->getId()."').on('click', {actAssocId:'".$_ACT_OBJ_VIEW->getId()."'}, markAsActive);";
 		$markAsCompletedText = "Mark as active";
 		$liClass = "completed_activity";
@@ -42,10 +42,10 @@
 	
 	<?php 
 		if (isset($_MY_LIST) && $_MY_LIST){
-			$interestedFrds = ActivityListAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
+			$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
 			$interestOnclick = "expandActivity('".$_ACT_OBJ_VIEW->getId()."')";
 		} else {
-			$interestedFrds = ActivityListAssociationQuery::getInterestedFriends($_FRIEND->getId(), $_ACT_OBJ_VIEW->getActivityId());
+			$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($_FRIEND->getId(), $_ACT_OBJ_VIEW->getActivityId());
 			$interestOnclick = "";
 		}
 	?>
@@ -74,15 +74,15 @@
 		
 		<?php if (!isset($_MY_LIST) || !$_MY_LIST):?>
 			<!-- Leave/Onboard button -->
-			<?php $userAssocLevel = ActivityListAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())?>
-			<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_OWNER):?>
+			<?php $userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())?>
+			<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_OWNER):?>
 				<a class="onboard_leave_unavailable">You're an owner</a>
 			<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())):?>
 				<a class="onboard_leave_unavailable">You're in discussion</a>
 			<?php else:?>
-				<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
+				<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
 					onclick="likeActivity(this, <?php echo $_ACT_OBJ_VIEW->getId()?>, <?php echo $_FRIEND->getId()?>);">
-					<?php if ($userAssocLevel == ActivityListAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
+					<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
 				</a>
 			<?php endif?>
 		<?php endif?>

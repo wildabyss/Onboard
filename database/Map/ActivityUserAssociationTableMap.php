@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \ActivityListAssociation;
-use \ActivityListAssociationQuery;
+use \ActivityUserAssociation;
+use \ActivityUserAssociationQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'activity_list_assoc' table.
+ * This class defines the structure of the 'activity_user_assoc' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class ActivityListAssociationTableMap extends TableMap
+class ActivityUserAssociationTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class ActivityListAssociationTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.ActivityListAssociationTableMap';
+    const CLASS_NAME = '.Map.ActivityUserAssociationTableMap';
 
     /**
      * The default database name for this class
@@ -44,17 +44,17 @@ class ActivityListAssociationTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'activity_list_assoc';
+    const TABLE_NAME = 'activity_user_assoc';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\ActivityListAssociation';
+    const OM_CLASS = '\\ActivityUserAssociation';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'ActivityListAssociation';
+    const CLASS_DEFAULT = 'ActivityUserAssociation';
 
     /**
      * The total number of columns
@@ -74,42 +74,42 @@ class ActivityListAssociationTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    const COL_ID = 'activity_list_assoc.id';
+    const COL_ID = 'activity_user_assoc.id';
 
     /**
      * the column name for the activity_id field
      */
-    const COL_ACTIVITY_ID = 'activity_list_assoc.activity_id';
+    const COL_ACTIVITY_ID = 'activity_user_assoc.activity_id';
 
     /**
-     * the column name for the list_id field
+     * the column name for the user_id field
      */
-    const COL_LIST_ID = 'activity_list_assoc.list_id';
+    const COL_USER_ID = 'activity_user_assoc.user_id';
 
     /**
      * the column name for the status field
      */
-    const COL_STATUS = 'activity_list_assoc.status';
+    const COL_STATUS = 'activity_user_assoc.status';
 
     /**
      * the column name for the date_added field
      */
-    const COL_DATE_ADDED = 'activity_list_assoc.date_added';
+    const COL_DATE_ADDED = 'activity_user_assoc.date_added';
 
     /**
      * the column name for the alias field
      */
-    const COL_ALIAS = 'activity_list_assoc.alias';
+    const COL_ALIAS = 'activity_user_assoc.alias';
 
     /**
      * the column name for the description field
      */
-    const COL_DESCRIPTION = 'activity_list_assoc.description';
+    const COL_DESCRIPTION = 'activity_user_assoc.description';
 
     /**
      * the column name for the is_owner field
      */
-    const COL_IS_OWNER = 'activity_list_assoc.is_owner';
+    const COL_IS_OWNER = 'activity_user_assoc.is_owner';
 
     /**
      * The default string format for model objects of the related table
@@ -123,10 +123,10 @@ class ActivityListAssociationTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ActivityId', 'ListId', 'Status', 'DateAdded', 'Alias', 'Description', 'IsOwner', ),
-        self::TYPE_CAMELNAME     => array('id', 'activityId', 'listId', 'status', 'dateAdded', 'alias', 'description', 'isOwner', ),
-        self::TYPE_COLNAME       => array(ActivityListAssociationTableMap::COL_ID, ActivityListAssociationTableMap::COL_ACTIVITY_ID, ActivityListAssociationTableMap::COL_LIST_ID, ActivityListAssociationTableMap::COL_STATUS, ActivityListAssociationTableMap::COL_DATE_ADDED, ActivityListAssociationTableMap::COL_ALIAS, ActivityListAssociationTableMap::COL_DESCRIPTION, ActivityListAssociationTableMap::COL_IS_OWNER, ),
-        self::TYPE_FIELDNAME     => array('id', 'activity_id', 'list_id', 'status', 'date_added', 'alias', 'description', 'is_owner', ),
+        self::TYPE_PHPNAME       => array('Id', 'ActivityId', 'UserId', 'Status', 'DateAdded', 'Alias', 'Description', 'IsOwner', ),
+        self::TYPE_CAMELNAME     => array('id', 'activityId', 'userId', 'status', 'dateAdded', 'alias', 'description', 'isOwner', ),
+        self::TYPE_COLNAME       => array(ActivityUserAssociationTableMap::COL_ID, ActivityUserAssociationTableMap::COL_ACTIVITY_ID, ActivityUserAssociationTableMap::COL_USER_ID, ActivityUserAssociationTableMap::COL_STATUS, ActivityUserAssociationTableMap::COL_DATE_ADDED, ActivityUserAssociationTableMap::COL_ALIAS, ActivityUserAssociationTableMap::COL_DESCRIPTION, ActivityUserAssociationTableMap::COL_IS_OWNER, ),
+        self::TYPE_FIELDNAME     => array('id', 'activity_id', 'user_id', 'status', 'date_added', 'alias', 'description', 'is_owner', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -137,10 +137,10 @@ class ActivityListAssociationTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ActivityId' => 1, 'ListId' => 2, 'Status' => 3, 'DateAdded' => 4, 'Alias' => 5, 'Description' => 6, 'IsOwner' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'activityId' => 1, 'listId' => 2, 'status' => 3, 'dateAdded' => 4, 'alias' => 5, 'description' => 6, 'isOwner' => 7, ),
-        self::TYPE_COLNAME       => array(ActivityListAssociationTableMap::COL_ID => 0, ActivityListAssociationTableMap::COL_ACTIVITY_ID => 1, ActivityListAssociationTableMap::COL_LIST_ID => 2, ActivityListAssociationTableMap::COL_STATUS => 3, ActivityListAssociationTableMap::COL_DATE_ADDED => 4, ActivityListAssociationTableMap::COL_ALIAS => 5, ActivityListAssociationTableMap::COL_DESCRIPTION => 6, ActivityListAssociationTableMap::COL_IS_OWNER => 7, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'activity_id' => 1, 'list_id' => 2, 'status' => 3, 'date_added' => 4, 'alias' => 5, 'description' => 6, 'is_owner' => 7, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'ActivityId' => 1, 'UserId' => 2, 'Status' => 3, 'DateAdded' => 4, 'Alias' => 5, 'Description' => 6, 'IsOwner' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'activityId' => 1, 'userId' => 2, 'status' => 3, 'dateAdded' => 4, 'alias' => 5, 'description' => 6, 'isOwner' => 7, ),
+        self::TYPE_COLNAME       => array(ActivityUserAssociationTableMap::COL_ID => 0, ActivityUserAssociationTableMap::COL_ACTIVITY_ID => 1, ActivityUserAssociationTableMap::COL_USER_ID => 2, ActivityUserAssociationTableMap::COL_STATUS => 3, ActivityUserAssociationTableMap::COL_DATE_ADDED => 4, ActivityUserAssociationTableMap::COL_ALIAS => 5, ActivityUserAssociationTableMap::COL_DESCRIPTION => 6, ActivityUserAssociationTableMap::COL_IS_OWNER => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'activity_id' => 1, 'user_id' => 2, 'status' => 3, 'date_added' => 4, 'alias' => 5, 'description' => 6, 'is_owner' => 7, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -154,16 +154,16 @@ class ActivityListAssociationTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('activity_list_assoc');
-        $this->setPhpName('ActivityListAssociation');
+        $this->setName('activity_user_assoc');
+        $this->setPhpName('ActivityUserAssociation');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\ActivityListAssociation');
+        $this->setClassName('\\ActivityUserAssociation');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
         $this->addForeignKey('activity_id', 'ActivityId', 'INTEGER', 'activity', 'id', true, 10, null);
-        $this->addForeignKey('list_id', 'ListId', 'INTEGER', 'activity_list', 'id', true, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', true, 10, null);
         $this->addColumn('status', 'Status', 'TINYINT', true, 3, null);
         $this->addColumn('date_added', 'DateAdded', 'TIMESTAMP', true, null, null);
         $this->addColumn('alias', 'Alias', 'VARCHAR', false, 255, null);
@@ -177,11 +177,11 @@ class ActivityListAssociationTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Activity', '\\Activity', RelationMap::MANY_TO_ONE, array('activity_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('ActivityList', '\\ActivityList', RelationMap::MANY_TO_ONE, array('list_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('DiscussionUserAssociation', '\\DiscussionUserAssociation', RelationMap::ONE_TO_MANY, array('id' => 'activity_list_assoc_id', ), 'CASCADE', null, 'DiscussionUserAssociations');
+        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('DiscussionUserAssociation', '\\DiscussionUserAssociation', RelationMap::ONE_TO_MANY, array('id' => 'activity_user_assoc_id', ), 'CASCADE', null, 'DiscussionUserAssociations');
     } // buildRelations()
     /**
-     * Method to invalidate the instance pool of all tables related to activity_list_assoc     * by a foreign key with ON DELETE CASCADE
+     * Method to invalidate the instance pool of all tables related to activity_user_assoc     * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
@@ -247,7 +247,7 @@ class ActivityListAssociationTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? ActivityListAssociationTableMap::CLASS_DEFAULT : ActivityListAssociationTableMap::OM_CLASS;
+        return $withPrefix ? ActivityUserAssociationTableMap::CLASS_DEFAULT : ActivityUserAssociationTableMap::OM_CLASS;
     }
 
     /**
@@ -261,22 +261,22 @@ class ActivityListAssociationTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (ActivityListAssociation object, last column rank)
+     * @return array           (ActivityUserAssociation object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = ActivityListAssociationTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = ActivityListAssociationTableMap::getInstanceFromPool($key))) {
+        $key = ActivityUserAssociationTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = ActivityUserAssociationTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + ActivityListAssociationTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + ActivityUserAssociationTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = ActivityListAssociationTableMap::OM_CLASS;
-            /** @var ActivityListAssociation $obj */
+            $cls = ActivityUserAssociationTableMap::OM_CLASS;
+            /** @var ActivityUserAssociation $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            ActivityListAssociationTableMap::addInstanceToPool($obj, $key);
+            ActivityUserAssociationTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -299,18 +299,18 @@ class ActivityListAssociationTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = ActivityListAssociationTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = ActivityListAssociationTableMap::getInstanceFromPool($key))) {
+            $key = ActivityUserAssociationTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = ActivityUserAssociationTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var ActivityListAssociation $obj */
+                /** @var ActivityUserAssociation $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                ActivityListAssociationTableMap::addInstanceToPool($obj, $key);
+                ActivityUserAssociationTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -331,18 +331,18 @@ class ActivityListAssociationTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_ID);
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_ACTIVITY_ID);
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_LIST_ID);
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_STATUS);
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_DATE_ADDED);
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_ALIAS);
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_DESCRIPTION);
-            $criteria->addSelectColumn(ActivityListAssociationTableMap::COL_IS_OWNER);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_ID);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_ACTIVITY_ID);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_STATUS);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_DATE_ADDED);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_ALIAS);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(ActivityUserAssociationTableMap::COL_IS_OWNER);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.activity_id');
-            $criteria->addSelectColumn($alias . '.list_id');
+            $criteria->addSelectColumn($alias . '.user_id');
             $criteria->addSelectColumn($alias . '.status');
             $criteria->addSelectColumn($alias . '.date_added');
             $criteria->addSelectColumn($alias . '.alias');
@@ -360,7 +360,7 @@ class ActivityListAssociationTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(ActivityListAssociationTableMap::DATABASE_NAME)->getTable(ActivityListAssociationTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(ActivityUserAssociationTableMap::DATABASE_NAME)->getTable(ActivityUserAssociationTableMap::TABLE_NAME);
     }
 
     /**
@@ -368,16 +368,16 @@ class ActivityListAssociationTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(ActivityListAssociationTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(ActivityListAssociationTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new ActivityListAssociationTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(ActivityUserAssociationTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(ActivityUserAssociationTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new ActivityUserAssociationTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a ActivityListAssociation or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a ActivityUserAssociation or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or ActivityListAssociation object or primary key or array of primary keys
+     * @param mixed               $values Criteria or ActivityUserAssociation object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -388,27 +388,27 @@ class ActivityListAssociationTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \ActivityListAssociation) { // it's a model object
+        } elseif ($values instanceof \ActivityUserAssociation) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(ActivityListAssociationTableMap::DATABASE_NAME);
-            $criteria->add(ActivityListAssociationTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(ActivityUserAssociationTableMap::DATABASE_NAME);
+            $criteria->add(ActivityUserAssociationTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = ActivityListAssociationQuery::create()->mergeWith($criteria);
+        $query = ActivityUserAssociationQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            ActivityListAssociationTableMap::clearInstancePool();
+            ActivityUserAssociationTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                ActivityListAssociationTableMap::removeInstanceFromPool($singleval);
+                ActivityUserAssociationTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -416,20 +416,20 @@ class ActivityListAssociationTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the activity_list_assoc table.
+     * Deletes all rows from the activity_user_assoc table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return ActivityListAssociationQuery::create()->doDeleteAll($con);
+        return ActivityUserAssociationQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a ActivityListAssociation or Criteria object.
+     * Performs an INSERT on the database, given a ActivityUserAssociation or Criteria object.
      *
-     * @param mixed               $criteria Criteria or ActivityListAssociation object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or ActivityUserAssociation object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -438,22 +438,22 @@ class ActivityListAssociationTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from ActivityListAssociation object
+            $criteria = $criteria->buildCriteria(); // build Criteria from ActivityUserAssociation object
         }
 
-        if ($criteria->containsKey(ActivityListAssociationTableMap::COL_ID) && $criteria->keyContainsValue(ActivityListAssociationTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ActivityListAssociationTableMap::COL_ID.')');
+        if ($criteria->containsKey(ActivityUserAssociationTableMap::COL_ID) && $criteria->keyContainsValue(ActivityUserAssociationTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ActivityUserAssociationTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = ActivityListAssociationQuery::create()->mergeWith($criteria);
+        $query = ActivityUserAssociationQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -462,7 +462,7 @@ class ActivityListAssociationTableMap extends TableMap
         });
     }
 
-} // ActivityListAssociationTableMap
+} // ActivityUserAssociationTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-ActivityListAssociationTableMap::buildTableMap();
+ActivityUserAssociationTableMap::buildTableMap();

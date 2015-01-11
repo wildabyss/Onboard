@@ -337,6 +337,7 @@ ul.activity_list li.adding_activity{
 	display: block;
 	box-sizing: border-box;
 	font: 13px sans-serif;
+	resize: none;
 }
 input.new_activity_buttons{
 	margin: 5px 0 0 5px;

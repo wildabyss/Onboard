@@ -1,12 +1,12 @@
 <?php
 
-use Base\ActivityListAssociationQuery as BaseActivityListAssociationQuery;
-use Map\ActivityListAssociationTableMap as ActivityListAssociationTableMap;
+use Base\ActivityUserAssociationQuery as BaseActivityUserAssociationQuery;
+use Map\ActivityUserAssociationTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\Formatter\ObjectFormatter;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'activity_list_assoc' table.
+ * Skeleton subclass for performing query and update operations on the 'activity_user_assoc' table.
  *
  *
  *
@@ -15,7 +15,7 @@ use Propel\Runtime\Formatter\ObjectFormatter;
  * long as it does not already exist in the output directory.
  *
  */
-class ActivityListAssociationQuery extends BaseActivityListAssociationQuery
+class ActivityUserAssociationQuery extends BaseActivityUserAssociationQuery
 {
 	
 	/**
@@ -27,34 +27,30 @@ class ActivityListAssociationQuery extends BaseActivityListAssociationQuery
 	 */
 	public static function getInterestedFriends($userId, $activityId){
 		$results = array();
-		
+	
 		// search for friends
-		$conn = Propel::getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
 			select distinct user.*
-				from activity_list_assoc ala
-				left join 
-					activity_list al
-			    on 
-					al.id = ala.list_id
-			    left join 
+				from activity_user_assoc ala
+			    left join
 					user
-			    on 
-					user.id = al.user_id
-				where 
+			    on
+					user.id = ala.user_id
+				where
 					ala.activity_id = :actid
 			        and ala.status = :userstatus
-			        and user.id in 
+			        and user.id in
 						(select user.id
-							from user_community_assoc uca 
-							join user on uca.user_id_right = user.id 
+							from user_community_assoc uca
+							join user on uca.user_id_right = user.id
 							where
 								user.status <> :actstatus1
 								and uca.user_id_left = :myid1
 						union
 						select user.id
-							from user_community_assoc uca 
-							join user on uca.user_id_left = user.id 
+							from user_community_assoc uca
+							join user on uca.user_id_left = user.id
 							where
 								user.status <> :actstatus2
 								and uca.user_id_right = :myid2)
@@ -62,16 +58,16 @@ class ActivityListAssociationQuery extends BaseActivityListAssociationQuery
 EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
-			array(
-				'actid'		=> $activityId,
-				'userstatus'=> User::ACTIVE_STATUS,
-				':actstatus1' 	=> ActivityListAssociation::ARCHIVED_STATUS, 
-				':myid1' 	=> $userId,
-				':actstatus2' 	=> ActivityListAssociation::ARCHIVED_STATUS, 
-				':myid2' 	=> $userId
+				array(
+						'actid'		=> $activityId,
+						'userstatus'=> User::ACTIVE_STATUS,
+						':actstatus1' 	=> ActivityUserAssociation::ARCHIVED_STATUS,
+						':myid1' 	=> $userId,
+						':actstatus2' 	=> ActivityUserAssociation::ARCHIVED_STATUS,
+						':myid2' 	=> $userId
 				));
-		
-		$con = Propel::getWriteConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+	
+		$con = Propel::getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$formatter = new ObjectFormatter();
 		$formatter->setClass('\User'); //full qualified class name
 		return $formatter->format($con->getDataFetcher($stmt));
@@ -95,16 +91,14 @@ EOT;
 	 * Determine how the user is associated with the activity
 	 * @param unknown $userId
 	 * @param unknown $activityId
-	 * @return number Const in ActivityListAssociation: USER_IS_NOT_ASSOCIATED, USER_IS_ASSOCIATED, USER_IS_OWNER
+	 * @return number Const in ActivityUserAssociation: USER_IS_NOT_ASSOCIATED, USER_IS_ASSOCIATED, USER_IS_OWNER
 	 */
 	public static function detUserAssociationWithActivity($userId, $activityId){
-		$conn = Propel::getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
-			select ala.is_owner, ala.status from activity_list_assoc ala
-				left join activity_list list
-					on list.id = ala.list_id
+			select ala.is_owner, ala.status from activity_user_assoc ala
 				where
-					list.user_id = :userid
+					ala.user_id = :userid
 					and ala.activity_id = :actid
 				limit 1;
 EOT;
@@ -114,43 +108,42 @@ EOT;
 						':userid'	=> $userId,
 						':actid'	=> $activityId
 				));
-		
+	
 		// assess results
 		$results = $stmt->fetchAll();
-		if (count($results)==0 || $results[0]['status'] == ActivityListAssociation::ARCHIVED_STATUS)
-			return ActivityListAssociation::USER_IS_NOT_ASSOCIATED;
+		if (count($results)==0 || $results[0]['status'] == ActivityUserAssociation::ARCHIVED_STATUS)
+			return ActivityUserAssociation::USER_IS_NOT_ASSOCIATED;
 		else
 			return ($results[0]['is_owner'] == 1?
-				ActivityListAssociation::USER_IS_OWNER : ActivityListAssociation::USER_IS_ASSOCIATED);
+					ActivityUserAssociation::USER_IS_OWNER : ActivityUserAssociation::USER_IS_ASSOCIATED);
 	}
 	
 	
 	/**
-	 * Get a list of chronologically recent ActivityListAssociations for the given user ($userId).
+	 * Get a list of chronologically recent ActivityUserAssociations (i.e. friend activities) 
+	 * for the given user ($userId).
 	 * Limit the number of results returned to $limit.
 	 * @param unknown $userId
 	 * @param unknown $limit
-	 * @return An array of ActivityListAssociations
+	 * @return An array of ActivityUserAssociations
 	 */
-	public static function getRecentActivityListAssociations($userId, $limit){
+	public static function getRecentActivityUserAssociations($userId, $limit){
 		// search for friends
-		$conn = Propel::getReadConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
-			select distinct ala.* from activity_list_assoc ala
-				left join activity_list list
-					on list.id = ala.list_id
-				where 
-					list.user_id in (
+			select distinct ala.* from activity_user_assoc ala
+				where
+					ala.user_id in (
 						select user.id
-							from user_community_assoc uca 
-							join user on uca.user_id_right = user.id 
+							from user_community_assoc uca
+							join user on uca.user_id_right = user.id
 							where
 								user.status <> :userstatus1
 								and uca.user_id_left = :myid1
 						union
 						select user.id
-							from user_community_assoc uca 
-							join user on uca.user_id_left = user.id 
+							from user_community_assoc uca
+							join user on uca.user_id_left = user.id
 							where
 								user.status <> :userstatus2
 								and uca.user_id_right = :myid2
@@ -166,14 +159,14 @@ EOT;
 						':myid1' 	=> $userId,
 						':userstatus2' 	=> User::INACTIVE_STATUS,
 						':myid2' 	=> $userId,
-						':actstatus'=> ActivityListAssociation::ARCHIVED_STATUS,
+						':actstatus'=> ActivityUserAssociation::ARCHIVED_STATUS,
 						':limit'	=> $limit
 				));
-		
-		// hydrate an array of ActivityListAssociation objects
-		$con = Propel::getWriteConnection(ActivityListAssociationTableMap::DATABASE_NAME);
+	
+		// hydrate an array of ActivityUserAssociation objects
+		$con = Propel::getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$formatter = new ObjectFormatter();
-		$formatter->setClass('\ActivityListAssociation'); //full qualified class name
+		$formatter->setClass('\ActivityUserAssociation'); //full qualified class name
 		return $formatter->format($con->getDataFetcher($stmt));
 	}
 }

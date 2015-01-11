@@ -74,16 +74,16 @@ CREATE TABLE `activity_list`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- activity_list_assoc
+-- activity_user_assoc
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `activity_list_assoc`;
+DROP TABLE IF EXISTS `activity_user_assoc`;
 
-CREATE TABLE `activity_list_assoc`
+CREATE TABLE `activity_user_assoc`
 (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `activity_id` int(10) unsigned NOT NULL,
-    `list_id` int(10) unsigned NOT NULL,
+    `user_id` int(10) unsigned NOT NULL,
     `status` tinyint(3) unsigned NOT NULL,
     `date_added` DATETIME NOT NULL,
     `alias` VARCHAR(255),
@@ -91,14 +91,14 @@ CREATE TABLE `activity_list_assoc`
     `is_owner` tinyint(3) unsigned NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `activity_id` (`activity_id`),
-    INDEX `list_id` (`list_id`),
+    INDEX `user_id` (`user_id`),
     CONSTRAINT `activity_user_assoc_ibfk_1`
         FOREIGN KEY (`activity_id`)
         REFERENCES `activity` (`id`)
         ON DELETE CASCADE,
-    CONSTRAINT `activity_user_assoc_ibfk_3`
-        FOREIGN KEY (`list_id`)
-        REFERENCES `activity_list` (`id`)
+    CONSTRAINT `user_ibfk_3`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `user` (`id`)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -147,18 +147,18 @@ CREATE TABLE `discussion_user_assoc`
 (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `discussion_id` int(10) unsigned NOT NULL,
-    `activity_list_assoc_id` bigint(20) unsigned NOT NULL,
+    `activity_user_assoc_id` bigint(20) unsigned NOT NULL,
     `status` tinyint(3) unsigned NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `discussion_id` (`discussion_id`),
-    INDEX `activity_list_assoc_id` (`activity_list_assoc_id`),
+    INDEX `activity_user_assoc_id` (`activity_user_assoc_id`),
     CONSTRAINT `discussion_user_assoc_ibfk_1`
         FOREIGN KEY (`discussion_id`)
         REFERENCES `discussion` (`id`)
         ON DELETE CASCADE,
-    CONSTRAINT `activity_list_assoc_ibfk_2`
-        FOREIGN KEY (`activity_list_assoc_id`)
-        REFERENCES `activity_list_assoc` (`id`)
+    CONSTRAINT `activity_user_assoc_ibfk_2`
+        FOREIGN KEY (`activity_user_assoc_id`)
+        REFERENCES `activity_user_assoc` (`id`)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 

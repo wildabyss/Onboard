@@ -31,12 +31,12 @@ class DiscussionUserAssociationQuery extends BaseDiscussionUserAssociationQuery
 					on user.id = dua.user_id
 			    left join discussion d
 					on d.id = dua.discussion_id
-				left join activity_list_assoc ala
-					on ala.activity_id = d.activity_id
+				left join activity_user_assoc aua
+					on aua.activity_id = d.activity_id
 			    where
 					user.id = :userid 
 					and d.activity_id = :actid
-					and ala.status = :actstatus
+					and aua.status = :actstatus
 				limit 1;
 EOT;
 		$stmt = $conn->prepare($sql);
@@ -44,7 +44,7 @@ EOT;
 			array(
 				':userid'	=> $userId,
 				':actid'	=> $activityId,
-				':actstatus'=> ActivityListAssociation::ARCHIVED_STATUS
+				':actstatus'=> ActivityUserAssociation::ARCHIVED_STATUS
 			));
 	
 		// assess results

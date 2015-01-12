@@ -1,6 +1,8 @@
 <?php
 
+use Map\DiscussionUserAssociationTableMap;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Propel;
 
 class DiscussionUtilities {
 	/**
@@ -11,7 +13,7 @@ class DiscussionUtilities {
 	 * @throws Exception
 	 * @return True if succeeded
 	 */
-	public static function createNew($discussionName, $activityId, array $arrActivityUserAssocId){
+	public static function createNewDiscussion($discussionName, $activityId, array $arrActivityUserAssocId){
 		// create discussion
 		$discussionObj = new Discussion();
 		$discussionObj->setActivityId($activityId);
@@ -39,7 +41,29 @@ class DiscussionUtilities {
 		$discussionObj->setDiscussionUserAssociations($assocCollection);
 	
 		// save discussion and the associations
-		if ($discussionObj->save())
-			return true;
+		return $discussionObj->save();
+	}
+	
+	
+	/**
+	 * Allows the specific user to leave the current discussion
+	 * @param unknown $discussionUserAssocId
+	 * @return true if succeeded
+	 */
+	public static function leaveDiscussion($discussionUserAssocId){
+		$assocObj = DiscussionUserAssociationQuery::create()->findOneById($discussionUserAssocId);
+		$assocObj->setStatus(DiscussionUserAssociation::INACTIVE_STATUS);
+		
+		return $assocObj->save();
+	}
+	
+	
+	public static function findDiscussionAssociation($userId, $activityId){
+		
+	}
+	
+	
+	public static function pushMessage($discAssocId, $timestamp, $msg){
+		
 	}
 }

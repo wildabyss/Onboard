@@ -67,10 +67,9 @@ EOT;
 						':myid2' 	=> $userId
 				));
 	
-		$con = Propel::getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$formatter = new ObjectFormatter();
 		$formatter->setClass('\User'); //full qualified class name
-		return $formatter->format($con->getDataFetcher($stmt));
+		return $formatter->format($conn->getDataFetcher($stmt));
 	}
 	
 	
@@ -164,9 +163,8 @@ EOT;
 				));
 	
 		// hydrate an array of ActivityUserAssociation objects
-		$con = Propel::getWriteConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$formatter = new ObjectFormatter();
 		$formatter->setClass('\ActivityUserAssociation'); //full qualified class name
-		return $formatter->format($con->getDataFetcher($stmt));
+		return $formatter->format($conn->getDataFetcher($stmt));
 	}
 }

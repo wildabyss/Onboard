@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \DiscussionUserAssociation;
-use \DiscussionUserAssociationQuery;
+use \DiscussionMessageCache;
+use \DiscussionMessageCacheQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'discussion_user_assoc' table.
+ * This class defines the structure of the 'discussion_msg_cache' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class DiscussionUserAssociationTableMap extends TableMap
+class DiscussionMessageCacheTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class DiscussionUserAssociationTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.DiscussionUserAssociationTableMap';
+    const CLASS_NAME = '.Map.DiscussionMessageCacheTableMap';
 
     /**
      * The default database name for this class
@@ -44,17 +44,17 @@ class DiscussionUserAssociationTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'discussion_user_assoc';
+    const TABLE_NAME = 'discussion_msg_cache';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\DiscussionUserAssociation';
+    const OM_CLASS = '\\DiscussionMessageCache';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'DiscussionUserAssociation';
+    const CLASS_DEFAULT = 'DiscussionMessageCache';
 
     /**
      * The total number of columns
@@ -74,22 +74,22 @@ class DiscussionUserAssociationTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    const COL_ID = 'discussion_user_assoc.id';
+    const COL_ID = 'discussion_msg_cache.id';
 
     /**
-     * the column name for the discussion_id field
+     * the column name for the discussion_user_assoc_id field
      */
-    const COL_DISCUSSION_ID = 'discussion_user_assoc.discussion_id';
+    const COL_DISCUSSION_USER_ASSOC_ID = 'discussion_msg_cache.discussion_user_assoc_id';
 
     /**
-     * the column name for the activity_user_assoc_id field
+     * the column name for the msg field
      */
-    const COL_ACTIVITY_USER_ASSOC_ID = 'discussion_user_assoc.activity_user_assoc_id';
+    const COL_MSG = 'discussion_msg_cache.msg';
 
     /**
-     * the column name for the status field
+     * the column name for the time field
      */
-    const COL_STATUS = 'discussion_user_assoc.status';
+    const COL_TIME = 'discussion_msg_cache.time';
 
     /**
      * The default string format for model objects of the related table
@@ -103,10 +103,10 @@ class DiscussionUserAssociationTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'DiscussionId', 'ActivityUserAssociationId', 'Status', ),
-        self::TYPE_CAMELNAME     => array('id', 'discussionId', 'activityUserAssociationId', 'status', ),
-        self::TYPE_COLNAME       => array(DiscussionUserAssociationTableMap::COL_ID, DiscussionUserAssociationTableMap::COL_DISCUSSION_ID, DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID, DiscussionUserAssociationTableMap::COL_STATUS, ),
-        self::TYPE_FIELDNAME     => array('id', 'discussion_id', 'activity_user_assoc_id', 'status', ),
+        self::TYPE_PHPNAME       => array('Id', 'Id', 'Message', 'Time', ),
+        self::TYPE_CAMELNAME     => array('id', 'id', 'message', 'time', ),
+        self::TYPE_COLNAME       => array(DiscussionMessageCacheTableMap::COL_ID, DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, DiscussionMessageCacheTableMap::COL_MSG, DiscussionMessageCacheTableMap::COL_TIME, ),
+        self::TYPE_FIELDNAME     => array('id', 'discussion_user_assoc_id', 'msg', 'time', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -117,10 +117,10 @@ class DiscussionUserAssociationTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'DiscussionId' => 1, 'ActivityUserAssociationId' => 2, 'Status' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'discussionId' => 1, 'activityUserAssociationId' => 2, 'status' => 3, ),
-        self::TYPE_COLNAME       => array(DiscussionUserAssociationTableMap::COL_ID => 0, DiscussionUserAssociationTableMap::COL_DISCUSSION_ID => 1, DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID => 2, DiscussionUserAssociationTableMap::COL_STATUS => 3, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'discussion_id' => 1, 'activity_user_assoc_id' => 2, 'status' => 3, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Id' => 1, 'Message' => 2, 'Time' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'id' => 1, 'message' => 2, 'time' => 3, ),
+        self::TYPE_COLNAME       => array(DiscussionMessageCacheTableMap::COL_ID => 0, DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID => 1, DiscussionMessageCacheTableMap::COL_MSG => 2, DiscussionMessageCacheTableMap::COL_TIME => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'discussion_user_assoc_id' => 1, 'msg' => 2, 'time' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -134,17 +134,17 @@ class DiscussionUserAssociationTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('discussion_user_assoc');
-        $this->setPhpName('DiscussionUserAssociation');
+        $this->setName('discussion_msg_cache');
+        $this->setPhpName('DiscussionMessageCache');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\DiscussionUserAssociation');
+        $this->setClassName('\\DiscussionMessageCache');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addForeignKey('discussion_id', 'DiscussionId', 'INTEGER', 'discussion', 'id', true, 10, null);
-        $this->addForeignKey('activity_user_assoc_id', 'ActivityUserAssociationId', 'BIGINT', 'activity_user_assoc', 'id', true, null, null);
-        $this->addColumn('status', 'Status', 'TINYINT', true, 3, null);
+        $this->addForeignKey('discussion_user_assoc_id', 'Id', 'BIGINT', 'discussion_user_assoc', 'id', true, null, null);
+        $this->addColumn('msg', 'Message', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('time', 'Time', 'TIMESTAMP', true, null, null);
     } // initialize()
 
     /**
@@ -152,19 +152,8 @@ class DiscussionUserAssociationTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Discussion', '\\Discussion', RelationMap::MANY_TO_ONE, array('discussion_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('ActivityUserAssociation', '\\ActivityUserAssociation', RelationMap::MANY_TO_ONE, array('activity_user_assoc_id' => 'id', ), 'CASCADE', null);
-        $this->addRelation('DiscussionMessageCache', '\\DiscussionMessageCache', RelationMap::ONE_TO_MANY, array('id' => 'discussion_user_assoc_id', ), 'CASCADE', null, 'DiscussionMessageCaches');
+        $this->addRelation('DiscussionUserAssociation', '\\DiscussionUserAssociation', RelationMap::MANY_TO_ONE, array('discussion_user_assoc_id' => 'id', ), 'CASCADE', null);
     } // buildRelations()
-    /**
-     * Method to invalidate the instance pool of all tables related to discussion_user_assoc     * by a foreign key with ON DELETE CASCADE
-     */
-    public static function clearRelatedInstancePool()
-    {
-        // Invalidate objects in related instance pools,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        DiscussionMessageCacheTableMap::clearInstancePool();
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -223,7 +212,7 @@ class DiscussionUserAssociationTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? DiscussionUserAssociationTableMap::CLASS_DEFAULT : DiscussionUserAssociationTableMap::OM_CLASS;
+        return $withPrefix ? DiscussionMessageCacheTableMap::CLASS_DEFAULT : DiscussionMessageCacheTableMap::OM_CLASS;
     }
 
     /**
@@ -237,22 +226,22 @@ class DiscussionUserAssociationTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (DiscussionUserAssociation object, last column rank)
+     * @return array           (DiscussionMessageCache object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = DiscussionUserAssociationTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = DiscussionUserAssociationTableMap::getInstanceFromPool($key))) {
+        $key = DiscussionMessageCacheTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = DiscussionMessageCacheTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + DiscussionUserAssociationTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + DiscussionMessageCacheTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = DiscussionUserAssociationTableMap::OM_CLASS;
-            /** @var DiscussionUserAssociation $obj */
+            $cls = DiscussionMessageCacheTableMap::OM_CLASS;
+            /** @var DiscussionMessageCache $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            DiscussionUserAssociationTableMap::addInstanceToPool($obj, $key);
+            DiscussionMessageCacheTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -275,18 +264,18 @@ class DiscussionUserAssociationTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = DiscussionUserAssociationTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = DiscussionUserAssociationTableMap::getInstanceFromPool($key))) {
+            $key = DiscussionMessageCacheTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = DiscussionMessageCacheTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var DiscussionUserAssociation $obj */
+                /** @var DiscussionMessageCache $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                DiscussionUserAssociationTableMap::addInstanceToPool($obj, $key);
+                DiscussionMessageCacheTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -307,15 +296,15 @@ class DiscussionUserAssociationTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_ID);
-            $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_DISCUSSION_ID);
-            $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_ACTIVITY_USER_ASSOC_ID);
-            $criteria->addSelectColumn(DiscussionUserAssociationTableMap::COL_STATUS);
+            $criteria->addSelectColumn(DiscussionMessageCacheTableMap::COL_ID);
+            $criteria->addSelectColumn(DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID);
+            $criteria->addSelectColumn(DiscussionMessageCacheTableMap::COL_MSG);
+            $criteria->addSelectColumn(DiscussionMessageCacheTableMap::COL_TIME);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.discussion_id');
-            $criteria->addSelectColumn($alias . '.activity_user_assoc_id');
-            $criteria->addSelectColumn($alias . '.status');
+            $criteria->addSelectColumn($alias . '.discussion_user_assoc_id');
+            $criteria->addSelectColumn($alias . '.msg');
+            $criteria->addSelectColumn($alias . '.time');
         }
     }
 
@@ -328,7 +317,7 @@ class DiscussionUserAssociationTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(DiscussionUserAssociationTableMap::DATABASE_NAME)->getTable(DiscussionUserAssociationTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(DiscussionMessageCacheTableMap::DATABASE_NAME)->getTable(DiscussionMessageCacheTableMap::TABLE_NAME);
     }
 
     /**
@@ -336,16 +325,16 @@ class DiscussionUserAssociationTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(DiscussionUserAssociationTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(DiscussionUserAssociationTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new DiscussionUserAssociationTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(DiscussionMessageCacheTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(DiscussionMessageCacheTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new DiscussionMessageCacheTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a DiscussionUserAssociation or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a DiscussionMessageCache or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or DiscussionUserAssociation object or primary key or array of primary keys
+     * @param mixed               $values Criteria or DiscussionMessageCache object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -356,27 +345,27 @@ class DiscussionUserAssociationTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DiscussionMessageCacheTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \DiscussionUserAssociation) { // it's a model object
+        } elseif ($values instanceof \DiscussionMessageCache) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(DiscussionUserAssociationTableMap::DATABASE_NAME);
-            $criteria->add(DiscussionUserAssociationTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(DiscussionMessageCacheTableMap::DATABASE_NAME);
+            $criteria->add(DiscussionMessageCacheTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = DiscussionUserAssociationQuery::create()->mergeWith($criteria);
+        $query = DiscussionMessageCacheQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            DiscussionUserAssociationTableMap::clearInstancePool();
+            DiscussionMessageCacheTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                DiscussionUserAssociationTableMap::removeInstanceFromPool($singleval);
+                DiscussionMessageCacheTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -384,20 +373,20 @@ class DiscussionUserAssociationTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the discussion_user_assoc table.
+     * Deletes all rows from the discussion_msg_cache table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return DiscussionUserAssociationQuery::create()->doDeleteAll($con);
+        return DiscussionMessageCacheQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a DiscussionUserAssociation or Criteria object.
+     * Performs an INSERT on the database, given a DiscussionMessageCache or Criteria object.
      *
-     * @param mixed               $criteria Criteria or DiscussionUserAssociation object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or DiscussionMessageCache object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -406,22 +395,22 @@ class DiscussionUserAssociationTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DiscussionMessageCacheTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from DiscussionUserAssociation object
+            $criteria = $criteria->buildCriteria(); // build Criteria from DiscussionMessageCache object
         }
 
-        if ($criteria->containsKey(DiscussionUserAssociationTableMap::COL_ID) && $criteria->keyContainsValue(DiscussionUserAssociationTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.DiscussionUserAssociationTableMap::COL_ID.')');
+        if ($criteria->containsKey(DiscussionMessageCacheTableMap::COL_ID) && $criteria->keyContainsValue(DiscussionMessageCacheTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.DiscussionMessageCacheTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = DiscussionUserAssociationQuery::create()->mergeWith($criteria);
+        $query = DiscussionMessageCacheQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -430,7 +419,7 @@ class DiscussionUserAssociationTableMap extends TableMap
         });
     }
 
-} // DiscussionUserAssociationTableMap
+} // DiscussionMessageCacheTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-DiscussionUserAssociationTableMap::buildTableMap();
+DiscussionMessageCacheTableMap::buildTableMap();

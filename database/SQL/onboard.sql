@@ -152,13 +152,33 @@ CREATE TABLE `discussion_user_assoc`
     PRIMARY KEY (`id`),
     INDEX `discussion_id` (`discussion_id`),
     INDEX `activity_user_assoc_id` (`activity_user_assoc_id`),
-    CONSTRAINT `discussion_user_assoc_ibfk_1`
+    CONSTRAINT `discussion_user_assoc_ibfk_2`
         FOREIGN KEY (`discussion_id`)
         REFERENCES `discussion` (`id`)
         ON DELETE CASCADE,
     CONSTRAINT `activity_user_assoc_ibfk_2`
         FOREIGN KEY (`activity_user_assoc_id`)
         REFERENCES `activity_user_assoc` (`id`)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- discussion_msg_cache
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `discussion_msg_cache`;
+
+CREATE TABLE `discussion_msg_cache`
+(
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `discussion_user_assoc_id` bigint(20) unsigned NOT NULL,
+    `msg` TEXT,
+    `time` DATETIME NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `discussion_user_assoc_id` (`discussion_user_assoc_id`),
+    CONSTRAINT `discussion_user_assoc_ibfk_1`
+        FOREIGN KEY (`discussion_user_assoc_id`)
+        REFERENCES `discussion_user_assoc` (`id`)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 

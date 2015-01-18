@@ -152,7 +152,7 @@ CREATE TABLE `discussion_user_assoc`
     PRIMARY KEY (`id`),
     INDEX `discussion_id` (`discussion_id`),
     INDEX `activity_user_assoc_id` (`activity_user_assoc_id`),
-    CONSTRAINT `discussion_user_assoc_ibfk_2`
+    CONSTRAINT `discussion_user_assoc_ibfk_123`
         FOREIGN KEY (`discussion_id`)
         REFERENCES `discussion` (`id`)
         ON DELETE CASCADE,

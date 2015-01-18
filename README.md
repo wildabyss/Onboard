@@ -37,3 +37,15 @@ Application Configuration:
 5. Populate initial data with /database/SQL/test_data.sql.
    Modify the values accordingly.
 6. Set up Propel using /database/propel.yml.
+7. Configure the web server to run server_startup.php on server startup.
+
+
+Updating Database Schema:
+-------
+
+Use /database/schema.xml to update the database structure.
+In the directory run:
+  composer model:build      to generate the PHP database model
+  composer sql:build        to generate the sql script
+In the top directory run:
+  composer dump-autoload    to generate the composer autoload

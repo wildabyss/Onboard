@@ -3,7 +3,13 @@
 use Map\DiscussionUserAssociationTableMap;
 use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Propel;
+use Propel\Runtime\Formatter\ObjectFormatter;
 
+/**
+ * DiscussionUtilities provides static methods for accessing event discussions on the server side
+ * @author Jimmy
+ *
+ */
 class DiscussionUtilities {
 	/**
 	 * Create a new Discussion object given the ActivityUserAssociation ids (i.e. discussion participants)
@@ -58,12 +64,65 @@ class DiscussionUtilities {
 	}
 	
 	
-	public static function findDiscussionAssociation($userId, $activityId){
+	/**
+	 * Find all the Discussion objects that match the ActivityUserAssociation
+	 * @param unknown $activityUserAssocId
+	 * @return array of Discussion objects
+	 */
+	public static function findDiscussions($activityUserAssocId){
+		// search for friends
+		$conn = Propel::getReadConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
+		$sql = <<<EOT
+			select disc.* from discussion disc
+				left join discussion_user_assoc dua
+			    on dua.discussion_id = disc.id
+			    where
+					dua.activity_user_assoc_id = :actassocid
+			        and disc.status = :status;
+EOT;
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(
+				array(
+						'actassocid'	=> $activityUserAssocId,
+						'status'		=> Discussion::ACTIVE_STATUS
+				));
 		
+		$formatter = new ObjectFormatter();
+		$formatter->setClass('\Discussion'); //full qualified class name
+		return $formatter->format($conn->getDataFetcher($stmt));
+	}
+	
+	
+	/**
+	 * Find all the DiscussionUserAssociation objects associated with a Discussion
+	 * @param unknown $discId
+	 * @return Array of DiscussionUserAssociation objects
+	 */
+	public static function findDiscussionUserAssociationsForDiscussion($discId){
+		return DiscussionUserAssociationQuery::create()->findByDiscussionId($discId);
 	}
 	
 	
 	public static function pushMessage($discAssocId, $timestamp, $msg){
 		
 	}
+	
+	
+	public static function displayChat($discussionId){
+		// find the Discussion object
+		$discussion = DiscussionQuery::create()->findOneById($discussionId);
+		
+		// read file
+		
+	}
+}
+
+
+/**
+ * DiscussionPersistentUpdate object should be continuously ran on the server to update the discussions
+ * @author Jimmy
+ *
+ */
+class DiscussionPersistentUpdater{
+	
 }

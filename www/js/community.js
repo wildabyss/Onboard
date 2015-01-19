@@ -1,4 +1,7 @@
-var likeActivity = function (ele, activityAssocId, friendId){
+var likeActivity = function (event, activityAssocId, friendId){
+	ele = event.target;
+	event.stopPropagation();
+	
 	if (!ele.type){
 		ele.type = "onboard";
 	}
@@ -12,7 +15,10 @@ var likeActivity = function (ele, activityAssocId, friendId){
 				// successful request 
 				
 				// change interest tally
-				$("#interest_tally_"+activityAssocId).html(result + " interests");
+				intTallyEl = $("#interest_tally_"+activityAssocId);
+				if (intTallyEl.length>0) {
+					intTallyEl.html(result + " interests");
+				}
 				
 				// change button
 				if (ele.type == "onboard"){

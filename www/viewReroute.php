@@ -1,17 +1,20 @@
 <?php 
 
+require_once "../loading.php";
+
 // PHP error reporting
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1);
 
-use Klein\Klein;
-use Facebook\FacebookSession;
-
-require_once "../loading.php";
-
 // begin PHP session
 session_start();
+
+// output buffering
+ob_start();
+
+use Klein\Klein;
+use Facebook\FacebookSession;
 
 /*try{*/
 	// initialize Facebook

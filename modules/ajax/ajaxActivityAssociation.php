@@ -178,7 +178,7 @@ switch ($_POST['action']){
 		
 		// output interested friends
 		$_INTERESTED_FRIENDS = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
-		include "../modules/layout/interested_friends_view.php";
+		include "../modules/layout/activity_details_view.php";
 		break;
 }
 

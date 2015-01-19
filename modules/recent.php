@@ -9,6 +9,7 @@
 <?php include "/layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
+<script type="text/javascript" src="js/community.js"></script>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
@@ -32,6 +33,19 @@
 							</a>
 							<a class="feed_datetime"><?php echo $recentActivityAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
 						</span>
+						
+						<!-- Leave/Onboard button -->
+						<?php $userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $recentActivityAssoc->getActivityId())?>
+						<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_OWNER):?>
+							<a class="onboard_leave_unavailable">You're an owner</a>
+						<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($curUser->getId(), $recentActivityAssoc->getActivityId())):?>
+							<a class="onboard_leave_unavailable">You're in discussion</a>
+						<?php else:?>
+							<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
+								onclick="likeActivity(event, <?php echo $recentActivityAssoc->getId()?>, <?php echo $recentActivityAssoc->getUserId()?>);">
+								<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
+							</a>
+						<?php endif?>
 					</li>
 			
 				<?php endforeach?>

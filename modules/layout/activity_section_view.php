@@ -81,7 +81,7 @@
 				<a class="onboard_leave_unavailable">You're in discussion</a>
 			<?php else:?>
 				<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
-					onclick="likeActivity(this, <?php echo $_ACT_OBJ_VIEW->getId()?>, <?php echo $_FRIEND->getId()?>);">
+					onclick="likeActivity(event, <?php echo $_ACT_OBJ_VIEW->getId()?>, <?php echo $_FRIEND->getId()?>);">
 					<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
 				</a>
 			<?php endif?>

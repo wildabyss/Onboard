@@ -229,7 +229,7 @@ var expandActivity = function(actAssocId) {
 	var expandButton = $('#expand_'+actAssocId);
 	if (expandButton.attr('action') == "expand"){
 		if ($('#interest_details_'+actAssocId).length){
-			$('#interest_details_'+actAssocId).show();
+			$('#interest_details_'+actAssocId).slideDown();
 			expandButton.attr('action', 'hide');
 		} else {
 			$.ajax({
@@ -241,13 +241,57 @@ var expandActivity = function(actAssocId) {
 						// successful request 
 
 						$('#interest_info_'+actAssocId).append(result);
+						$('#interest_details_'+actAssocId).slideDown();
 						expandButton.attr('action', 'hide');
 					}
 				}
 			});
 		}
 	} else if (expandButton.attr('action') == "hide"){
-		$('#interest_details_'+actAssocId).hide();
+		$('#interest_details_'+actAssocId).slideUp();
 		expandButton.attr('action', 'expand');
 	}
+}
+
+var facebook_switch = function(actAssocId){
+	facebookTabId = "facebook_tab_"+actAssocId;
+	
+	// add tab appearance
+	$("#"+facebookTabId).addClass("discussion_tab_facebook_active");
+	$("#discussion_main_"+actAssocId).addClass("discussion_main_facebook");
+	
+	// remove appearances on the other tabs
+	siblings = $("#"+facebookTabId).siblings();
+	for (i=0; i<siblings.length; i++){
+		$(siblings[i]).removeClass("discussion_tab_active");
+	}
+}
+
+var discussion_switch = function(discussionId, actAssocId){
+	// add tab appearance
+	$("#discussion_tab_"+discussionId).addClass("discussion_tab_active");
+	
+	// remove appearance on Facebook tab
+	$("#facebook_tab_"+actAssocId).removeClass("discussion_tab_facebook_active");
+	$("#discussion_main_"+actAssocId).removeClass("discussion_main_facebook");
+	
+	// remove appearances on the other tabs
+	siblings = $("#discussion_tab_"+discussionId).siblings();
+	for (i=0; i<siblings.length; i++){
+		$(siblings[i]).removeClass("discussion_tab_active");
+	}
+	
+	// send ajax request
+	$.ajax({
+		url:	"ajaxDiscussion",
+		type: 	"post",
+		data:	{action: 'discussion_switch', discussion_id: discussionId},
+		success: function(result){
+			if (result != ""){
+				// successful request 
+				
+				$('#discussion_main_'+actAssocId).html(result);
+			}
+		}
+	});
 }

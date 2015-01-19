@@ -504,7 +504,7 @@ ul.interest_details li{
 	display: inline-block;
 	cursor: pointer;
 	position: relative;
-	margin-bottom: 5px;
+	margin-bottom: 2px;
 	padding: 0;
 	border: none;
 }
@@ -512,6 +512,95 @@ ul.interest_details li{
 #no_activity_msg{
 	text-align: center;
 	margin-top: 30px;
+}
+
+/* discussions tab */
+
+.discussion_container{
+	margin: 10px 0 10px 0;
+	padding: 0;
+	position: relative;
+}
+
+.discussion_main{
+	border: solid 1px #aaa;
+	margin-top: -1px;
+	padding: 4px;
+	background-color: #eee;
+}
+.discussion_main_facebook{
+	background-color: #dfe3ee;
+}
+
+.discussion_tab_content{
+	display: block;
+	margin: 4px;
+}
+
+.discussion_tab{
+	display: inline-block;
+	border: solid 1px #aaa;
+	margin: 0;
+	height: 24px;
+}
+.discussion_tab:hover{
+	cursor: pointer;
+	background-color: #eee;
+}
+
+.discussion_tab_facebook{
+	background-color: #8b9dc3;
+	border-bottom-color: #8b9dc3;
+}
+.discussion_tab_facebook:hover{
+	background-color: #dfe3ee;
+	border-bottom-color: #dfe3ee;
+}
+.discussion_tab_facebook_active{
+	background-color: #dfe3ee;
+	border-bottom-color: #dfe3ee;
+}
+
+.discussion_tab_active{
+	border-bottom-color: #eee;
+	background-color: #eee;
+}
+
+.dicussion_tab_add{
+	width: 24px;
+	text-align: center;
+}
+
+.message_container{
+	height: 300px;
+	overflow-y: scroll;
+	margin-bottom: 10px;
+}
+
+ul.message_list{
+	padding: 0;
+	
+}
+ul.message_list li{
+	border-style: none;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.msg_title{
+	background-color: #c4cde0;
+	padding: 3px;
+}
+
+.msg_body{
+	background-color: white;
+	padding: 3px;
+}
+
+.msg_new{
+	width: 100%;
+	resize: none;
+	box-sizing: border-box;
 }
 
 /* community */

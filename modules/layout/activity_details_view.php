@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div class="discussion_main_facebook discussion_main" id="discussion_main_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-			Create an event on Facebook
+			<?php include '../modules/layout/facebook_event_view.php'?>
 		</div>
 	</div>
 </div>

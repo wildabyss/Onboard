@@ -265,6 +265,21 @@ var facebook_switch = function(actAssocId){
 	for (i=0; i<siblings.length; i++){
 		$(siblings[i]).removeClass("discussion_tab_active");
 	}
+	
+	// send ajax request
+	$.ajax({
+		url:	"ajaxDiscussion",
+		type: 	"post",
+		data:	{action: 'facebook_switch'},
+		success: function(result){
+			if (result != ""){
+				// successful request 
+				
+				$('#discussion_main_'+actAssocId).html(result);
+			}
+		}
+	});
+	$("#discussion_main_"+actAssocId).html("<p>Create an event on Facebook</p>");
 }
 
 var discussion_switch = function(discussionId, actAssocId){
@@ -285,13 +300,23 @@ var discussion_switch = function(discussionId, actAssocId){
 	$.ajax({
 		url:	"ajaxDiscussion",
 		type: 	"post",
-		data:	{action: 'discussion_switch', discussion_id: discussionId},
+		data:	{action: 'discussion_switch', discussion_id: discussionId, activity_assoc: actAssocId},
 		success: function(result){
 			if (result != ""){
 				// successful request 
 				
 				$('#discussion_main_'+actAssocId).html(result);
+				msg_container = $('#discussion_main_'+actAssocId+' div.message_container');
+				msg_container[0].scrollTop = msg_container[0].scrollHeight;
 			}
 		}
 	});
+}
+
+var discussion_msg_keydown = function(event, discussionId, actAssocId){
+	
+}
+
+var discussion_msg_keyup = function(event, discussionId, actAssocId){
+	
 }

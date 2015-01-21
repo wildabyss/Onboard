@@ -26,8 +26,6 @@ class ActivityUserAssociationQuery extends BaseActivityUserAssociationQuery
 	 * @return array of Users
 	 */
 	public static function getInterestedFriends($userId, $activityId){
-		$results = array();
-	
 		// search for friends
 		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT

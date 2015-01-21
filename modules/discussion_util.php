@@ -108,12 +108,13 @@ EOT;
 	}
 	
 	
-	public static function displayChat($discussionId){
+	public static function getChatMessages($discussionId){
 		// find the Discussion object
 		$discussion = DiscussionQuery::create()->findOneById($discussionId);
 		
 		// read file
-		
+		$json_data = file_get_contents("../discussions/".$discussion->getFileName());
+		return json_decode($json_data, true);
 	}
 }
 

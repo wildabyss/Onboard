@@ -93,11 +93,15 @@ class FacebookUtilities {
 	public static function GetProfilePicture(FacebookSession $session, User $user){
 		// ignore https certificate
 		$contextOptions = [
-			'ssl' => [
-				'verify_peer' => false
+			'http' => [
+					'header' => 'Connection: close\r\n'
+			],
+			'https' => [
+				'header' => 'Connection: close\r\n'
 			]
 		];
-		$context = stream_context_create($contextOptions);
+		
+		$context = stream_context_create(array('https' => array('header'=>'Connection: close\r\n')));
 		
 		// get large sized profile picture
 		$request = new FacebookRequest($session, 'GET', '/me/picture', 
@@ -111,8 +115,8 @@ class FacebookUtilities {
 		$response = $request->execute();
 		$graphObject = $response->getGraphObject();
 		
-		$data = file_get_contents($graphObject->getProperty('url'), false, $context);
-		file_put_contents('profile_pic_cache/'.$user->getId().'_large.jpg', $data);
+		// save large profile picture
+		Utilities::SaveImage($graphObject->getProperty('url'), 'profile_pic_cache/'.$user->getId().'_large.jpg');
 		
 		// get small sized profile picture
 		$request = new FacebookRequest($session, 'GET', '/me/picture',
@@ -126,7 +130,7 @@ class FacebookUtilities {
 		$response = $request->execute();
 		$graphObject = $response->getGraphObject();
 		
-		$data = file_get_contents($graphObject->getProperty('url'), false, $context);
-		file_put_contents('profile_pic_cache/'.$user->getId().'_small.jpg', $data);
+		// save small profile picture
+		Utilities::SaveImage($graphObject->getProperty('url'), 'profile_pic_cache/'.$user->getId().'_small.jpg');
 	}
 }

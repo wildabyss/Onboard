@@ -42,7 +42,7 @@ Application Configuration:
 5. Setup the SQL database using /database/SQL/db_setup.sql and /database/SQL/onboard.sql.
    Note that onboard.sql can be replicated using /database/schema.xml from Propel.
    
-6. Populate initial data with /database/SQL/test_data.sql.
+6. Populate initial data with /database/SQL/initial_data.sql.
    Modify the values accordingly.
    
 7. Set up Propel using /database/propel.yml.

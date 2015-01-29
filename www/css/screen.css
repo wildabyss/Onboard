@@ -432,7 +432,6 @@ h2.activity_title{
 .interest_info{
 	background-color: #F8F8F8;
 	margin: 10px -5px -5px -5px;
-	padding: 5px;
 	border-top: 1px solid #e5e6e9;
 }
 
@@ -446,9 +445,9 @@ h2.activity_title{
 	position: absolute;
 	min-width: 100px;
 	padding: 0;
-	z-index: 1000;
 	border: 1px solid #aaa;
 	background-color: #ddd;
+	z-index: 500;
 }
 ul.interested_friends_summary li{
 	margin: 0;
@@ -456,7 +455,7 @@ ul.interested_friends_summary li{
 	line-height: 8px;
 	font-size: 12px;
 	background-color: transparent;
-	border: none;
+	border: 0;
 }
 a.interested_friends_summary{
 	line-height: 14px;
@@ -481,6 +480,7 @@ a.interested_friends_summary{
 }
 
 .interest_tally{
+	margin: 5px;
 	display: inline-block;
 	padding-left: 18px;
 	height: 15px;
@@ -494,16 +494,20 @@ a.interested_friends_summary{
 	text-decoration: underline;
 }
 
+.interest_details_container{
+	margin-bottom: 10px;
+	border-bottom: 1px solid #dfe0e4;
+	padding: 5px;
+}
 ul.interest_details{
 	margin: 0 auto;
-	margin-top: 10px;
+	margin-bottom: 10px;
 	border: none;
 	padding: 0;
 	/*background-color: #E0ECF8;*/
 	overflow-x: auto;
 	overflow-y: hidden;
 	width: 100%;
-	z-index: 1000;
 	position: relative;
 }
 ul.interest_details li{
@@ -524,13 +528,17 @@ ul.interest_details li{
 	position: fixed;
 	opacity: 0.5;
 	background-color: #ccc;
+	z-index: 1000;
+	display: none;
 }
+
+
 
 /* discussions tab */
 
 .discussion_container{
 	margin: 10px 0 10px 0;
-	padding: 0;
+	padding: 5px;
 	position: relative;
 }
 
@@ -538,7 +546,7 @@ ul.interest_details li{
 	border: solid 1px #aaa;
 	margin-top: -1px;
 	padding: 4px;
-	background-color: #eee;
+	background-color: #dfe3ee;
 }
 .discussion_main_facebook{
 	background-color: #dfe3ee;
@@ -557,7 +565,8 @@ ul.interest_details li{
 }
 .discussion_tab:hover{
 	cursor: pointer;
-	background-color: #eee;
+	background-color: #dfe3ee;
+	border-bottom-color: #dfe3ee;
 }
 
 .discussion_tab_facebook{
@@ -574,8 +583,8 @@ ul.interest_details li{
 }
 
 .discussion_tab_active{
-	border-bottom-color: #eee;
-	background-color: #eee;
+	border-bottom-color: #dfe3ee;
+	background-color: #dfe3ee;
 }
 
 .dicussion_tab_add{

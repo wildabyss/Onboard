@@ -1,17 +1,19 @@
 <div id="interest_details_<?php echo $_ACT_OBJ_VIEW->getId()?>" style="display:none">
-	<?php if (count($_INTERESTED_FRIENDS)>0):?>
-		<ul class="interest_details">
-			<?php foreach ($_INTERESTED_FRIENDS as $friend):?>
-				<li onclick="window.location.href = 'community?id=<?php echo $friend->getId()?>';">
-					<a class="interested_friends_summary" id="interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>"><?php echo $friend->getDisplayName()?></a>
-					<a class="feed_profile_pic" 
-						onmouseover="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').show()" 
-						onmouseout="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').hide()"
-						style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
-				</li>
-			<?php endforeach?>
-		</ul>
-	<?php endif?>
+	<div class="interest_details_container">
+		<?php if (count($_INTERESTED_FRIENDS)>0):?>
+			<ul class="interest_details">
+				<?php foreach ($_INTERESTED_FRIENDS as $friend):?>
+					<li onclick="window.location.href = 'community?id=<?php echo $friend->getId()?>';">
+						<a class="interested_friends_summary" id="interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>"><?php echo $friend->getDisplayName()?></a>
+						<a class="feed_profile_pic" 
+							onmouseenter="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').show()" 
+							onmouseleave="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').hide()"
+							style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
+					</li>
+				<?php endforeach?>
+			</ul>
+		<?php endif?>
+	</div>
 	
 	<div class="discussion_container">
 		<div id="tab_strip_<?php echo $_ACT_OBJ_VIEW->getId()?>">

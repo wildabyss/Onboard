@@ -279,7 +279,6 @@ var facebook_switch = function(actAssocId){
 			}
 		}
 	});
-	$("#discussion_main_"+actAssocId).html("<p>Create an event on Facebook</p>");
 }
 
 var discussion_switch = function(discussionId, actAssocId){

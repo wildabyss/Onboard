@@ -90,7 +90,7 @@ try {
 			</div>
 			<div id="footer_login">
 				<a class="footer_block">
-					Copyright 2014
+					Copyright <?php echo date("Y") ?>
 				</a>
 				<a class="footer_block">
 					Contact

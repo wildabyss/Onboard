@@ -1,3 +1,4 @@
+<div id="haze"></div>
 <div id="global_wrapper">
 	<div id="header">
 		<a href="/mylist" id="header_logo"></a>

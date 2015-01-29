@@ -17,7 +17,7 @@ Web Server Configuration:
 Must have the following rewrite rules implemented to enable Klein re-router:
 
   1. Rewrite the exclusion of the following regex to viewReroute.php
-     ^(ajax.*)|(.*\.(css|gif|png|jpg|jpeg|js))$
+     ^(ajax.*)|(.*\.(css|gif|png|jpg|jpeg|js|ico))$
      
   2. Rewrite the inclusion of the following regex to ajaxReroute.php
      ^ajax.*$

@@ -2,29 +2,44 @@
 use Facebook\FacebookSession;
 use Facebook\FacebookRedirectLoginHelper;
 use Facebook\FacebookAuthorizationException;
+use Base\User;
 
 // set basic variables for layout
 $_PAGE_TITLE = "Sign In"; 
 
-// Facebook app info
-$fbLoginHelper = new FacebookRedirectLoginHelper('http://192.168.1.126/login');
-
-// if a valid session already exists, redirect to home
-if (isset($_SESSION['current_user']) && $_SESSION['fb_token']) {
+if (isset($_SESSION['current_user'])) {
+	// if a valid session already exists, redirect to home
+	header("Location: mylist");
+	die();
+	
+} elseif (isset($_COOKIE['fb_token'])) {
+	// if a cookie exists, validate then proceed to create session
+	
 	// get active facebook session
-	$fbSession = new FacebookSession($_SESSION['fb_token']);
+	$fbSession = new FacebookSession($_COOKIE['fb_token']);
 	try {
 		// validate Facebook session, if outdated or invalid, will throw exception
-		$fbSession->validate();
-
-		// redirect
-		header("Location: mylist");
-		die();
+		if ($fbSession->validate()){
+			// verify that the user profile is in the database
+			$curUserObj = FacebookUtilities::CorroborateFacebookLogin($fbSession);
+			if ($curUserObj){
+				// finalize authenticated session
+				FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
+				
+				// redirect to home page
+				header("Location: mylist");
+				die();
+			}
+		}
 	} catch (FacebookAuthorizationException $ex){
 		$fbSession = false;
 	}
 }
 
+// at this point, we don't have a valid session
+
+// Facebook app info
+$fbLoginHelper = new FacebookRedirectLoginHelper('http://192.168.1.126/login');
 
 // get access token and finalize facebook login
 try {
@@ -46,7 +61,7 @@ try {
 	<?php 
 	
 	// verify that the user profile is in the database
-	$curUserObj = FacebookUtilities::ValidateFacebookLogin($fbSession);
+	$curUserObj = FacebookUtilities::CorroborateFacebookLogin($fbSession);
 	if ($curUserObj == false){
 		// register user in database
 		$curUserObj = FacebookUtilities::RegisterFacebookUser($fbSession);
@@ -84,8 +99,8 @@ try {
 				<h1>Sign in/Register</h1>
 				<div class="center">
 					<a id="facebook_signin" href="<?php echo $fbLoginHelper->getLoginUrl(FacebookUtilities::FACEBOOK_PRIVILEGES)?>"></a>
-					<p>or</p>
-					<a id="google_signin"></a>
+					<!-- <p>or</p>
+					<a id="google_signin"></a> -->
 				</div>
 			</div>
 			<div id="footer_login">

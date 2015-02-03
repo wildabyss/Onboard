@@ -23,37 +23,53 @@ class ActivityUserAssociationQuery extends BaseActivityUserAssociationQuery
 	 * Only active users with active activities are be counted
 	 * @param unknown $userId
 	 * @param unknown $activityId
+	 * @param bool $getAssocs False (default) return User objects, True return ActivityUserAssociation objects
 	 * @return array of Users
 	 */
-	public static function getInterestedFriends($userId, $activityId){
+	public static function getInterestedFriends($userId, $activityId, $getAssocs=false){
 		// search for friends
 		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
-		$sql = <<<EOT
-			select distinct user.*
-				from activity_user_assoc ala
-			    left join
-					user
-			    on
-					user.id = ala.user_id
-				where
-					ala.activity_id = :actid
-			        and ala.status = :userstatus
-			        and user.id in
-						(select user.id
-							from user_community_assoc uca
-							join user on uca.user_id_right = user.id
-							where
-								user.status <> :actstatus1
-								and uca.user_id_left = :myid1
-						union
-						select user.id
-							from user_community_assoc uca
-							join user on uca.user_id_left = user.id
-							where
-								user.status <> :actstatus2
-								and uca.user_id_right = :myid2)
-				order by display_name;
+		
+		// stringify base SQL statement
+		if ($getAssocs){
+			$sql = <<<EOT
+				select distinct ala.*
+					from activity_user_assoc ala
 EOT;
+		} else {
+			$sql = <<<EOT
+				select distinct user.*
+					from activity_user_assoc ala
+				    left join
+						user
+				    on
+						user.id = ala.user_id
+EOT;
+		}
+		$sql = $sql.<<<EOT
+			where
+				ala.activity_id = :actid
+		        and ala.status = :userstatus
+		        and ala.user_id in
+					(select user.id
+						from user_community_assoc uca
+						join user on uca.user_id_right = user.id
+						where
+							user.status <> :actstatus1
+							and uca.user_id_left = :myid1
+					union
+					select user.id
+						from user_community_assoc uca
+						join user on uca.user_id_left = user.id
+						where
+							user.status <> :actstatus2
+							and uca.user_id_right = :myid2)
+EOT;
+		if (!$getAssocs){
+			$sql = $sql." order by user.display_name";
+		}
+		
+		// bind variables
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
 				array(

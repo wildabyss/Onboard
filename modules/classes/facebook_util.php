@@ -18,7 +18,7 @@ class FacebookUtilities {
 	 * @param Facebook session $session
 	 * @return User object|boolean
 	 */
-	public static function ValidateFacebookLogin($session){
+	public static function CorroborateFacebookLogin($session){
 		// retrieve Facebook ID
 		$user_profile = (new FacebookRequest($session, 'GET', '/me'))
 			->execute()->getGraphObject(GraphUser::className());
@@ -41,8 +41,14 @@ class FacebookUtilities {
 	 * @param User $curUserObj
 	 */
 	public static function FinalizeFacebookLogin(FacebookSession $session, $curUserObj){
+		// create session
 		$_SESSION['fb_token'] = $session->getToken();
 		$_SESSION['current_user'] = $curUserObj;
+		
+		// create cookies
+		// set expire in 30 days
+		$exp = time()+30*24*3600;
+		setcookie('fb_token', $session->getToken(), $exp);
 	}
 	
 	
@@ -51,7 +57,11 @@ class FacebookUtilities {
 	 * Destroy session
 	 */
 	public static function Logout(){
+		// destroy current session
 		session_destroy();
+		
+		// expire cookies
+		setcookie("fb_token", "", time()-10);
 	}
 	
 	

@@ -2,21 +2,11 @@
 
 require_once "../loading.php";
 
-// PHP error reporting
-ini_set('display_errors',1);
-ini_set('display_startup_errors',1);
-error_reporting(-1);
-
-// begin PHP session
-session_start();
-
-// output buffering
-ob_start();
-
+// namespaces
 use Klein\Klein;
 use Facebook\FacebookSession;
 
-/*try{*/
+try{
 	// initialize Facebook
 	$fb_app_id = Utilities::GetFacebookAppId();
 	$fb_app_secret = Utilities::GetFacebookAppSecret();
@@ -24,10 +14,7 @@ use Facebook\FacebookSession;
 
 	// URL router
 	$kleinRouter = new Klein();
-	
-	// FIXME time zone should vary with user location
-	date_default_timezone_set('America/Toronto');
-	
+
 	if (isset($_SESSION['current_user'])) {
 		// home page
 		$kleinRouter->respond(array('GET','POST'), '/', function () {
@@ -87,10 +74,10 @@ use Facebook\FacebookSession;
 	
 	$kleinRouter->dispatch();
 	
-/*} catch (PDOException $e){
+} catch (PDOException $e){
 	die("Database down");
 } catch (FacebookRequestException $e){
 	die("Unable to connect to Facebook");
 } catch (Exception $e){
 	die("Unexpected server error");
-}*/
+}

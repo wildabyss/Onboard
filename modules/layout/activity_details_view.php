@@ -16,26 +16,38 @@
 	</div>
 	
 	<div class="discussion_container">
-		<div id="tab_strip_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-			<div class="discussion_tab_facebook_active discussion_tab_facebook discussion_tab" 
-				onclick="facebook_switch('<?php echo $_ACT_OBJ_VIEW->getId()?>')" 
-				id="facebook_tab_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-				<a class="discussion_tab_content">Facebook</a>
-			</div>
-			<?php $discussions = DiscussionUtilities::findDiscussions($_ACT_OBJ_VIEW->getId())?>
-			<?php foreach ($discussions as $_DISCUSSION):?>
-				<div class="discussion_tab" 
-					onclick="discussion_switch('<?php echo $_DISCUSSION->getId()?>', '<?php echo $_ACT_OBJ_VIEW->getId()?>')" 
-					id="discussion_tab_<?php echo $_DISCUSSION->getId()?>">
-					<a class="discussion_tab_content"><?php echo $_DISCUSSION->getName()?></a>
-				</div>
-			<?php endforeach?>
-			<div class="dicussion_tab_add discussion_tab" id="discussion_new_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-				<a class="discussion_tab_content">+</a>
-			</div>
+		<?php $discussions = DiscussionUtilities::findDiscussions($_ACT_OBJ_VIEW->getId())?>
+	
+		<!-- tabs -->
+		<div style="font-size:0" id="tab_strip_<?php echo $_ACT_OBJ_VIEW->getId()?>">
+			<?php $_TAB_TYPE = "add" ?>
+			<?php include "../modules/layout/discussion_tab_view.php" ?>
+			
+			
+			<?php for ($k=0; $k<count($discussions); $k++):?>
+				<?php $_DISCUSSION_OBJ = $discussions[$k] ?>
+				<?php $_TAB_TYPE = "discussion" ?>
+				
+				<?php if ($k==0):?>
+					<?php $_ACTIVE_TAB=true ?>
+				<?php else:?>
+					<?php $_ACTIVE_TAB=false ?>
+				<?php endif ?>
+				
+				<?php include "../modules/layout/discussion_tab_view.php" ?>
+			<?php endfor ?>
 		</div>
+		
+		<!-- content -->
 		<div class="discussion_main_facebook discussion_main" id="discussion_main_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-			<?php include '../modules/layout/facebook_event_view.php'?>
+			<?php if (count($discussions)==0):?>
+				<p class="center">Start a discussion with the folks who have shown interest!</p>
+			<?php else: ?>
+				<?php $_DISCUSSION_OBJ = $discussions[0] ?>
+				<?php $_CHAT_DATA = DiscussionUtilities::getChatMessages($_DISCUSSION_OBJ->getId())['data'] ?>
+		
+				<?php include "../modules/layout/discussion_view.php" ?>
+			<?php endif ?>
 		</div>
 	</div>
 </div>

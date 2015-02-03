@@ -1,1 +1,0 @@
-<p>Create an event using Facebook.</p>

@@ -15,11 +15,13 @@ class DiscussionUtilities {
 	 * Create a new Discussion object given the ActivityUserAssociation ids (i.e. discussion participants)
 	 * @param unknown $discussionName
 	 * @param unknown $activityId
-	 * @param array $arrActivityUserAssocId
+	 * @param array $arrActivityUserAssocs
+	 * @param bool $forAll True to include everyone's interested friends in $arrActivityUserAssocId in this discussion, 
+	 * False (default) only include those in the array 
 	 * @throws Exception
-	 * @return True if succeeded
+	 * @return false if failed, otherwise return the Discussion object
 	 */
-	public static function createNewDiscussion($discussionName, $activityId, array $arrActivityUserAssocId){
+	public static function createNewDiscussion($discussionName, $activityId, array $arrActivityUserAssocs, $forAll=false){
 		// create discussion
 		$discussionObj = new Discussion();
 		$discussionObj->setActivityId($activityId);
@@ -29,25 +31,40 @@ class DiscussionUtilities {
 		$discussionObj->setDateCreated($timestamp);
 	
 		// set up physical file
-		$fileName = $activityId."_".$timestamp."_".$arrActivityUserAssocId[0].".txt";
+		$fileName = $activityId."_".$timestamp."_".$arrActivityUserAssocs[0]->getId().".txt";
 		$fileHandle = fopen("../discussions/$fileName", "w");
 		if ($fileHandle===false)
 			throw new Exception("Unable to create file");
 		$discussionObj->setFileName($fileName);
 	
 		// set up association
-		$assocCollection = new Collection();
-		foreach ($arrActivityUserAssocId as $actUserAssocId){
-			$assocObj = new DiscussionUserAssociation();
-			$assocObj->setDiscussion($discussionObj);
-			$assocObj->setActivityUserAssociationId($actUserAssocId);
-			$assocObj->setStatus(DiscussionUserAssociation::ACTIVE_STATUS);
-			$assocCollection->append($assocObj);
+		$discAssocCollection = new Collection();
+		foreach ($arrActivityUserAssocs as $actUserAssocObj){
+			$discAssocObj = new DiscussionUserAssociation();
+			$discAssocObj->setDiscussion($discussionObj);
+			$discAssocObj->setActivityUserAssociationId($actUserAssocObj->getId());
+			$discAssocObj->setStatus(DiscussionUserAssociation::ACTIVE_STATUS);
+			$discAssocCollection->append($discAssocObj);
+			
+			// if $forAll is set to true, we need to include all his/her interested friends too
+			if ($forAll){
+				$frdsActAssocObjs = ActivityUserAssociationQuery::getInterestedFriends($actUserAssocObj->getUserId(), $actUserAssocObj->getActivityId(), true);
+				foreach ($frdsActAssocObjs as $frdActAssocObj){
+					$discAssocObj = new DiscussionUserAssociation();
+					$discAssocObj->setDiscussion($discussionObj);
+					$discAssocObj->setActivityUserAssociationId($frdActAssocObj->getId());
+					$discAssocObj->setStatus(DiscussionUserAssociation::ACTIVE_STATUS);
+					$discAssocCollection->append($discAssocObj);
+				}
+			}
 		}
-		$discussionObj->setDiscussionUserAssociations($assocCollection);
+		$discussionObj->setDiscussionUserAssociations($discAssocCollection);
 	
 		// save discussion and the associations
-		return $discussionObj->save();
+		if (!$discussionObj->save())
+			return false;
+		else
+			return $discussionObj;
 	}
 	
 	

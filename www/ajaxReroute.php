@@ -2,41 +2,38 @@
 
 require_once "../loading.php";
 
-// PHP error reporting
-ini_set('display_errors',1);
-ini_set('display_startup_errors',1);
-error_reporting(-1);
-
-// begin PHP session
-session_start();
-
-// output buffering
-ob_start();
-
+// namespaces
 use Klein\Klein;
+use Facebook\FacebookSession;
 
-// URL router
-$kleinRouter = new Klein();
+try{
+	// initialize Facebook
+	$fb_app_id = Utilities::GetFacebookAppId();
+	$fb_app_secret = Utilities::GetFacebookAppSecret();
+	FacebookSession::setDefaultApplication($fb_app_id, $fb_app_secret);
 
-// FIXME time zone should vary with user location
-date_default_timezone_set('America/Toronto');
-
-if (isset($_SESSION['current_user'])) {
-	$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () {
-		include "../modules/ajax/ajaxActivityAssociation.php";
-		return;
-	});
+	// URL router
+	$kleinRouter = new Klein();
 	
-	$kleinRouter->respond('POST', '/ajaxDiscussion', function () {
-		include "../modules/ajax/ajaxDiscussion.php";
-		return;
-	});
-
-	// error response
-	$kleinRouter->onHttpError(function ($code, $router) {
-		return;
-	});
-
+	if (isset($_SESSION['current_user'])) {
+		$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () {
+			include "../modules/ajax/ajaxActivityAssociation.php";
+			return;
+		});
+		
+		$kleinRouter->respond('POST', '/ajaxDiscussion', function () {
+			include "../modules/ajax/ajaxDiscussion.php";
+			return;
+		});
+	
+		// error response
+		$kleinRouter->onHttpError(function ($code, $router) {
+			return;
+		});
+	
+	}
+	
+	$kleinRouter->dispatch();
+} catch (Exception $e){
+	exit();
 }
-
-$kleinRouter->dispatch();

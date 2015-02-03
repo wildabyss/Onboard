@@ -1,6 +1,7 @@
 /* new activity */
 
 var activity_being_added = false;
+var holding_key = "";
 
 var addNewActivity = function(){
 	if (!activity_being_added){
@@ -83,7 +84,12 @@ var cancelNewActivity = function(){
 /* existing activity */
 
 var displayDetailsBox = function (ev, div_id){
-	ev.preventDefault();
+	// IE8 fix
+	ev = ev || window.event;
+	if(event.preventDefault) 
+		event.preventDefault();
+	else
+		event.returnValue = false;
 	
 	var div = $('#'+div_id);
 	
@@ -184,6 +190,9 @@ var cancelDeleteActivity = function(actAssocId){
 }
 
 var markAsCompleted = function(event){
+	// IE8 fix
+	event = event || window.event;
+	
 	var actAssocId = event.data.actAssocId;
 	
 	$.ajax({
@@ -205,6 +214,9 @@ var markAsCompleted = function(event){
 }
 
 var markAsActive = function(event){
+	// IE8 fix
+	event = event || window.event;
+	
 	var actAssocId = event.data.actAssocId;
 	
 	$.ajax({
@@ -242,55 +254,128 @@ var expandActivity = function(actAssocId) {
 
 						$('#interest_info_'+actAssocId).append(result);
 						$('#interest_details_'+actAssocId).slideDown();
+						// change the button action
 						expandButton.attr('action', 'hide');
 					}
 				}
 			});
 		}
 	} else if (expandButton.attr('action') == "hide"){
-		$('#interest_details_'+actAssocId).slideUp();
+		// change the button action
 		expandButton.attr('action', 'expand');
+		
+		// remove the details content
+		var detailsEl = $('#interest_details_'+actAssocId);
+		if (detailsEl.length) {
+			detailsEl.slideUp(function(){
+				detailsEl.remove();
+			});
+		}
 	}
 }
 
-var facebook_switch = function(actAssocId){
-	facebookTabId = "facebook_tab_"+actAssocId;
+var discussion_add = function(event, actAssocId){
+	// IE8 fix
+	event = event || window.event;
 	
-	// add tab appearance
-	$("#"+facebookTabId).addClass("discussion_tab_facebook_active");
-	$("#discussion_main_"+actAssocId).addClass("discussion_main_facebook");
-	
-	// remove appearances on the other tabs
-	siblings = $("#"+facebookTabId).siblings();
-	for (i=0; i<siblings.length; i++){
-		$(siblings[i]).removeClass("discussion_tab_active");
-	}
-	
-	// send ajax request
-	$.ajax({
-		url:	"ajaxDiscussion",
-		type: 	"post",
-		data:	{action: 'facebook_switch'},
-		success: function(result){
-			if (result != ""){
-				// successful request 
-				
-				$('#discussion_main_'+actAssocId).html(result);
+	// only allow one new discussion to be added at a time
+	if ($("[id^=discussion_tab_new_]").length == 0){
+		// send ajax request
+		$.ajax({
+			url:	"ajaxDiscussion",
+			type: 	"post",
+			data:	{action: 'discussion_add', activity_assoc: actAssocId},
+			success: function(result){
+				if (result != ""){
+					// successful request 
+					
+					$(result).insertAfter('#discussion_tab_add_'+actAssocId);
+					$('#discussion_title_new_'+actAssocId).focus();
+				}
 			}
-		}
-	});
+		});
+	}
+}
+
+var discussion_add_tab_keydown = function(event, actAssocId){
+	// IE8 fix
+	event = event || window.event;
+	var target = event.target || event.srcElement;
+	
+	if (event.keyCode==13){
+		// enter
+
+		// prevent newline
+		if(event.preventDefault) 
+			event.preventDefault();
+		else
+			event.returnValue = false;
+		
+		// validate name
+		if ($.trim(target.innerHTML) == "")
+			return;
+		
+		// perform save
+		$.ajax({
+			url:	"ajaxDiscussion",
+			type: 	"post",
+			data:	{action: 'discussion_new', activity_assoc: actAssocId, name: target.innerHTML},
+			success: function(discussionId){
+				if ($.isNumeric(discussionId)){
+					// successful request 
+					
+					// perform ajax to retrieve the discussion
+					$.ajax({
+						url:	"ajaxDiscussion",
+						type: 	"post",
+						data:	{action: 'discussion_switch', discussion_id: discussionId},
+						success: function(result){
+							if (result != ""){
+								// successful request 
+								
+								// change this tab's appearance
+								var tab = $('#discussion_tab_new_'+actAssocId);
+								var tabTitle = $('#discussion_title_new_'+actAssocId);
+								tabTitle.attr('contenteditable', 'false');
+								tab.removeClass('discussion_tab_new');
+								tab.addClass('discussion_tab_active');
+								// change its id
+								tab.attr('id', 'discussion_tab_'+discussionId);
+								tabTitle.removeAttr('id');
+								
+								// tie the onclick event
+								tab.attr('onclick', "discussion_switch('"+discussionId+"', '"+actAssocId+"')");
+								
+								// remove appearances on other tabs
+								var siblings = tab.siblings();
+								for (i=0; i<siblings.length; i++){
+									$(siblings[i]).removeClass("discussion_tab_active");
+								}
+								
+								// set the discussion msgs
+								$('#discussion_main_'+actAssocId).html(result);
+								var msg_container = $('#discussion_main_'+actAssocId+' div.message_container');
+								msg_container[0].scrollTop = msg_container[0].scrollHeight;
+							}
+						}
+					});
+				}
+			}
+		});
+		
+	} else if (event.keyCode==27){
+		// esc
+		
+		$('#discussion_tab_new_'+actAssocId).remove();
+	}
 }
 
 var discussion_switch = function(discussionId, actAssocId){
 	// add tab appearance
 	$("#discussion_tab_"+discussionId).addClass("discussion_tab_active");
 	
-	// remove appearance on Facebook tab
-	$("#facebook_tab_"+actAssocId).removeClass("discussion_tab_facebook_active");
-	$("#discussion_main_"+actAssocId).removeClass("discussion_main_facebook");
-	
-	// remove appearances on the other tabs
-	siblings = $("#discussion_tab_"+discussionId).siblings();
+	// remove appearances on other tabs
+	var siblings = $("#discussion_tab_"+discussionId).siblings();
 	for (i=0; i<siblings.length; i++){
 		$(siblings[i]).removeClass("discussion_tab_active");
 	}
@@ -299,23 +384,95 @@ var discussion_switch = function(discussionId, actAssocId){
 	$.ajax({
 		url:	"ajaxDiscussion",
 		type: 	"post",
-		data:	{action: 'discussion_switch', discussion_id: discussionId, activity_assoc: actAssocId},
+		data:	{action: 'discussion_switch', discussion_id: discussionId},
 		success: function(result){
 			if (result != ""){
 				// successful request 
 				
 				$('#discussion_main_'+actAssocId).html(result);
-				msg_container = $('#discussion_main_'+actAssocId+' div.message_container');
+				var msg_container = $('#discussion_main_'+actAssocId+' div.message_container');
 				msg_container[0].scrollTop = msg_container[0].scrollHeight;
 			}
 		}
 	});
 }
 
-var discussion_msg_keydown = function(event, discussionId, actAssocId){
+var discussion_msg_keydown = function(event, discussionId){
+	// IE8 fix
+	event = event || window.event;
+	var target = event.target || event.srcElement;
 	
+	switch (event.keyCode){
+	case 16:
+		// register shift keydown
+		
+		holding_key = 16;
+		break;
+	case 13:
+		// enter
+		
+		if(event.preventDefault) 
+			event.preventDefault();
+		else
+			event.returnValue = false;
+		
+		// submit msg to the server
+		var msg = $.trim(target.value);
+		if (msg != ""){
+			$.ajax({
+				url:	"ajaxDiscussion",
+				type: 	"post",
+				data:	{action: 'msg_add', discussion_id: discussionId},
+				success: function(result){
+					if (result != ""){
+						// successful request 
+						
+						
+					}
+				}
+			});
+		}
+		
+		break;
+	}
 }
 
-var discussion_msg_keyup = function(event, discussionId, actAssocId){
+var discussion_msg_keyup = function(event, discussionId){
+	// IE8 fix
+	event = event || window.event;
+	var target = event.target || event.srcElement;
 	
+	if (event.keyCode == 13 && holding_key == 16){
+		// shift+enter
+		target.value = target.value + "\n";
+	}
+	
+	// reset holding
+	holding_key = "";
 }
+
+
+/* loads when document finishes loading */
+$(document).ready(function () {
+	// autogrow text area
+	$('textarea').autogrow();
+	
+	// hide all activity drop downs when user clicks anywhere in the window
+	$(document).click(function (e) {
+		if ($(e.target).closest('[id^=activity_drop_]').length > 0) return;
+		$("[id^=activity_edit_]").hide();
+		
+		if ($(e.target).closest('[id^=discussion_tab_add_]').length > 0) return;
+		$("[id^=discussion_new_]").hide();
+    });
+	
+	// timer for continuously updating the chat messages
+	window.setInterval(function(){
+		// first check how many discussion_main_XX elements are there
+		var arrDiscMain = $("[id^=discussion_main_]");
+		if (arrDiscMain.length>0){
+			
+		}
+		
+	}, 1000);
+});

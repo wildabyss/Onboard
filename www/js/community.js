@@ -1,7 +1,13 @@
 var likeActivity = function (event, activityAssocId, friendId){
-	ele = event.target;
-	event.stopPropagation();
+	// IE8 fix
+	event = event || window.event;
+	var ele = event.target || event.srcElement;
+	if (event.stopPropagation)
+		event.stopPropagation();
+	else
+		event.cancelBubble = true;
 	
+	// default type
 	if (!ele.type){
 		ele.type = "onboard";
 	}
@@ -15,7 +21,7 @@ var likeActivity = function (event, activityAssocId, friendId){
 				// successful request 
 				
 				// change interest tally
-				intTallyEl = $("#interest_tally_"+activityAssocId);
+				var intTallyEl = $("#interest_tally_"+activityAssocId);
 				if (intTallyEl.length>0) {
 					intTallyEl.html(result + " interests");
 				}

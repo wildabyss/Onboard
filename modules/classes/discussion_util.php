@@ -4,6 +4,7 @@ use Map\DiscussionUserAssociationTableMap;
 use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Propel;
 use Propel\Runtime\Formatter\ObjectFormatter;
+use Base\DiscussionMessageCacheQuery;
 
 /**
  * DiscussionUtilities provides static methods for accessing event discussions on the server side
@@ -120,11 +121,28 @@ EOT;
 	}
 	
 	
-	public static function pushMessage($discAssocId, $timestamp, $msg){
-		
+	/**
+	 * Push the message to the cache table to be digested
+	 * @param unknown $discAssocId
+	 * @param unknown $timestamp
+	 * @param unknown $msg
+	 * @throws Exception
+	 * @return Number of rows affected
+	 */
+	public static function pushMessage($discAssocObj, $timestamp, $msg){
+		$messageObject = new DiscussionMessageCache();
+		$messageObject->setMessage($msg);
+		$messageObject->setTime($timestamp);
+		$messageObject->setDiscussionUserAssociation($discAssocObj);
+		return $messageObject->save();
 	}
 	
 	
+	/**
+	 * Return the chat messages for a given Discussion object ID
+	 * @param unknown $discussionId
+	 * @return mixed
+	 */
 	public static function getChatMessages($discussionId){
 		// find the Discussion object
 		$discussion = DiscussionQuery::create()->findOneById($discussionId);
@@ -142,5 +160,30 @@ EOT;
  *
  */
 class DiscussionPersistentUpdater{
+	private $conn = false;
+	public $stop = false;
 	
+	
+	/**
+	 * Constructor
+	 */
+	public function __construct(){
+		$conn = Propel::getWriteConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
+	}
+	
+	
+	/**
+	 * Continuously update the Discussion files from the cache table
+	 */
+	public function UpdateDiscussions(){
+		while (!stop){
+			$arrCacheObj = DiscussionMessageCacheQuery::create()->find($this->conn);
+			foreach ($arrCacheObj as $cacheObj){
+				
+			}
+			
+			// sleep
+			usleep(100);
+		}
+	}
 }

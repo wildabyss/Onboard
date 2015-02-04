@@ -332,7 +332,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
      *
      * @return string
      */
-    public function getId()
+    public function getDiscussionUserAssociationId()
     {
         return $this->discussion_user_assoc_id;
     }
@@ -393,7 +393,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
      * @param  string $v new value
      * @return $this|\DiscussionMessageCache The current object (for fluent API support)
      */
-    public function setId($v)
+    public function setDiscussionUserAssociationId($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -409,7 +409,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
         }
 
         return $this;
-    } // setId()
+    } // setDiscussionUserAssociationId()
 
     /**
      * Set the value of [msg] column.
@@ -490,7 +490,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : DiscussionMessageCacheTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DiscussionMessageCacheTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DiscussionMessageCacheTableMap::translateFieldName('DiscussionUserAssociationId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->discussion_user_assoc_id = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DiscussionMessageCacheTableMap::translateFieldName('Message', TableMap::TYPE_PHPNAME, $indexType)];
@@ -823,7 +823,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getId();
+                return $this->getDiscussionUserAssociationId();
                 break;
             case 2:
                 return $this->getMessage();
@@ -862,7 +862,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
         $keys = DiscussionMessageCacheTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getId(),
+            $keys[1] => $this->getDiscussionUserAssociationId(),
             $keys[2] => $this->getMessage(),
             $keys[3] => $this->getTime(),
         );
@@ -925,7 +925,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setId($value);
+                $this->setDiscussionUserAssociationId($value);
                 break;
             case 2:
                 $this->setMessage($value);
@@ -963,7 +963,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setId($arr[$keys[1]]);
+            $this->setDiscussionUserAssociationId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setMessage($arr[$keys[2]]);
@@ -1110,7 +1110,7 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setId($this->getId());
+        $copyObj->setDiscussionUserAssociationId($this->getDiscussionUserAssociationId());
         $copyObj->setMessage($this->getMessage());
         $copyObj->setTime($this->getTime());
         if ($makeNew) {
@@ -1151,9 +1151,9 @@ abstract class DiscussionMessageCache implements ActiveRecordInterface
     public function setDiscussionUserAssociation(ChildDiscussionUserAssociation $v = null)
     {
         if ($v === null) {
-            $this->setId(NULL);
+            $this->setDiscussionUserAssociationId(NULL);
         } else {
-            $this->setId($v->getId());
+            $this->setDiscussionUserAssociationId($v->getId());
         }
 
         $this->aDiscussionUserAssociation = $v;

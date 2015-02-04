@@ -103,8 +103,8 @@ class DiscussionMessageCacheTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Id', 'Message', 'Time', ),
-        self::TYPE_CAMELNAME     => array('id', 'id', 'message', 'time', ),
+        self::TYPE_PHPNAME       => array('Id', 'DiscussionUserAssociationId', 'Message', 'Time', ),
+        self::TYPE_CAMELNAME     => array('id', 'discussionUserAssociationId', 'message', 'time', ),
         self::TYPE_COLNAME       => array(DiscussionMessageCacheTableMap::COL_ID, DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, DiscussionMessageCacheTableMap::COL_MSG, DiscussionMessageCacheTableMap::COL_TIME, ),
         self::TYPE_FIELDNAME     => array('id', 'discussion_user_assoc_id', 'msg', 'time', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
@@ -117,8 +117,8 @@ class DiscussionMessageCacheTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Id' => 1, 'Message' => 2, 'Time' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'id' => 1, 'message' => 2, 'time' => 3, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'DiscussionUserAssociationId' => 1, 'Message' => 2, 'Time' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'discussionUserAssociationId' => 1, 'message' => 2, 'time' => 3, ),
         self::TYPE_COLNAME       => array(DiscussionMessageCacheTableMap::COL_ID => 0, DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID => 1, DiscussionMessageCacheTableMap::COL_MSG => 2, DiscussionMessageCacheTableMap::COL_TIME => 3, ),
         self::TYPE_FIELDNAME     => array('id' => 0, 'discussion_user_assoc_id' => 1, 'msg' => 2, 'time' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
@@ -142,7 +142,7 @@ class DiscussionMessageCacheTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addForeignKey('discussion_user_assoc_id', 'Id', 'BIGINT', 'discussion_user_assoc', 'id', true, null, null);
+        $this->addForeignKey('discussion_user_assoc_id', 'DiscussionUserAssociationId', 'BIGINT', 'discussion_user_assoc', 'id', true, null, null);
         $this->addColumn('msg', 'Message', 'LONGVARCHAR', false, null, null);
         $this->addColumn('time', 'Time', 'TIMESTAMP', true, null, null);
     } // initialize()

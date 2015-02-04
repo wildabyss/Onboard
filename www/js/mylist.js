@@ -328,7 +328,7 @@ var discussion_add_tab_keydown = function(event, actAssocId){
 					$.ajax({
 						url:	"ajaxDiscussion",
 						type: 	"post",
-						data:	{action: 'discussion_switch', discussion_id: discussionId},
+						data:	{action: 'discussion_switch', discussion_id: discussionId, activity_assoc: actAssocId},
 						success: function(result){
 							if (result != ""){
 								// successful request 
@@ -397,7 +397,7 @@ var discussion_switch = function(discussionId, actAssocId){
 	});
 }
 
-var discussion_msg_keydown = function(event, discussionId){
+var discussion_msg_keydown = function(event, discussionId, actAssocId){
 	// IE8 fix
 	event = event || window.event;
 	var target = event.target || event.srcElement;
@@ -422,12 +422,12 @@ var discussion_msg_keydown = function(event, discussionId){
 			$.ajax({
 				url:	"ajaxDiscussion",
 				type: 	"post",
-				data:	{action: 'msg_add', discussion_id: discussionId},
+				data:	{action: 'msg_add', discussion_id: discussionId, message: msg, activity_assoc: actAssocId},
 				success: function(result){
-					if (result != ""){
+					if (result == 1){
 						// successful request 
 						
-						
+						target.value = "";
 					}
 				}
 			});

@@ -129,7 +129,7 @@
 	
 	<table name="discussion_msg_cache" idMethod="native" phpName="DiscussionMessageCache">
 		<column name="id" phpName="Id" type="BIGINT" sqlType="bigint(20) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-		<column name="discussion_user_assoc_id" phpName="Id" type="BIGINT" sqlType="bigint(20) unsigned" required="true"/>
+		<column name="discussion_user_assoc_id" phpName="DiscussionUserAssociationId" type="BIGINT" sqlType="bigint(20) unsigned" required="true"/>
 		<column name="msg" phpName="Message" type="LONGVARCHAR" />
 		<column name="time" phpName="Time" type="TIMESTAMP" required="true"/>
 		<foreign-key foreignTable="discussion_user_assoc" name="discussion_user_assoc_ibfk_2" onDelete="CASCADE">

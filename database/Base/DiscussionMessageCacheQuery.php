@@ -21,12 +21,12 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildDiscussionMessageCacheQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildDiscussionMessageCacheQuery orderById($order = Criteria::ASC) Order by the discussion_user_assoc_id column
+ * @method     ChildDiscussionMessageCacheQuery orderByDiscussionUserAssociationId($order = Criteria::ASC) Order by the discussion_user_assoc_id column
  * @method     ChildDiscussionMessageCacheQuery orderByMessage($order = Criteria::ASC) Order by the msg column
  * @method     ChildDiscussionMessageCacheQuery orderByTime($order = Criteria::ASC) Order by the time column
  *
  * @method     ChildDiscussionMessageCacheQuery groupById() Group by the id column
- * @method     ChildDiscussionMessageCacheQuery groupById() Group by the discussion_user_assoc_id column
+ * @method     ChildDiscussionMessageCacheQuery groupByDiscussionUserAssociationId() Group by the discussion_user_assoc_id column
  * @method     ChildDiscussionMessageCacheQuery groupByMessage() Group by the msg column
  * @method     ChildDiscussionMessageCacheQuery groupByTime() Group by the time column
  *
@@ -44,13 +44,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussionMessageCache findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDiscussionMessageCache matching the query, or a new ChildDiscussionMessageCache object populated from the query conditions when no match is found
  *
  * @method     ChildDiscussionMessageCache findOneById(string $id) Return the first ChildDiscussionMessageCache filtered by the id column
- * @method     ChildDiscussionMessageCache findOneById(string $discussion_user_assoc_id) Return the first ChildDiscussionMessageCache filtered by the discussion_user_assoc_id column
+ * @method     ChildDiscussionMessageCache findOneByDiscussionUserAssociationId(string $discussion_user_assoc_id) Return the first ChildDiscussionMessageCache filtered by the discussion_user_assoc_id column
  * @method     ChildDiscussionMessageCache findOneByMessage(string $msg) Return the first ChildDiscussionMessageCache filtered by the msg column
  * @method     ChildDiscussionMessageCache findOneByTime(string $time) Return the first ChildDiscussionMessageCache filtered by the time column
  *
  * @method     ChildDiscussionMessageCache[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDiscussionMessageCache objects based on current ModelCriteria
  * @method     ChildDiscussionMessageCache[]|ObjectCollection findById(string $id) Return ChildDiscussionMessageCache objects filtered by the id column
- * @method     ChildDiscussionMessageCache[]|ObjectCollection findById(string $discussion_user_assoc_id) Return ChildDiscussionMessageCache objects filtered by the discussion_user_assoc_id column
+ * @method     ChildDiscussionMessageCache[]|ObjectCollection findByDiscussionUserAssociationId(string $discussion_user_assoc_id) Return ChildDiscussionMessageCache objects filtered by the discussion_user_assoc_id column
  * @method     ChildDiscussionMessageCache[]|ObjectCollection findByMessage(string $msg) Return ChildDiscussionMessageCache objects filtered by the msg column
  * @method     ChildDiscussionMessageCache[]|ObjectCollection findByTime(string $time) Return ChildDiscussionMessageCache objects filtered by the time column
  * @method     ChildDiscussionMessageCache[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -280,14 +280,14 @@ abstract class DiscussionMessageCacheQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterById(1234); // WHERE discussion_user_assoc_id = 1234
-     * $query->filterById(array(12, 34)); // WHERE discussion_user_assoc_id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE discussion_user_assoc_id > 12
+     * $query->filterByDiscussionUserAssociationId(1234); // WHERE discussion_user_assoc_id = 1234
+     * $query->filterByDiscussionUserAssociationId(array(12, 34)); // WHERE discussion_user_assoc_id IN (12, 34)
+     * $query->filterByDiscussionUserAssociationId(array('min' => 12)); // WHERE discussion_user_assoc_id > 12
      * </code>
      *
      * @see       filterByDiscussionUserAssociation()
      *
-     * @param     mixed $id The value to use as filter.
+     * @param     mixed $discussionUserAssociationId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -295,16 +295,16 @@ abstract class DiscussionMessageCacheQuery extends ModelCriteria
      *
      * @return $this|ChildDiscussionMessageCacheQuery The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterByDiscussionUserAssociationId($discussionUserAssociationId = null, $comparison = null)
     {
-        if (is_array($id)) {
+        if (is_array($discussionUserAssociationId)) {
             $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, $id['min'], Criteria::GREATER_EQUAL);
+            if (isset($discussionUserAssociationId['min'])) {
+                $this->addUsingAlias(DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, $discussionUserAssociationId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, $id['max'], Criteria::LESS_EQUAL);
+            if (isset($discussionUserAssociationId['max'])) {
+                $this->addUsingAlias(DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, $discussionUserAssociationId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -315,7 +315,7 @@ abstract class DiscussionMessageCacheQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, $id, $comparison);
+        return $this->addUsingAlias(DiscussionMessageCacheTableMap::COL_DISCUSSION_USER_ASSOC_ID, $discussionUserAssociationId, $comparison);
     }
 
     /**

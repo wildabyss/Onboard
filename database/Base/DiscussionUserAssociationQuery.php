@@ -576,7 +576,7 @@ abstract class DiscussionUserAssociationQuery extends ModelCriteria
     {
         if ($discussionMessageCache instanceof \DiscussionMessageCache) {
             return $this
-                ->addUsingAlias(DiscussionUserAssociationTableMap::COL_ID, $discussionMessageCache->getId(), $comparison);
+                ->addUsingAlias(DiscussionUserAssociationTableMap::COL_ID, $discussionMessageCache->getDiscussionUserAssociationId(), $comparison);
         } elseif ($discussionMessageCache instanceof ObjectCollection) {
             return $this
                 ->useDiscussionMessageCacheQuery()

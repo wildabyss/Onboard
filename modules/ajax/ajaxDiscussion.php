@@ -38,7 +38,7 @@ switch ($_POST['action']){
 		
 		try {
 			// create discussion
-			$_DISCUSSION_OBJ = DiscussionUtilities::createNewDiscussion($name, $actAssocObj->getActivityId(), array($actAssocObj));
+			$_DISCUSSION_OBJ = DiscussionUtilities::createNewDiscussion($name, $actAssocObj->getActivityId(), array($actAssocObj), true);
 			
 			// output to client
 			echo $_DISCUSSION_OBJ->getId();
@@ -66,6 +66,24 @@ switch ($_POST['action']){
 		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'])['data'];
 		
 		include "../modules/layout/discussion_view.php";
+		break;
+		
+	case 'discussion_refresh':
+		if (!isset($_POST['discussion_id']))
+			exit();
+		
+		// TODO: check for file timestamp. If timestamp didn't change, don't output anything
+			
+		// retrieve the discussion object
+		$_DISCUSSION_OBJ = DiscussionQuery::create()->findOneById($_POST['discussion_id']);
+		if (!$_DISCUSSION_OBJ)
+			exit();
+		
+		// open file
+		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'])['data'];
+		
+		include "../modules/layout/discussion_content_view.php";
+		
 		break;
 		
 	case "msg_add":

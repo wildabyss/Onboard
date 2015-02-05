@@ -2,6 +2,12 @@
 
 require_once "../loading.php";
 
+// begin PHP session
+session_start();
+
+// output buffering
+ob_start();
+
 // namespaces
 use Klein\Klein;
 use Facebook\FacebookSession;

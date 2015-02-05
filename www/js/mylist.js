@@ -1,4 +1,5 @@
 /* new activity */
+// FIXME: a malicious user can easily change the client IDs to display unwarranted information from other users
 
 var activity_being_added = false;
 var holding_key = "";
@@ -384,7 +385,7 @@ var discussion_switch = function(discussionId, actAssocId){
 	$.ajax({
 		url:	"ajaxDiscussion",
 		type: 	"post",
-		data:	{action: 'discussion_switch', discussion_id: discussionId},
+		data:	{action: 'discussion_switch', discussion_id: discussionId, activity_assoc: actAssocId},
 		success: function(result){
 			if (result != ""){
 				// successful request 
@@ -469,10 +470,30 @@ $(document).ready(function () {
 	// timer for continuously updating the chat messages
 	window.setInterval(function(){
 		// first check how many discussion_main_XX elements are there
-		var arrDiscMain = $("[id^=discussion_main_]");
+		var arrDiscMain = $("[id^=message_container_]");
 		if (arrDiscMain.length>0){
-			
+			for (var i=0; i<arrDiscMain.length; i++){
+				// message display area
+				var msgObj = arrDiscMain[i];
+				var discussionId = msgObj.id.split('_')[2];
+				
+				// send ajax request
+				$.ajax({
+					url:	"ajaxDiscussion",
+					type: 	"post",
+					data:	{action: 'discussion_refresh', discussion_id: discussionId},
+					async:	false,
+					success: function(result){
+						if (result != ""){
+							// successful request 
+
+							msgObj.innerHTML = result;
+							msgObj.scrollTop = msgObj.scrollHeight;
+						}
+					}
+				});
+			}
 		}
 		
-	}, 1000);
+	}, 500);
 });

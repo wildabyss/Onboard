@@ -4,7 +4,6 @@ use Map\DiscussionUserAssociationTableMap;
 use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Propel;
 use Propel\Runtime\Formatter\ObjectFormatter;
-use Base\DiscussionMessageCacheQuery;
 
 /**
  * DiscussionUtilities provides static methods for accessing event discussions on the server side
@@ -143,6 +142,7 @@ EOT;
 	 * @param unknown $discussionId
 	 * @return mixed
 	 */
+	// TODO: this should be made more efficient without reading the entire file every time
 	public static function getChatMessages($discussionId){
 		// find the Discussion object
 		$discussion = DiscussionQuery::create()->findOneById($discussionId);
@@ -160,7 +160,7 @@ EOT;
  *
  */
 class DiscussionPersistentUpdater{
-	private $conn = false;
+	private $conn = null;
 	public $stop = false;
 	
 	
@@ -168,19 +168,41 @@ class DiscussionPersistentUpdater{
 	 * Constructor
 	 */
 	public function __construct(){
-		$conn = Propel::getWriteConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
+		$this->conn = Propel::getConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
 	}
 	
 	
 	/**
 	 * Continuously update the Discussion files from the cache table
 	 */
-	public function UpdateDiscussions(){
-		while (!stop){
-			$arrCacheObj = DiscussionMessageCacheQuery::create()->find($this->conn);
-			foreach ($arrCacheObj as $cacheObj){
+	public function updateDiscussions(){
+		while (!$this->stop){
+			// fetch cached messages
+			$dataArr = DiscussionMessageCacheQuery::getCachedMessages($this->conn);
+			
+			// go through each row and pass into the respective files
+			$maxId = 0;
+			foreach ($dataArr as $rowArr){
+				$maxId = $rowArr['cache_id'];
 				
+				// TODO: this should be made more efficient without reading/writing the whole file every time
+				// read file
+				$json_data = file_get_contents("../discussions/".$rowArr['file_name']);
+				$chatData = json_decode($json_data, true);
+				
+				// append to $chatData
+				$chatData['data'][] = array(
+					'timestamp' => $rowArr['time'],
+					'sender'	=> $rowArr['activity_user_assoc_id'],
+					'message'	=> $rowArr['discussion_msg']
+				);
+				
+				// write to file
+				file_put_contents("../discussions/".$rowArr['file_name'], json_encode($chatData));
 			}
+			
+			// delete cached records
+			DiscussionMessageCacheQuery::deleteCachedMessages($maxId, $this->conn);
 			
 			// sleep
 			usleep(100);

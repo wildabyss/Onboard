@@ -1,7 +1,7 @@
 <?php
 
 use Base\DiscussionUserAssociationQuery as BaseDiscussionUserAssociationQuery;
-use Map\DiscussionUserAssociationTableMap as DiscussionUserAssociationTableMap;
+use Map\DiscussionUserAssociationTableMap;
 use Propel\Runtime\Propel;
 
 /**
@@ -50,5 +50,39 @@ EOT;
 		// assess results
 		$results = $stmt->fetchAll();
 		return count($results)>0;
+	}
+	
+	
+	/**
+	 * Verify that the userId and the discussionId are linked
+	 * @param unknown $userId
+	 * @param unknown $discussionId
+	 * @return Return true if linked
+	 */
+	public static function verifyUserAndDiscussionId($userId, $discussionId){
+		$conn = Propel::getReadConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
+		$sql = <<<EOT
+			select 1
+			from 
+				discussion_user_assoc dua
+			left join
+				activity_user_assoc aua
+			on
+				dua.activity_user_assoc_id = aua.id
+			where
+				dua.discussion_id = :discid
+				and aua.user_id = :userid
+			limit 1;
+EOT;
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(
+			array(
+				':userid'	=> $userId,
+				':discid'	=> $discussionId
+			));
+	
+		// assess results
+		$results = $stmt->fetchAll();
+		return count($results);
 	}
 }

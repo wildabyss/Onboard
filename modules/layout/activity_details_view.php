@@ -44,7 +44,7 @@
 				<p class="center">Start a discussion with the folks who have shown interest!</p>
 			<?php else: ?>
 				<?php $_DISCUSSION_OBJ = $discussions[0] ?>
-				<?php $_CHAT_DATA = DiscussionUtilities::getChatMessages($_DISCUSSION_OBJ->getId())['data'] ?>
+				<?php $_CHAT_DATA = DiscussionUtilities::getChatMessages($_DISCUSSION_OBJ->getId(), $_SESSION['discussions_time'], $changed)['data'] ?>
 		
 				<?php include "../modules/layout/discussion_view.php" ?>
 			<?php endif ?>

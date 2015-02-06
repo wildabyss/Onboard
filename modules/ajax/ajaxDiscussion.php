@@ -1,8 +1,5 @@
 <?php
 
-use Base\ActivityUserAssociationQuery;
-use Base\DiscussionUserAssociation;
-
 if (!isset($_POST['action']))
 	exit();
 
@@ -17,6 +14,10 @@ switch ($_POST['action']){
 		// retrieve the activity association object
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findOneById($_POST['activity_assoc']);
 		if (!$_ACT_OBJ_VIEW)
+			exit();
+		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_ACT_OBJ_VIEW->getId()))
 			exit();
 					
 		include "../modules/layout/discussion_tab_view.php";
@@ -34,6 +35,10 @@ switch ($_POST['action']){
 		// get the user's ActivityUserAssociation object
 		$actAssocObj = ActivityUserAssociationQuery::create()->findOneById($_POST['activity_assoc']);
 		if (!$actAssocObj)
+			exit();
+		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $actAssocObj->getId()))
 			exit();
 		
 		try {
@@ -57,13 +62,21 @@ switch ($_POST['action']){
 		if (!$_DISCUSSION_OBJ)
 			exit();
 		
+		// verify this discussion belongs to the current user
+		if (!DiscussionUserAssociationQuery::verifyUserAndDiscussionId($curUser->getId(), $_DISCUSSION_OBJ->getId()))
+			exit();
+		
 		// retrieve ActivityUserAssociation object
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findOneById($_POST['activity_assoc']);
 		if (!$_ACT_OBJ_VIEW)
 			exit();
 		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_ACT_OBJ_VIEW->getId()))
+			exit();
+		
 		// open file
-		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'])['data'];
+		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'], $_SESSION['discussions_time'], $changed)['data'];
 		
 		include "../modules/layout/discussion_view.php";
 		break;
@@ -71,16 +84,21 @@ switch ($_POST['action']){
 	case 'discussion_refresh':
 		if (!isset($_POST['discussion_id']))
 			exit();
-		
-		// TODO: check for file timestamp. If timestamp didn't change, don't output anything
-			
+				
 		// retrieve the discussion object
 		$_DISCUSSION_OBJ = DiscussionQuery::create()->findOneById($_POST['discussion_id']);
 		if (!$_DISCUSSION_OBJ)
 			exit();
 		
+		// verify this discussion belongs to the current user
+		if (!DiscussionUserAssociationQuery::verifyUserAndDiscussionId($curUser->getId(), $_DISCUSSION_OBJ->getId()))
+			exit();
+		
 		// open file
-		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'])['data'];
+		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'], $_SESSION['discussions_time'], $changed);
+		if (!$changed)
+			exit();
+		$_CHAT_DATA = $_CHAT_DATA['data'];
 		
 		include "../modules/layout/discussion_content_view.php";
 		
@@ -96,6 +114,13 @@ switch ($_POST['action']){
 			->filterByActivityUserAssociationId($_POST['activity_assoc'])
 			->findOne();
 		if (!$discAssocObj)
+			exit();
+		
+		// verify this discussion belongs to the current user
+		if (!DiscussionUserAssociationQuery::verifyUserAndDiscussionId($curUser->getId(), $_POST['discussion_id']))
+			exit();
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_POST['activity_assoc']))
 			exit();
 		
 		// save message

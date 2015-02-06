@@ -17,11 +17,11 @@
 	<div class="content_column_wrapper" id="column_wrapper_middle">
 	
 		<?php 
-			if (isset($_GET['id'])) 
+			if (isset($_GET['id']) && UserCommunityAssociationQuery::verifyUsersAreFriends($curUser->getId(), $_GET['id'])) 
 				$_FRIEND = UserQuery::create()->findOneById($_GET['id']); 
 		?>
 		
-		<?php if (isset($_FRIEND)):?>
+		<?php if (isset($_FRIEND) && $_FRIEND!=false):?>
 		
 			<div id="profile_section">
 				<a id="profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $_FRIEND->getId()?>_large.jpg)"></a>

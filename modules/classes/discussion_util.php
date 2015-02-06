@@ -140,15 +140,31 @@ EOT;
 	/**
 	 * Return the chat messages for a given Discussion object ID
 	 * @param unknown $discussionId
-	 * @return mixed
+	 * @param &$sessionContainer Session variable for storing the discussion modification timestamps
+	 * @param &$changedStatus
+	 * @return chat data, false if nothing has been modified
 	 */
 	// TODO: this should be made more efficient without reading the entire file every time
-	public static function getChatMessages($discussionId){
+	public static function getChatMessages($discussionId, &$sessionContainer, &$changedStatus){
 		// find the Discussion object
 		$discussion = DiscussionQuery::create()->findOneById($discussionId);
+		if (!$discussion){
+			$changedStatus = false;
+			return "";
+		}
+		
+		// get file modification timestamp
+		$filepath = "../discussions/".$discussion->getFileName();
+		$modTime = filemtime($filepath);
+		if (isset($sessionContainer[$discussionId]) && $modTime == $sessionContainer[$discussionId]){
+			$changedStatus = false;
+		} else {
+			$sessionContainer[$discussionId] = $modTime;
+			$changedStatus = true;
+		}
 		
 		// read file
-		$json_data = file_get_contents("../discussions/".$discussion->getFileName());
+		$json_data = file_get_contents($filepath);
 		return json_decode($json_data, true);
 	}
 }

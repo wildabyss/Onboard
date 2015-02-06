@@ -181,4 +181,33 @@ EOT;
 		$formatter->setClass('\ActivityUserAssociation'); //full qualified class name
 		return $formatter->format($conn->getDataFetcher($stmt));
 	}
+	
+	
+	/**
+	 * Verify that the userId and the activityUserAssociationId are linked
+	 * @param unknown $userId
+	 * @param unknown $activityUserAssociationId
+	 * @return Return true if linked
+	 */
+	public static function verifyUserAndActivityAssociationId($userId, $activityUserAssociationId){
+		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
+		$sql = <<<EOT
+			select 1
+			from activity_user_assoc aua
+			where
+				aua.id = :associd
+				and aua.user_id = :userid
+			limit 1;
+EOT;
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(
+				array(
+						':userid'	=> $userId,
+						':associd'	=> $activityUserAssociationId
+				));
+		
+		// assess results
+		$results = $stmt->fetchAll();
+		return count($results);
+	}
 }

@@ -41,5 +41,6 @@ try{
 	
 	$kleinRouter->dispatch();
 } catch (Exception $e){
+	echo $e->__toString();
 	exit();
 }

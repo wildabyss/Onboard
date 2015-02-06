@@ -9,14 +9,17 @@ switch ($_POST['action']){
 	// onboard/leave action
 	case 'onboard':
 	case 'leave':
-		if (!isset($_POST['activity_assoc']) || !isset($_POST['friend_id']))
+		if (!isset($_POST['activity_assoc']))
 			exit();
 		
 		try {
 			// the friend's ActivityUserAssociation
-			$friendActivityUserAssoc = ActivityUserAssociationQuery::create()
-				->filterById($_POST['activity_assoc'])
-				->findOne();
+			$friendActivityUserAssoc = ActivityUserAssociationQuery::create()->findOneById($_POST['activity_assoc']);
+			
+			// verify this guy is my guy's friend
+			if (!UserCommunityAssociationQuery::verifyUsersAreFriends($curUser->getId(), $friendActivityUserAssoc->getUserId()))
+				exit();
+
 			// current user's (i.e. my) association level with the activity
 			$userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $friendActivityUserAssoc->getActivityId());
 			if ($userAssocLevel == ActivityUserAssociation::USER_IS_NOT_ASSOCIATED && $_POST['action']=="onboard"){
@@ -47,7 +50,7 @@ switch ($_POST['action']){
 			}
 		
 			// send the new interest tally for this friend
-			echo ActivityUserAssociationQuery::countInterestedFriends($_POST['friend_id'], $friendActivityUserAssoc->getActivityId());
+			echo ActivityUserAssociationQuery::countInterestedFriends($friendActivityUserAssoc->getUserId(), $friendActivityUserAssoc->getActivityId());
 		} catch (Exception $e){
 			exit();
 		}
@@ -59,10 +62,15 @@ switch ($_POST['action']){
 		if (!isset($_POST['activity_assoc']))
 			exit();
 		
-		$actAssocObj = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		// retrieve the data object
+		$actAssocObj = ActivityUserAssociationQuery::create()->findOneById($_POST['activity_assoc']);
 		if ($actAssocObj == false)
 			exit();
 		$actCategories = $actAssocObj->getActivityCategories();
+		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $actAssocObj->getId()))
+			exit();
 		
 		// this variable will be used by activity_edit_view.php
 		$_ACT_EDIT['id'] = $actAssocObj->getId();
@@ -82,8 +90,13 @@ switch ($_POST['action']){
 		if (!isset($_POST['activity_assoc']))
 			exit();
 		
-		$actAssocObj = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
+		// retrieve the data object
+		$actAssocObj = ActivityUserAssociationQuery::create()->findOneById($_POST['activity_assoc']);
 		if ($actAssocObj == false)
+			exit();
+		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $actAssocObj->getId()))
 			exit();
 		
 		// change status of ActivityUserAssociation object to archived (deleted)
@@ -136,6 +149,10 @@ switch ($_POST['action']){
 		if ($_ACT_OBJ_VIEW == false)
 			exit();
 		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_ACT_OBJ_VIEW->getId()))
+			exit();
+		
 		// save the changes
 		$_ACT_OBJ_VIEW->setAlias(trim($_POST['activity_alias']));
 		$_ACT_OBJ_VIEW->setDescription(trim($_POST['activity_descr']));
@@ -156,6 +173,10 @@ switch ($_POST['action']){
 		if ($actAssocObj == false)
 			exit();
 		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $actAssocObj->getId()))
+			exit();
+		
 		// set activityassoc status
 		if ($_POST['action'] == "mark_complete")
 			$actAssocObj->setStatus(ActivityUserAssociation::COMPLETED_STATUS);
@@ -174,6 +195,10 @@ switch ($_POST['action']){
 		// verify the activity association id that's passed in
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
+			exit();
+		
+		// verify this activityAssociation belongs to the current user
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_ACT_OBJ_VIEW->getId()))
 			exit();
 		
 		// output interested friends

@@ -72,4 +72,36 @@ EOT;
 			}
 		}
 	}
+	
+	
+	/**
+	 * Verify that the two userIds are linked in the same community
+	 * @param unknown $userId1
+	 * @param unknown $userId2
+	 * @return Return true if linked
+	 */
+	public static function verifyUsersAreFriends($userId1, $userId2){
+		$conn = Propel::getReadConnection(UserCommunityAssociationTableMap::DATABASE_NAME);
+		$sql = <<<EOT
+			select 1 from user_community_assoc
+			    where user_id_left = :userid1
+			    and user_id_right = :userid2
+			union
+			select 1 from user_community_assoc
+			    where user_id_left = :userid3
+			    and user_id_right = :userid4;
+EOT;
+		$stmt = $conn->prepare($sql);
+		$stmt->execute(
+			array(
+				':userid1'	=> $userId1,
+				':userid2'	=> $userId2,
+				':userid3'	=> $userId2,
+				':userid4'	=> $userId1
+			));
+	
+		// assess results
+		$results = $stmt->fetchAll();
+		return count($results)>=1;
+	}
 }

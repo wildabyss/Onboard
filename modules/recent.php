@@ -22,30 +22,20 @@
 		<?php else:?>
 		
 			<ul class="activity_list">
-				<?php foreach ($recentActivityAssocs as $recentActivityAssoc):?>
-					<?php $assocUser = $recentActivityAssoc->getUser() ?>
+				<?php foreach ($recentActivityAssocs as $_ACT_OBJ_VIEW):?>
+					<?php $assocUser = $_ACT_OBJ_VIEW->getUser() ?>
 					
-					<li class="feed_page_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>#activity_section_<?php echo $recentActivityAssoc->getId()?>';">
+					<li class="feed_page_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>#activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>';">
 						<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $assocUser->getId()?>_small.jpg)"></a>
 						<span class="feed_page_block_body">
 							<a class="feed_title">
-								<i><?php echo $assocUser->getDisplayName()?></i> has added <b><?php echo $recentActivityAssoc->getAlias()?></b>.
+								<i><?php echo $assocUser->getDisplayName()?></i> has added <b><?php echo $_ACT_OBJ_VIEW->getAlias()?></b>.
 							</a>
-							<a class="feed_datetime"><?php echo $recentActivityAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
+							<a class="feed_datetime"><?php echo $_ACT_OBJ_VIEW->getDateAdded()->format('Y-m-d H:i:s');?></a>
 						</span>
 						
 						<!-- Leave/Onboard button -->
-						<?php $userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $recentActivityAssoc->getActivityId())?>
-						<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_OWNER):?>
-							<a class="onboard_leave_unavailable">You're an owner</a>
-						<?php elseif (DiscussionUserAssociationQuery::isUserInDiscussion($curUser->getId(), $recentActivityAssoc->getActivityId())):?>
-							<a class="onboard_leave_unavailable">You're in discussion</a>
-						<?php else:?>
-							<a class="onboard_leave" type="<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
-								onclick="likeActivity(event, <?php echo $recentActivityAssoc->getId()?>, <?php echo $recentActivityAssoc->getUserId()?>);">
-								<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
-							</a>
-						<?php endif?>
+						<?php include "../modules/layout/onboard_button_view.php" ?>
 					</li>
 			
 				<?php endforeach?>

@@ -13,12 +13,29 @@ class FacebookUtilities {
 	
 	
 	/**
+	 * Get the Facebook app id for this app
+	 */
+	public static function GetFacebookAppId(){
+		$enum = EnumQuery::create()->findOneByName("fb_app_id");
+		return $enum->getValue();
+	}
+	
+	
+	/**
+	 * Get the Facebook app secret for this app
+	 */
+	public static function GetFacebookAppSecret(){
+		$enum = EnumQuery::create()->findOneByName("fb_app_secret");
+		return $enum->getValue();
+	}
+	
+	/**
 	 * Validate that the user has already registered with our app
 	 * Return the User object if true, otherwise return false
 	 * @param Facebook session $session
 	 * @return User object|boolean
 	 */
-	public static function CorroborateFacebookLogin($session){
+	public static function CorroborateFacebookLogin(FacebookSession $session){
 		// retrieve Facebook ID
 		$user_profile = (new FacebookRequest($session, 'GET', '/me'))
 			->execute()->getGraphObject(GraphUser::className());
@@ -37,10 +54,10 @@ class FacebookUtilities {
 	/**
 	 * Finalize the login process by saving the Facebook session and the User object into
 	 * PHP session
-	 * @param Facebook session $session
+	 * @param FacebookSession $session
 	 * @param User $curUserObj
 	 */
-	public static function FinalizeFacebookLogin(FacebookSession $session, $curUserObj){
+	public static function FinalizeFacebookLogin(FacebookSession $session, User $curUserObj){
 		// create session
 		$_SESSION['fb_token'] = $session->getToken();
 		$_SESSION['current_user'] = $curUserObj;
@@ -68,10 +85,10 @@ class FacebookUtilities {
 	/**
 	 * Register the user referred to by the current Facebook session
 	 * If successful, return the newly created User object
-	 * @param Facebook session $session
+	 * @param FacebookSession $session
 	 * @return User|boolean
 	 */
-	public static function RegisterFacebookUser($session){
+	public static function RegisterFacebookUser(FacebookSession $session){
 		// retrieve Facebook profile information
 		$user_profile = (new FacebookRequest($session, 'GET', '/me'))
 			->execute()->getGraphObject(GraphUser::className());
@@ -100,11 +117,16 @@ class FacebookUtilities {
 	}
 	
 	
+	/**
+	 * Retrieve the user's Facebook profile picture and save it
+	 * @param FacebookSession $session
+	 * @param User $user
+	 */
 	public static function GetProfilePicture(FacebookSession $session, User $user){
 		// ignore https certificate
 		$contextOptions = [
 			'http' => [
-					'header' => 'Connection: close\r\n'
+				'header' => 'Connection: close\r\n'
 			],
 			'https' => [
 				'header' => 'Connection: close\r\n'
@@ -142,5 +164,31 @@ class FacebookUtilities {
 		
 		// save small profile picture
 		Utilities::SaveImage($graphObject->getProperty('url'), 'profile_pic_cache/'.$user->getId().'_small.jpg');
+	}
+	
+	
+	/**
+	 * Create a Facebook app group and include all the participants
+	 * @param array $arrActivityUserAssocs
+	 * @param string $forAll If true, will recursively add all the interested friends of each member of $arrActivityUserAssocs
+	 */
+	public static function CreateGroup(array $arrActivityUserAssocs=null, $forAll=false){
+		// app id and secret to construct the app access token
+		$fbAppId = self::GetFacebookAppId();
+		$fbAppSecret = self::GetFacebookAppSecret();
+		
+		// execute group creation request
+		$request = new FacebookRequest(FacebookSession::newAppSession($fbAppId, $fbAppSecret), "POST", "/{$fbAppId}/groups", array("name" => "Test Group"));
+		$response = $request->execute();
+		$graphObject = $response->getGraphObject();
+		
+		// group ID that was just created
+		$groupId = $graphObject->getProperty('id');
+		
+		// execute group creation request
+		$request = new FacebookRequest(FacebookSession::newAppSession($fbAppId, $fbAppSecret), "GET", "/{$groupId}");
+		$response = $request->execute();
+		var_dump($graphObject = $response->getGraphObject());
+		die();
 	}
 }

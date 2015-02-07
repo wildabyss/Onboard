@@ -14,8 +14,8 @@ use Facebook\FacebookSession;
 
 try{
 	// initialize Facebook
-	$fb_app_id = Utilities::GetFacebookAppId();
-	$fb_app_secret = Utilities::GetFacebookAppSecret();
+	$fb_app_id = FacebookUtilities::GetFacebookAppId();
+	$fb_app_secret = FacebookUtilities::GetFacebookAppSecret();
 	FacebookSession::setDefaultApplication($fb_app_id, $fb_app_secret);
 
 	// URL router

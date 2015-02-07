@@ -93,7 +93,6 @@
 		<column name="activity_id" phpName="ActivityId" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
 		<column name="status" phpName="Status" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" required="true"/>
 		<column name="date_created" phpName="DateCreated" type="TIMESTAMP" required="true"/>
-		<column name="file_name" phpName="FileName" type="VARCHAR" size="255" required="true"/>
 		<foreign-key foreignTable="activity" name="discussion_ibfk_1" onDelete="CASCADE">
 			<reference local="activity_id" foreign="id"/>
 		</foreign-key>
@@ -137,6 +136,9 @@
 		</foreign-key>
 		<index name="discussion_user_assoc_id">
 			<index-column name="discussion_user_assoc_id"/>
+		</index>
+		<index name="time">
+			<index-column name="time"/>
 		</index>
 		<vendor type="mysql">
 			<parameter name="Engine" value="InnoDB"/>

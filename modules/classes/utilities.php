@@ -6,24 +6,6 @@ class Utilities {
 	const PAGE_MY_ACTIVITIES = "My Activities";
 	const PAGE_COMMUNITY = "Community";
 	const PAGE_BROWSE = "Browse";
-
-	
-	/**
-	 * Get the Facebook app id for this app
-	 */
-	public static function GetFacebookAppId(){
-		$enum = EnumQuery::create()->findOneByName("fb_app_id");
-		return $enum->getValue();
-	}
-	
-	
-	/**
-	 * Get the Facebook app secret for this app
-	 */
-	public static function GetFacebookAppSecret(){
-		$enum = EnumQuery::create()->findOneByName("fb_app_secret");
-		return $enum->getValue();
-	}
 	
 	
 	/**

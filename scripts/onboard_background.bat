@@ -1,1 +1,0 @@
-php onboard_background.php

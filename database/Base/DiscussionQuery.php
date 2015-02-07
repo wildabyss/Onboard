@@ -25,14 +25,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussionQuery orderByActivityId($order = Criteria::ASC) Order by the activity_id column
  * @method     ChildDiscussionQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     ChildDiscussionQuery orderByDateCreated($order = Criteria::ASC) Order by the date_created column
- * @method     ChildDiscussionQuery orderByFileName($order = Criteria::ASC) Order by the file_name column
  *
  * @method     ChildDiscussionQuery groupById() Group by the id column
  * @method     ChildDiscussionQuery groupByName() Group by the name column
  * @method     ChildDiscussionQuery groupByActivityId() Group by the activity_id column
  * @method     ChildDiscussionQuery groupByStatus() Group by the status column
  * @method     ChildDiscussionQuery groupByDateCreated() Group by the date_created column
- * @method     ChildDiscussionQuery groupByFileName() Group by the file_name column
  *
  * @method     ChildDiscussionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildDiscussionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -56,7 +54,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussion findOneByActivityId(int $activity_id) Return the first ChildDiscussion filtered by the activity_id column
  * @method     ChildDiscussion findOneByStatus(int $status) Return the first ChildDiscussion filtered by the status column
  * @method     ChildDiscussion findOneByDateCreated(string $date_created) Return the first ChildDiscussion filtered by the date_created column
- * @method     ChildDiscussion findOneByFileName(string $file_name) Return the first ChildDiscussion filtered by the file_name column
  *
  * @method     ChildDiscussion[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDiscussion objects based on current ModelCriteria
  * @method     ChildDiscussion[]|ObjectCollection findById(int $id) Return ChildDiscussion objects filtered by the id column
@@ -64,7 +61,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDiscussion[]|ObjectCollection findByActivityId(int $activity_id) Return ChildDiscussion objects filtered by the activity_id column
  * @method     ChildDiscussion[]|ObjectCollection findByStatus(int $status) Return ChildDiscussion objects filtered by the status column
  * @method     ChildDiscussion[]|ObjectCollection findByDateCreated(string $date_created) Return ChildDiscussion objects filtered by the date_created column
- * @method     ChildDiscussion[]|ObjectCollection findByFileName(string $file_name) Return ChildDiscussion objects filtered by the file_name column
  * @method     ChildDiscussion[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -156,7 +152,7 @@ abstract class DiscussionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, activity_id, status, date_created, file_name FROM discussion WHERE id = :p0';
+        $sql = 'SELECT id, name, activity_id, status, date_created FROM discussion WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -441,35 +437,6 @@ abstract class DiscussionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DiscussionTableMap::COL_DATE_CREATED, $dateCreated, $comparison);
-    }
-
-    /**
-     * Filter the query on the file_name column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByFileName('fooValue');   // WHERE file_name = 'fooValue'
-     * $query->filterByFileName('%fooValue%'); // WHERE file_name LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $fileName The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildDiscussionQuery The current query, for fluid interface
-     */
-    public function filterByFileName($fileName = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($fileName)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $fileName)) {
-                $fileName = str_replace('*', '%', $fileName);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(DiscussionTableMap::COL_FILE_NAME, $fileName, $comparison);
     }
 
     /**

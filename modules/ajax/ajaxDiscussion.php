@@ -76,7 +76,7 @@ switch ($_POST['action']){
 			exit();
 		
 		// open file
-		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'], $_SESSION['discussions_time'], $changed)['data'];
+		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'], $_SESSION['discussions_time'], $changed);
 		
 		include "../modules/layout/discussion_view.php";
 		break;
@@ -98,7 +98,6 @@ switch ($_POST['action']){
 		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'], $_SESSION['discussions_time'], $changed);
 		if (!$changed)
 			exit();
-		$_CHAT_DATA = $_CHAT_DATA['data'];
 		
 		include "../modules/layout/discussion_content_view.php";
 		

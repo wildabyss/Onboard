@@ -59,7 +59,7 @@ class DiscussionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class DiscussionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the id field
@@ -97,11 +97,6 @@ class DiscussionTableMap extends TableMap
     const COL_DATE_CREATED = 'discussion.date_created';
 
     /**
-     * the column name for the file_name field
-     */
-    const COL_FILE_NAME = 'discussion.file_name';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -113,11 +108,11 @@ class DiscussionTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'ActivityId', 'Status', 'DateCreated', 'FileName', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'activityId', 'status', 'dateCreated', 'fileName', ),
-        self::TYPE_COLNAME       => array(DiscussionTableMap::COL_ID, DiscussionTableMap::COL_NAME, DiscussionTableMap::COL_ACTIVITY_ID, DiscussionTableMap::COL_STATUS, DiscussionTableMap::COL_DATE_CREATED, DiscussionTableMap::COL_FILE_NAME, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'activity_id', 'status', 'date_created', 'file_name', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'ActivityId', 'Status', 'DateCreated', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'activityId', 'status', 'dateCreated', ),
+        self::TYPE_COLNAME       => array(DiscussionTableMap::COL_ID, DiscussionTableMap::COL_NAME, DiscussionTableMap::COL_ACTIVITY_ID, DiscussionTableMap::COL_STATUS, DiscussionTableMap::COL_DATE_CREATED, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'activity_id', 'status', 'date_created', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -127,11 +122,11 @@ class DiscussionTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'ActivityId' => 2, 'Status' => 3, 'DateCreated' => 4, 'FileName' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'activityId' => 2, 'status' => 3, 'dateCreated' => 4, 'fileName' => 5, ),
-        self::TYPE_COLNAME       => array(DiscussionTableMap::COL_ID => 0, DiscussionTableMap::COL_NAME => 1, DiscussionTableMap::COL_ACTIVITY_ID => 2, DiscussionTableMap::COL_STATUS => 3, DiscussionTableMap::COL_DATE_CREATED => 4, DiscussionTableMap::COL_FILE_NAME => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'activity_id' => 2, 'status' => 3, 'date_created' => 4, 'file_name' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'ActivityId' => 2, 'Status' => 3, 'DateCreated' => 4, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'activityId' => 2, 'status' => 3, 'dateCreated' => 4, ),
+        self::TYPE_COLNAME       => array(DiscussionTableMap::COL_ID => 0, DiscussionTableMap::COL_NAME => 1, DiscussionTableMap::COL_ACTIVITY_ID => 2, DiscussionTableMap::COL_STATUS => 3, DiscussionTableMap::COL_DATE_CREATED => 4, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'activity_id' => 2, 'status' => 3, 'date_created' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -156,7 +151,6 @@ class DiscussionTableMap extends TableMap
         $this->addForeignKey('activity_id', 'ActivityId', 'INTEGER', 'activity', 'id', true, 10, null);
         $this->addColumn('status', 'Status', 'TINYINT', true, 3, null);
         $this->addColumn('date_created', 'DateCreated', 'TIMESTAMP', true, null, null);
-        $this->addColumn('file_name', 'FileName', 'VARCHAR', true, 255, null);
     } // initialize()
 
     /**
@@ -323,14 +317,12 @@ class DiscussionTableMap extends TableMap
             $criteria->addSelectColumn(DiscussionTableMap::COL_ACTIVITY_ID);
             $criteria->addSelectColumn(DiscussionTableMap::COL_STATUS);
             $criteria->addSelectColumn(DiscussionTableMap::COL_DATE_CREATED);
-            $criteria->addSelectColumn(DiscussionTableMap::COL_FILE_NAME);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.activity_id');
             $criteria->addSelectColumn($alias . '.status');
             $criteria->addSelectColumn($alias . '.date_created');
-            $criteria->addSelectColumn($alias . '.file_name');
         }
     }
 

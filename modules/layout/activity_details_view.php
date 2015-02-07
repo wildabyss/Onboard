@@ -39,12 +39,12 @@
 		</div>
 		
 		<!-- content -->
-		<div class="discussion_main_facebook discussion_main" id="discussion_main_<?php echo $_ACT_OBJ_VIEW->getId()?>">
+		<div class="discussion_main" id="discussion_main_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 			<?php if (count($discussions)==0):?>
 				<p class="center">Start a discussion with the folks who have shown interest!</p>
 			<?php else: ?>
 				<?php $_DISCUSSION_OBJ = $discussions[0] ?>
-				<?php $_CHAT_DATA = DiscussionUtilities::getChatMessages($_DISCUSSION_OBJ->getId(), $_SESSION['discussions_time'], $changed)['data'] ?>
+				<?php $_CHAT_DATA = DiscussionUtilities::getChatMessages($_DISCUSSION_OBJ->getId(), $_SESSION['discussions_time'], $changed) ?>
 		
 				<?php include "../modules/layout/discussion_view.php" ?>
 			<?php endif ?>

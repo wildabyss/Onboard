@@ -44,6 +44,7 @@ $fbLoginHelper = new FacebookRedirectLoginHelper('http://192.168.1.126/login');
 // get access token and finalize facebook login
 try {
 	$fbSession = $fbLoginHelper->getSessionFromRedirect();
+	 
 } catch(FacebookRequestException $ex) {
 	// Facebook login error
 	header("Location: login");
@@ -66,7 +67,7 @@ try {
 		// register user in database
 		$curUserObj = FacebookUtilities::RegisterFacebookUser($fbSession);
 	}
-	
+
 	// try again
 	if ($curUserObj != false) {
 		// refresh his community based on Facebook friends

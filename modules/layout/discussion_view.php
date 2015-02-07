@@ -1,3 +1,8 @@
+<div style="text-align: right; margin: 5px;">
+	<a class="button_participants">Participants</a>
+	<a class="button_leave">Leave</a>
+</div>
+
 <div class="message_container" id="message_container_<?php echo $_DISCUSSION_OBJ->getId() ?>">
 	<?php include "../modules/layout/discussion_content_view.php" ?>
 </div>

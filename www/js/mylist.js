@@ -256,6 +256,12 @@ var expandActivity = function(actAssocId) {
 						$('#interest_details_'+actAssocId).slideDown();
 						// change the button action
 						expandButton.attr('action', 'hide');
+						
+						// scroll message to bottom
+						var container = $('#discussion_main_'+actAssocId+' div.message_container').get(0);
+						if (container){
+							container.scrollTop = container.scrollHeight;
+						}
 					}
 				}
 			});
@@ -504,5 +510,5 @@ $(document).ready(function () {
 			}
 		}
 		
-	}, 500);
+	}, 200);
 });

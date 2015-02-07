@@ -98,12 +98,6 @@ abstract class Discussion implements ActiveRecordInterface
     protected $date_created;
 
     /**
-     * The value for the file_name field.
-     * @var        string
-     */
-    protected $file_name;
-
-    /**
      * @var        ChildActivity
      */
     protected $aActivity;
@@ -406,16 +400,6 @@ abstract class Discussion implements ActiveRecordInterface
     }
 
     /**
-     * Get the [file_name] column value.
-     *
-     * @return string
-     */
-    public function getFileName()
-    {
-        return $this->file_name;
-    }
-
-    /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
@@ -520,26 +504,6 @@ abstract class Discussion implements ActiveRecordInterface
     } // setDateCreated()
 
     /**
-     * Set the value of [file_name] column.
-     *
-     * @param  string $v new value
-     * @return $this|\Discussion The current object (for fluent API support)
-     */
-    public function setFileName($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->file_name !== $v) {
-            $this->file_name = $v;
-            $this->modifiedColumns[DiscussionTableMap::COL_FILE_NAME] = true;
-        }
-
-        return $this;
-    } // setFileName()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -592,9 +556,6 @@ abstract class Discussion implements ActiveRecordInterface
                 $col = null;
             }
             $this->date_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DiscussionTableMap::translateFieldName('FileName', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->file_name = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -603,7 +564,7 @@ abstract class Discussion implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = DiscussionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = DiscussionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Discussion'), 0, $e);
@@ -850,9 +811,6 @@ abstract class Discussion implements ActiveRecordInterface
         if ($this->isColumnModified(DiscussionTableMap::COL_DATE_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'date_created';
         }
-        if ($this->isColumnModified(DiscussionTableMap::COL_FILE_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'file_name';
-        }
 
         $sql = sprintf(
             'INSERT INTO discussion (%s) VALUES (%s)',
@@ -878,9 +836,6 @@ abstract class Discussion implements ActiveRecordInterface
                         break;
                     case 'date_created':
                         $stmt->bindValue($identifier, $this->date_created ? $this->date_created->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
-                        break;
-                    case 'file_name':
-                        $stmt->bindValue($identifier, $this->file_name, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -959,9 +914,6 @@ abstract class Discussion implements ActiveRecordInterface
             case 4:
                 return $this->getDateCreated();
                 break;
-            case 5:
-                return $this->getFileName();
-                break;
             default:
                 return null;
                 break;
@@ -997,7 +949,6 @@ abstract class Discussion implements ActiveRecordInterface
             $keys[2] => $this->getActivityId(),
             $keys[3] => $this->getStatus(),
             $keys[4] => $this->getDateCreated(),
-            $keys[5] => $this->getFileName(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1084,9 +1035,6 @@ abstract class Discussion implements ActiveRecordInterface
             case 4:
                 $this->setDateCreated($value);
                 break;
-            case 5:
-                $this->setFileName($value);
-                break;
         } // switch()
 
         return $this;
@@ -1127,9 +1075,6 @@ abstract class Discussion implements ActiveRecordInterface
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setDateCreated($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setFileName($arr[$keys[5]]);
         }
     }
 
@@ -1186,9 +1131,6 @@ abstract class Discussion implements ActiveRecordInterface
         }
         if ($this->isColumnModified(DiscussionTableMap::COL_DATE_CREATED)) {
             $criteria->add(DiscussionTableMap::COL_DATE_CREATED, $this->date_created);
-        }
-        if ($this->isColumnModified(DiscussionTableMap::COL_FILE_NAME)) {
-            $criteria->add(DiscussionTableMap::COL_FILE_NAME, $this->file_name);
         }
 
         return $criteria;
@@ -1280,7 +1222,6 @@ abstract class Discussion implements ActiveRecordInterface
         $copyObj->setActivityId($this->getActivityId());
         $copyObj->setStatus($this->getStatus());
         $copyObj->setDateCreated($this->getDateCreated());
-        $copyObj->setFileName($this->getFileName());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1648,7 +1589,6 @@ abstract class Discussion implements ActiveRecordInterface
         $this->activity_id = null;
         $this->status = null;
         $this->date_created = null;
-        $this->file_name = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

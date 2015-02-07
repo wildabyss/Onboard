@@ -128,7 +128,6 @@ CREATE TABLE `discussion`
     `activity_id` int(10) unsigned NOT NULL,
     `status` tinyint(3) unsigned NOT NULL,
     `date_created` DATETIME NOT NULL,
-    `file_name` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `activity_id` (`activity_id`),
     CONSTRAINT `discussion_ibfk_1`
@@ -152,7 +151,7 @@ CREATE TABLE `discussion_user_assoc`
     PRIMARY KEY (`id`),
     INDEX `discussion_id` (`discussion_id`),
     INDEX `activity_user_assoc_id` (`activity_user_assoc_id`),
-    CONSTRAINT `discussion_user_assoc_ibfk_123`
+    CONSTRAINT `discussion_user_assoc_ibfk_1`
         FOREIGN KEY (`discussion_id`)
         REFERENCES `discussion` (`id`)
         ON DELETE CASCADE,
@@ -176,7 +175,8 @@ CREATE TABLE `discussion_msg_cache`
     `time` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `discussion_user_assoc_id` (`discussion_user_assoc_id`),
-    CONSTRAINT `discussion_user_assoc_ibfk_1`
+    INDEX `time` (`time`),
+    CONSTRAINT `discussion_user_assoc_ibfk_2`
         FOREIGN KEY (`discussion_user_assoc_id`)
         REFERENCES `discussion_user_assoc` (`id`)
         ON DELETE CASCADE

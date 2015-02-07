@@ -575,7 +575,7 @@ ul.interest_details li{
 }
 
 .discussion_tab_content{
-	display: block;
+	display: inline-block;
 	margin: 4px;
 	font-size: 13px;
 }
@@ -621,6 +621,7 @@ ul.interest_details li{
 	height: 300px;
 	overflow-y: scroll;
 	margin-bottom: 10px;
+	margin-top: 10px;
 }
 
 ul.message_list{
@@ -647,6 +648,21 @@ ul.message_list li{
 	width: 100%;
 	resize: none;
 	box-sizing: border-box;
+}
+
+a.button_participants{
+	display: inline-block;
+	margin-right: 10px;
+	padding-left: 21px;
+	background-image: url(../images/participants.png);
+	background-repeat: no-repeat;
+}
+a.button_leave{
+	display: inline-block;
+	margin-right: 10px;
+	padding-left: 21px;
+	background-image: url(../images/exit.png);
+	background-repeat: no-repeat;
 }
 
 /* community */

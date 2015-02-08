@@ -5,7 +5,7 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookSession;
 
 class FacebookUtilities {
-	const FACEBOOK_PRIVILEGES = array("email","user_friends");
+	const FACEBOOK_PRIVILEGES = array("email","user_friends","user_groups");
 	
 	// profile picture sizes
 	const PROFILE_PIC_LARGE = 3;
@@ -170,25 +170,34 @@ class FacebookUtilities {
 	/**
 	 * Create a Facebook app group and include all the participants
 	 * @param array $arrActivityUserAssocs
-	 * @param string $forAll If true, will recursively add all the interested friends of each member of $arrActivityUserAssocs
+	 * @param bool $forAll If true, will recursively add all the interested friends of each member of $arrActivityUserAssocs
 	 */
-	public static function CreateGroup(array $arrActivityUserAssocs=null, $forAll=false){
+	public static function CreateGroup(array $arrActivityUserAssocs, $forAll=false){
 		// app id and secret to construct the app access token
 		$fbAppId = self::GetFacebookAppId();
 		$fbAppSecret = self::GetFacebookAppSecret();
+		$appSession = FacebookSession::newAppSession($fbAppId, $fbAppSecret);
 		
 		// execute group creation request
-		$request = new FacebookRequest(FacebookSession::newAppSession($fbAppId, $fbAppSecret), "POST", "/{$fbAppId}/groups", array("name" => "Test Group"));
+		$request = new FacebookRequest($appSession, "POST", "/{$fbAppId}/groups", array("name" => "Test Group"));
 		$response = $request->execute();
 		$graphObject = $response->getGraphObject();
 		
-		// group ID that was just created
+		// get the group that we have just created
 		$groupId = $graphObject->getProperty('id');
-		
-		// execute group creation request
-		$request = new FacebookRequest(FacebookSession::newAppSession($fbAppId, $fbAppSecret), "GET", "/{$groupId}");
+		$request = new FacebookRequest($appSession, "GET", "/{$groupId}");
 		$response = $request->execute();
-		var_dump($graphObject = $response->getGraphObject());
-		die();
+		$graphObject = $response->getGraphObject();
+		
+		// add the users to this empty group
+		foreach ($arrActivityUserAssocs as $actAssocObj){
+			$userObj = $actAssocObj->getUser();
+			
+			$request = new FacebookRequest($appSession, 'POST', "/{$groupId}/members", array('member' => $userObj->getFbId()));
+			$response = $request->execute();
+			$graphObject = $response->getGraphObject();
+			var_dump($graphObject);
+			die();
+		}
 	}
 }

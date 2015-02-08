@@ -19,6 +19,12 @@ switch ($_POST['action']){
 		// verify this activityAssociation belongs to the current user
 		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_ACT_OBJ_VIEW->getId()))
 			exit();
+		
+		try{
+		FacebookUtilities::CreateGroup(array($_ACT_OBJ_VIEW));
+		} catch (Exception $e){
+			echo $e->getMessage();
+		}
 					
 		include "../modules/layout/discussion_tab_view.php";
 		break;
@@ -125,6 +131,14 @@ switch ($_POST['action']){
 		// save message
 		if (DiscussionUtilities::pushMessage($discAssocObj, time(), trim($_POST['message'])))
 			echo 1;
+		
+		break;
+		
+	case 'facebook_group_new':
+		if (!isset($_POST['activity_assoc']))
+			exit();
+			
+		
 		
 		break;
 }

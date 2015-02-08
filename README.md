@@ -1,6 +1,13 @@
 Onboard
 =======
 
+Working Environments
+-------
+
+This application has been tested with PHP 5.6, Chrome 30 and above, Firefox 4.0 and above, 
+and IE 8.0 and above.
+
+
 Required Vendor Packages:
 -------
 1. Composer
@@ -14,7 +21,9 @@ Required Vendor Packages:
 Web Server Configuration:
 -------
 
-Must have the following rewrite rules implemented to enable Klein re-router:
+* Disable directory browsing
+
+* Must have the following rewrite rules implemented to enable Klein re-router:
 
   1. Rewrite the exclusion of the following regex to viewReroute.php
      ^(ajax.*)|(.*\.(css|gif|png|jpg|jpeg|js|ico))$
@@ -22,7 +31,7 @@ Must have the following rewrite rules implemented to enable Klein re-router:
   2. Rewrite the inclusion of the following regex to ajaxReroute.php
      ^ajax.*$
      
-Configuration for IIS7 is included in the web.config file under www/ directory
+  Configuration for IIS7 is included in the web.config file under www/ directory
 
 
 Application Configuration:
@@ -34,7 +43,7 @@ Application Configuration:
 2. Create the following directories:
    /www/profile_pic_cache
    
-3. Configure the web server as per above. Install MySQL.
+3. Configure the web server as per Web Server Configuration. Install MySQL.
 
 4. Modify /database/propel.yml and /database/SQL/db_setup.sql for database username and password.
    Set up Propel and the MySQL database.
@@ -44,6 +53,8 @@ Application Configuration:
    
 6. Populate initial data with /database/SQL/initial_data.sql.
    Modify the values accordingly.
+   
+7. Modify /loading.php to set error_reporting to production settings.
    
 
 Updating Database Schema:

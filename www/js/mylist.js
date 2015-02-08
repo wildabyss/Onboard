@@ -280,6 +280,24 @@ var expandActivity = function(actAssocId) {
 	}
 }
 
+var facebook_discussion_add = function(event, actAssocId){
+	// IE8 fix
+	event = event || window.event;
+	
+	$.ajax({
+		url:	"ajaxDiscussion",
+		type: 	"post",
+		data:	{activity_assoc: actAssocId, action: 'facebook_group_new'},
+		success: function(result){
+			if (result == 1){
+				// successful request 
+				
+				
+			}
+		}
+	});
+}
+
 var discussion_add = function(event, actAssocId){
 	// IE8 fix
 	event = event || window.event;

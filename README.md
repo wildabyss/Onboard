@@ -32,12 +32,12 @@ Application Configuration:
    /composer.json and versions as specified in /composer.lock.
    
 2. Create the following directories:
-   /discussions
    /www/profile_pic_cache
    
 3. Configure the web server as per above. Install MySQL.
 
 4. Modify /database/propel.yml and /database/SQL/db_setup.sql for database username and password.
+   Set up Propel and the MySQL database.
 
 5. Setup the SQL database using /database/SQL/db_setup.sql and /database/SQL/onboard.sql.
    Note that onboard.sql can be replicated using /database/schema.xml from Propel.
@@ -45,10 +45,6 @@ Application Configuration:
 6. Populate initial data with /database/SQL/initial_data.sql.
    Modify the values accordingly.
    
-7. Set up Propel using /database/propel.yml.
-
-8. Configure the web server to run server_startup.php on server startup.
-
 
 Updating Database Schema:
 -------

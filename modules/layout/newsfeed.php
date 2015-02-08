@@ -13,7 +13,7 @@
 				<a class="feed_profile_pic"></a>
 				<span class="feed_block_body">
 					<a class="feed_title">
-						<i><?php echo $assocUser->getDisplayName()?></i> has added <b><?php echo $recentActivityAssoc->getAlias()?></b>.
+						<i><?php echo htmlentities($assocUser->getDisplayName())?></i> has added <b><?php echo htmlentities($recentActivityAssoc->getAlias())?></b>.
 					</a>
 					<a class="feed_datetime"><?php echo $recentActivityAssoc->getDateAdded()->format('Y-m-d H:i:s');?></a>
 				</span>

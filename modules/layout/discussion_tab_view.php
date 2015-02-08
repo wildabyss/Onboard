@@ -19,7 +19,7 @@
 		onclick="discussion_switch('<?php echo $_DISCUSSION_OBJ->getId()?>', '<?php echo $_ACT_OBJ_VIEW->getId()?>')" 
 		id="discussion_tab_<?php echo $_DISCUSSION_OBJ->getId()?>">
 		
-		<a class="discussion_tab_content"><?php echo $_DISCUSSION_OBJ->getName()?></a>
+		<a class="discussion_tab_content"><?php echo htmlentities($_DISCUSSION_OBJ->getName())?></a>
 <?php endif ?>
 
 </div>

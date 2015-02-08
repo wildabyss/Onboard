@@ -14,7 +14,7 @@
 ?>
 
 <li id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-	<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo $_ACT_OBJ_VIEW->getAlias()?></h2>
+	<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></h2>
 	
 	<?php if (isset($_MY_LIST) && $_MY_LIST):?>
 		<a class="details" id="activity_drop_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="displayDetailsBox(event, 'activity_edit_<?php echo $_ACT_OBJ_VIEW->getId()?>')"></a>
@@ -37,7 +37,7 @@
 	
 	<a class="datetime">Added: <?php echo $_ACT_OBJ_VIEW->getDateAdded()->format('Y-m-d H:i:s');?></a>
 	<p class="post_body" id="activity_description_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-		<?php echo $_ACT_OBJ_VIEW->getDescription();?>
+		<?php echo htmlentities($_ACT_OBJ_VIEW->getDescription()) ?>
 	</p>
 	
 	<?php 
@@ -55,7 +55,7 @@
 			<?php $numInterestedFrds = count($interestedFrds)?>
 			<?php for ($iIntFrd=0; $iIntFrd<15 && $iIntFrd<$numInterestedFrds; $iIntFrd++):?>
 				<?php $frdInt = $interestedFrds[$iIntFrd]?>
-				<li><?php echo $frdInt->getDisplayName()?></li>
+				<li><?php echo htmlentities($frdInt->getDisplayName()) ?></li>
 			<?php endfor?>
 			
 			<!-- count the remnant -->

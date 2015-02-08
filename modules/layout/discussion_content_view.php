@@ -9,11 +9,11 @@
 			<?php endif ?>
 			
 			<li>
-				<div class="msg_title"><?php echo $chatBody->getDiscussionUserAssociation()->getActivityUserAssociation()->getUser()->getDisplayName() ?></div>
+				<div class="msg_title"><?php echo htmlentities($chatBody->getDiscussionUserAssociation()->getActivityUserAssociation()->getUser()->getDisplayName()) ?></div>
 			<?php $prevSender = $chatBody->getDiscussionUserAssociationId() ?>
 		<?php endif ?>
 		
-		<div class="msg_body"><?php echo $chatBody->getMessage() ?></div>
+		<div class="msg_body"><?php echo htmlentities($chatBody->getMessage()) ?></div>
 		
 	<?php endfor ?>
 </ul>

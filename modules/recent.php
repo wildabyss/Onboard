@@ -29,7 +29,7 @@
 						<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $assocUser->getId()?>_small.jpg)"></a>
 						<span class="feed_page_block_body">
 							<a class="feed_title">
-								<i><?php echo $assocUser->getDisplayName()?></i> has added <b><?php echo $_ACT_OBJ_VIEW->getAlias()?></b>.
+								<i><?php echo htmlentities($assocUser->getDisplayName())?></i> has added <b><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></b>.
 							</a>
 							<a class="feed_datetime"><?php echo $_ACT_OBJ_VIEW->getDateAdded()->format('Y-m-d H:i:s');?></a>
 						</span>

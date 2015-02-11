@@ -2,7 +2,8 @@
 	// set basic variables for layout
 	$_PAGE_TITLE = Utilities::PAGE_COMMUNITY; 
 	
-	$curUser = $_SESSION['current_user'];
+	if (isset($_SESSION['current_user']))
+		$curUser = $_SESSION['current_user'];
 ?>
 
 <?php include "/layout/screen_header_start.php"; ?>
@@ -17,7 +18,7 @@
 	<div class="content_column_wrapper" id="column_wrapper_middle">
 	
 		<?php 
-			if (isset($_GET['id']) && UserCommunityAssociationQuery::verifyUsersAreFriends($curUser->getId(), $_GET['id'])) 
+			if (isset($_GET['id'])) 
 				$_FRIEND = UserQuery::create()->findOneById($_GET['id']); 
 		?>
 		
@@ -45,17 +46,17 @@
 		
 		<?php else:?>
 	
-			<?php $curUser->getFriends($friends); ?>
+			<?php $friends = $curUser->getFriends(); ?>
 			
 			<h1 class="page_title">My Community</h1>
 			<?php if (count($friends)==0):?>
 				<p id="no_activity_msg">None of your friends is currently using <i>onboard</i>.</p>
 			<?php else:?>
 				<?php foreach ($friends as $friend):?>
-					<div class="friend">
-						<a class="friend_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $friend['id']?>_large.jpg)"></a>
-						<div style="vertical-align: middle; display:inline-block; height:100px; margin:0;"></div>
-						<a class="friend_name comm_link" href="community?id=<?php echo $friend['id']?>"><?php echo htmlentities($friend['display_name'])?></a>
+					<div class="friend" onclick="location.href='community?id=<?php echo $friend->getId()?>'">
+						<a class="friend_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_large.jpg)"></a>
+						<div class="vertical_center_filler" style="height:100px"></div>
+						<a class="friend_name"><?php echo htmlentities($friend->getDisplayName())?></a>
 					</div>
 				<?php endforeach ?>
 			<?php endif?>

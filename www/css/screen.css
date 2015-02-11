@@ -29,8 +29,11 @@ a:visited {
 	text-align: center;
 }
 
-.editable{
-	
+.vertical_center_filler{
+	vertical-align: middle; 
+	display:inline-block; 
+	height:50px; 
+	margin:0;
 }
 
 h1{
@@ -50,6 +53,12 @@ h2{
 	margin-bottom: 10px;
 }
 
+h3{
+	font-size: 14px;
+	margin: 0;
+	margin-bottom: 12px;
+}
+
 textarea{
 	overflow: hidden;
 	font: 13px sans-serif;
@@ -60,19 +69,20 @@ textarea{
 
 input.search{
 	width: 200px;
-	height: 18px;
-	background-image: url(../images/search.png);
+	height: 24px;
+	background-image: url(../images/search_large.png);
 	background-repeat: no-repeat;
 	background-position: 2px;
-	padding-left: 20px;
+	padding-left: 24px;
+	border: 1px solid #d9d9d9;
+	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+	box-sizing: border-box;
 }
 input#global_search.search{
-	width: 150px;
+	width: 578px;
 	position: absolute;
 	right: 70px;
-	border: 1px solid;
-	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-	margin-top: 10px;
+	margin-top: 8px;
 }
 
 /* header */
@@ -80,7 +90,6 @@ input#global_search.search{
 #header{
 	width: 100%;
 	height: 40px;
-	text-align: center;
 	font-size: 14px;
 	position: relative;
 }
@@ -258,7 +267,7 @@ input#global_search.search{
 	background-position: 8px;
 }
 #button_browse{
-	background-image: url(../images/browse.png);
+	background-image: url(../images/search_large.png);
 }
 #button_recent{
 	background-image: url(../images/time.png);
@@ -674,6 +683,10 @@ a.button_leave{
 	border: 1px solid #d9d9d9;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
 	margin: 5px;
+	cursor: pointer;
+}
+.friend:hover{
+	background-color: #F0F0F0;
 }
 
 .friend_profile_pic{
@@ -806,6 +819,41 @@ a.comm_link:hover{
 	color: #808080;
 	font-size: 12px;
 	margin-top: 5px;
+}
+
+/* browse and search results */
+
+.results_container{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.results_left_container{
+	box-sizing: border-box;
+	width: 50%;
+}
+.results_right_container{
+	box-sizing: border-box;
+	width: 50%;
+	float:right;
+}
+
+.results_content{
+	padding: 5px;
+	border: 1px solid #d9d9d9;
+	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+}
+#results_friends.results_content{
+	margin-left: 5px;
+}
+#results_activities.results_content{
+	margin-right: 5px;
+}
+
+a.search_result_body{
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 5px;
+	width: 210px;
 }
 
 /* footer */

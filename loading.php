@@ -10,6 +10,7 @@ require_once(__DIR__."/database/config.php");
 require_once(__DIR__."/modules/classes/utilities.php");
 require_once(__DIR__."/modules/classes/facebook_util.php");
 require_once(__DIR__."/modules/classes/discussion_util.php");
+require_once(__DIR__."/modules/classes/search.php");
 
 // PHP error reporting
 ini_set('display_errors',1);

@@ -1,4 +1,7 @@
-<?php $curUser = $_SESSION['current_user'];?>
+<?php 
+	if (isset($_SESSION['current_user']))
+		$curUser = $_SESSION['current_user'];
+?>
 
 <?php 
 	// completed status
@@ -13,7 +16,7 @@
 	}
 ?>
 
-<li id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>">
+<li id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="document.location.hash='activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>'">
 	<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></h2>
 	
 	<?php if (isset($_MY_LIST) && $_MY_LIST):?>

@@ -3,6 +3,7 @@
 use Base\UserQuery;
 use Base\User as BaseUser;
 use Propel\Runtime\Propel;
+use Propel\Runtime\Formatter\ObjectFormatter;
 use Map\UserTableMap;
 use Map\ActivityListTableMap;
 use Map\ActivityUserAssociationTableMap;
@@ -24,18 +25,17 @@ class User extends BaseUser
 	
 	
 	/**
-	 * Get this user's friends and return in the form of a short associative array
+	 * Get this user's friends and return in the form of User objects
 	 * @param Results to be returned &$results
 	 *     Contains two associative indexes: id and display_name
 	 */
-	public function getFriends(&$results){
+	public function getFriends(){
 		$myId = $this->getPrimaryKey();
-		$results = array();
 		
 		// search for friends
 		$conn = Propel::getReadConnection(UserTableMap::DATABASE_NAME);
 		$sql = <<<EOT
-			select distinct id, display_name from user
+			select user.* from user
 				where id in
 					(select user.id
 						from user_community_assoc uca 
@@ -60,10 +60,9 @@ EOT;
 			':status2' 	=> self::ACTIVE_STATUS, 
 			':myid2' 	=> $myId));
 		
-		// populate results array
-		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$results[] = $row;
-		}
+		$formatter = new ObjectFormatter();
+		$formatter->setClass('\User'); //full qualified class name
+		return $formatter->format($conn->getDataFetcher($stmt));
 	}
 	
 	

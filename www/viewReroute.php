@@ -21,6 +21,7 @@ try{
 	// URL router
 	$kleinRouter = new Klein();
 
+	// check to make sure the user has logged in
 	if (isset($_SESSION['current_user'])) {
 		// home page
 		$kleinRouter->respond(array('GET','POST'), '/', function () {
@@ -71,11 +72,27 @@ try{
 		});
 		
 	} else {
-		// redirect to login
-		$kleinRouter->respond(function ($request) {
+		// No user session is present,
+		// redirect to login for private pages
+		$kleinRouter->respond('@\/(?!community)', function () {
 			include "../modules/login.php";
 			return;
 		});
+		
+		// community is a public page if id is specified through GET
+		$kleinRouter->respond('/community', function ($request, $response) {
+			// check to make sure the id parameter is present
+			$id = $request->param('id');
+			if ($id){
+				// display the public version of the community page
+				include "../modules/community.php";
+				return;
+			} else {
+				// redirect to login
+				include "../modules/login.php";
+				return;
+			}
+	    });
 	}
 	
 	$kleinRouter->dispatch();

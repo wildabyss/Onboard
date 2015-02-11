@@ -4,6 +4,12 @@ use Facebook\GraphUser;
 use Facebook\FacebookRequest;
 use Facebook\FacebookSession;
 
+/**
+ * FacebookUtilities contains static methods for communicating with Facebook through
+ * its GraphAPI, and is specially tailored to Onboard
+ * @author Jimmy
+ *
+ */
 class FacebookUtilities {
 	const FACEBOOK_PRIVILEGES = array("email","user_friends","user_groups");
 	

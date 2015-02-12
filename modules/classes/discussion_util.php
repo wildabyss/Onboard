@@ -67,11 +67,19 @@ class DiscussionUtilities {
 	 * @param unknown $discussionUserAssocId
 	 * @return true if succeeded
 	 */
-	public static function leaveDiscussion($discussionUserAssocId){
-		$assocObj = DiscussionUserAssociationQuery::create()->findOneById($discussionUserAssocId);
-		$assocObj->setStatus(DiscussionUserAssociation::INACTIVE_STATUS);
+	public static function leaveDiscussion($discussionId, $activityAssocId){
+		// find the association object
+		$discAssocObj = DiscussionUserAssociationQuery::create()
+			->filterByDiscussionId($discussionId)
+			->filterByActivityUserAssociationId($activityAssocId)
+			->findOne();
 		
-		return $assocObj->save();
+		if ($discAssocObj){
+			$discAssocObj->setStatus(DiscussionUserAssociation::INACTIVE_STATUS);
+			return $discAssocObj->save();
+		} else {
+			return false;
+		}
 	}
 	
 	
@@ -89,14 +97,14 @@ class DiscussionUtilities {
 			    on dua.discussion_id = disc.id
 			    where
 					dua.activity_user_assoc_id = :actassocid
-			        and disc.status = :status;
+			        and dua.status = :status;
 EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
-				array(
-						'actassocid'	=> $activityUserAssocId,
-						'status'		=> Discussion::ACTIVE_STATUS
-				));
+			array(
+				'actassocid'	=> $activityUserAssocId,
+				'status'		=> DiscussionUserAssociation::ACTIVE_STATUS
+			));
 		
 		$formatter = new ObjectFormatter();
 		$formatter->setClass('\Discussion'); //full qualified class name
@@ -110,7 +118,19 @@ EOT;
 	 * @return Array of DiscussionUserAssociation objects
 	 */
 	public static function findDiscussionUserAssociationsForDiscussion($discId){
-		return DiscussionUserAssociationQuery::create()->findByDiscussionId($discId);
+		return DiscussionUserAssociationQuery::create()
+			->joinActivityUserAssociation()
+			->useActivityUserAssociationQuery()
+				->joinUser()
+				->filterByStatus(ActivityUserAssociation::ARCHIVED_STATUS, Criteria::NOT_EQUAL)
+				->useUserQuery()
+					->filterByStatus(User::ACTIVE_STATUS)
+					->orderByDisplayName(Criteria::ASC)
+				->endUse()
+			->endUse()
+			->filterByStatus(DiscussionUserAssociation::ACTIVE_STATUS)
+			->filterByDiscussionId($discId)
+			->find();
 	}
 	
 	

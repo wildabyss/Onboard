@@ -3,6 +3,16 @@
 var activity_being_added = false;
 var holding_key = "";
 
+var activitySectionClick = function(activityAssocId){
+	//document.location.hash = 'activity_section_'+activityAssocId;
+	if(history.pushState) {
+	    history.pushState(null, null, '#activity_section_'+activityAssocId);
+	}
+	else {
+	    location.hash = '#activity_section_'+activityAssocId;
+	}
+}
+
 var addNewActivity = function(){
 	if (!activity_being_added){
 		activity_being_added = true;
@@ -237,13 +247,13 @@ var markAsActive = function(event){
 	});
 }
 
-var expandActivity = function(actAssocId) {
+var expandActivity = function(actAssocId, forceRefresh) {
+	// default forceRefresh to false
+	forceRefresh = typeof forceRefresh !== 'undefined' ? forceRefresh : false;
+	
 	var expandButton = $('#expand_'+actAssocId);
-	if (expandButton.attr('action') == "expand"){
-		if ($('#interest_details_'+actAssocId).length){
-			$('#interest_details_'+actAssocId).slideDown();
-			expandButton.attr('action', 'hide');
-		} else {
+	if (expandButton.attr('action') == "expand" || (expandButton.attr('action') == "hide" && forceRefresh)){
+		if (forceRefresh || $('#interest_details_'+actAssocId).length==0){
 			$.ajax({
 				url:	"ajaxActivityAssociation",
 				type: 	"post",
@@ -252,8 +262,15 @@ var expandActivity = function(actAssocId) {
 					if (result != ""){
 						// successful request 
 
-						$('#interest_info_'+actAssocId).append(result);
-						$('#interest_details_'+actAssocId).slideDown();
+						// append or refresh result
+						if ($('#interest_details_'+actAssocId).length){
+							$('#interest_details_'+actAssocId).replaceWith(result);
+							$('#interest_details_'+actAssocId).show();
+						} else {
+							$('#interest_info_'+actAssocId).append(result);
+							$('#interest_details_'+actAssocId).slideDown();
+						}
+						
 						// change the button action
 						expandButton.attr('action', 'hide');
 						
@@ -265,6 +282,9 @@ var expandActivity = function(actAssocId) {
 					}
 				}
 			});
+		} else {
+			$('#interest_details_'+actAssocId).slideDown();
+			expandButton.attr('action', 'hide');
 		}
 	} else if (expandButton.attr('action') == "hide"){
 		// change the button action
@@ -421,6 +441,23 @@ var discussion_switch = function(discussionId, actAssocId){
 	});
 }
 
+var discussion_leave = function(discussionId, actAssocId){
+	// send ajax request
+	$.ajax({
+		url:	"ajaxDiscussion",
+		type: 	"post",
+		data:	{action: 'discussion_leave', discussion_id: discussionId, activity_assoc: actAssocId},
+		success: function(result){
+			if (result == 1){
+				// successful request 
+				
+				// refresh the activity detail section
+				expandActivity(actAssocId, true);
+			}
+		}
+	});
+}
+
 var discussion_msg_keydown = function(event, discussionId, actAssocId){
 	// IE8 fix
 	event = event || window.event;
@@ -473,6 +510,17 @@ var discussion_msg_keyup = function(event, discussionId){
 	
 	// reset holding
 	holding_key = "";
+}
+
+var showParticipants = function(discId){
+	var count = $("#participants_summary_"+discId+" li").length;
+	if (count > 0){
+		$("#participants_summary_"+discId).show();
+	}
+}
+
+var hideParticipants = function(discId){
+	$("#participants_summary_"+discId).hide();
 }
 
 

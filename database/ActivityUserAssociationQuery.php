@@ -49,20 +49,20 @@ EOT;
 		$sql = $sql.<<<EOT
 			where
 				ala.activity_id = :actid
-		        and ala.status = :userstatus
+		        and ala.status <> :actstatus
 		        and ala.user_id in
 					(select user.id
 						from user_community_assoc uca
 						join user on uca.user_id_right = user.id
 						where
-							user.status <> :actstatus1
+							user.status = :userstatus1
 							and uca.user_id_left = :myid1
 					union
 					select user.id
 						from user_community_assoc uca
 						join user on uca.user_id_left = user.id
 						where
-							user.status <> :actstatus2
+							user.status = :userstatus2
 							and uca.user_id_right = :myid2)
 EOT;
 		if (!$getAssocs){
@@ -73,12 +73,12 @@ EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
 				array(
-						'actid'		=> $activityId,
-						'userstatus'=> User::ACTIVE_STATUS,
-						':actstatus1' 	=> ActivityUserAssociation::ARCHIVED_STATUS,
-						':myid1' 	=> $userId,
-						':actstatus2' 	=> ActivityUserAssociation::ARCHIVED_STATUS,
-						':myid2' 	=> $userId
+						'actid'			=> $activityId,
+						'userstatus1'	=> User::ACTIVE_STATUS,
+						'userstatus2' 	=> User::ACTIVE_STATUS,
+						'myid1' 		=> $userId,
+						'actstatus' 	=> ActivityUserAssociation::ARCHIVED_STATUS,
+						'myid2' 		=> $userId
 				));
 	
 		$formatter = new ObjectFormatter();

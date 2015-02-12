@@ -659,19 +659,26 @@ ul.message_list li{
 	box-sizing: border-box;
 }
 
-a.button_participants{
+a.button_discussions{
 	display: inline-block;
+	background-repeat: no-repeat;
+	cursor: pointer;
 	margin-right: 10px;
 	padding-left: 21px;
+}
+a.button_discussions:hover{
+	text-decoration: underline;
+}
+a.button_participants{
 	background-image: url(../images/participants.png);
-	background-repeat: no-repeat;
 }
 a.button_leave{
-	display: inline-block;
-	margin-right: 10px;
-	padding-left: 21px;
 	background-image: url(../images/exit.png);
-	background-repeat: no-repeat;
+}
+
+/* note: this should be used in conjunction with .interested_friends_summary */
+ul.participants{
+	margin-left: 450px;
 }
 
 /* community */

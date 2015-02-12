@@ -18,8 +18,8 @@
 	<div class="content_column_wrapper" id="column_wrapper_middle">
 	
 		<?php 
-			if (isset($request) && $request->param('id') !== false) 
-				$_FRIEND = UserQuery::create()->findOneById($request->param('id')); 
+			if (isset($_KLEIN_REQUEST) && $_KLEIN_REQUEST->param('id') !== false) 
+				$_FRIEND = UserQuery::create()->findOneById($_KLEIN_REQUEST->param('id')); 
 		?>
 		
 		<?php if (isset($_FRIEND) && $_FRIEND!=false):?>

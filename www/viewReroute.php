@@ -26,8 +26,8 @@ try{
 		$curUser = $_SESSION['current_user'];
 		
 		// home page
-		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($request, $response) use ($curUser) {
-			if ($request->param('id') == $curUser->getId())
+		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
+			if ($_KLEIN_REQUEST->param('id') == $curUser->getId())
 				include "../modules/my_activities.php";
 			else 
 				include "../modules/community.php";
@@ -85,9 +85,9 @@ try{
 		});
 		
 		// community is a public page if id is specified through GET
-		$kleinRouter->respond('/id/[i:id]', function ($request, $response) {
+		$kleinRouter->respond('/id/[i:id]', function ($_KLEIN_REQUEST, $response) {
 			// check to make sure the id parameter is present
-			$id = $request->param('id');
+			$id = $_KLEIN_REQUEST->param('id');
 			if ($id){
 				// display the public version of the community page
 				include "../modules/community.php";

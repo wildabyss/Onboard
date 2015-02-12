@@ -9,7 +9,7 @@
 <?php include "/layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
-<script type="text/javascript" src="js/community.js"></script>
+<script type="text/javascript" src="/js/community.js"></script>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
@@ -25,7 +25,7 @@
 				<?php foreach ($recentActivityAssocs as $_ACT_OBJ_VIEW):?>
 					<?php $assocUser = $_ACT_OBJ_VIEW->getUser() ?>
 					
-					<li class="feed_page_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>#activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>';">
+					<li class="feed_page_block" onclick="window.location.href = '/id/<?php echo $assocUser->getId()?>#activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>';">
 						<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $assocUser->getId()?>_small.jpg)"></a>
 						<span class="feed_page_block_body">
 							<a class="feed_title">

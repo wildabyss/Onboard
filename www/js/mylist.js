@@ -3,16 +3,6 @@
 var activity_being_added = false;
 var holding_key = "";
 
-var activitySectionClick = function(activityAssocId){
-	//document.location.hash = 'activity_section_'+activityAssocId;
-	if(history.pushState) {
-	    history.pushState(null, null, '#activity_section_'+activityAssocId);
-	}
-	else {
-	    location.hash = '#activity_section_'+activityAssocId;
-	}
-}
-
 var addNewActivity = function(){
 	if (!activity_being_added){
 		activity_being_added = true;
@@ -38,7 +28,7 @@ var saveNewActivity = function(listId){
 		return;
 
 	$.ajax({
-		url:	"ajaxActivityAssociation",
+		url:	"/ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_alias: inputActAlias, activity_descr: inputActDescr, activity_cats: inputActCats, 
 			activity_list: listId, action: 'save_new'},
@@ -112,7 +102,7 @@ var displayDetailsBox = function (ev, div_id){
 
 var editActivity = function(activityAssocId){
 	$.ajax({
-		url:	"ajaxActivityAssociation",
+		url:	"/ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_assoc: activityAssocId, action: 'get'},
 		success: function(result){
@@ -138,7 +128,7 @@ var saveActivity = function(activityAssocId){
 		return;
 	
 	$.ajax({
-		url:	"ajaxActivityAssociation",
+		url:	"/ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_assoc: activityAssocId, activity_alias: inputActAlias, 
 			activity_descr: inputActDescr, activity_cats: inputActCats, action: 'save'},
@@ -180,7 +170,7 @@ var deleteActivity = function(actAssocId){
 
 var confirmDeleteActivity = function(actAssocId){
 	$.ajax({
-		url:	"ajaxActivityAssociation",
+		url:	"/ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_assoc: actAssocId, action: 'delete'},
 		success: function(result){
@@ -206,7 +196,7 @@ var markAsCompleted = function(event){
 	var actAssocId = event.data.actAssocId;
 	
 	$.ajax({
-		url:	"ajaxActivityAssociation",
+		url:	"/ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_assoc: actAssocId, action: 'mark_complete'},
 		success: function(result){
@@ -230,7 +220,7 @@ var markAsActive = function(event){
 	var actAssocId = event.data.actAssocId;
 	
 	$.ajax({
-		url:	"ajaxActivityAssociation",
+		url:	"/ajaxActivityAssociation",
 		type: 	"post",
 		data:	{activity_assoc: actAssocId, action: 'mark_active'},
 		success: function(result){
@@ -255,7 +245,7 @@ var expandActivity = function(actAssocId, forceRefresh) {
 	if (expandButton.attr('action') == "expand" || (expandButton.attr('action') == "hide" && forceRefresh)){
 		if (forceRefresh || $('#interest_details_'+actAssocId).length==0){
 			$.ajax({
-				url:	"ajaxActivityAssociation",
+				url:	"/ajaxActivityAssociation",
 				type: 	"post",
 				data:	{activity_assoc: actAssocId, action: 'expand_activity_details'},
 				success: function(result){
@@ -305,7 +295,7 @@ var facebook_discussion_add = function(event, actAssocId){
 	event = event || window.event;
 	
 	$.ajax({
-		url:	"ajaxDiscussion",
+		url:	"/ajaxDiscussion",
 		type: 	"post",
 		data:	{activity_assoc: actAssocId, action: 'facebook_group_new'},
 		success: function(result){
@@ -326,7 +316,7 @@ var discussion_add = function(event, actAssocId){
 	if ($("[id^=discussion_tab_new_]").length == 0){
 		// send ajax request
 		$.ajax({
-			url:	"ajaxDiscussion",
+			url:	"/ajaxDiscussion",
 			type: 	"post",
 			data:	{action: 'discussion_add', activity_assoc: actAssocId},
 			success: function(result){
@@ -361,7 +351,7 @@ var discussion_add_tab_keydown = function(event, actAssocId){
 		
 		// perform save
 		$.ajax({
-			url:	"ajaxDiscussion",
+			url:	"/ajaxDiscussion",
 			type: 	"post",
 			data:	{action: 'discussion_new', activity_assoc: actAssocId, name: target.innerHTML},
 			success: function(discussionId){
@@ -370,7 +360,7 @@ var discussion_add_tab_keydown = function(event, actAssocId){
 					
 					// perform ajax to retrieve the discussion
 					$.ajax({
-						url:	"ajaxDiscussion",
+						url:	"/ajaxDiscussion",
 						type: 	"post",
 						data:	{action: 'discussion_switch', discussion_id: discussionId, activity_assoc: actAssocId},
 						success: function(result){
@@ -426,7 +416,7 @@ var discussion_switch = function(discussionId, actAssocId){
 	
 	// send ajax request
 	$.ajax({
-		url:	"ajaxDiscussion",
+		url:	"/ajaxDiscussion",
 		type: 	"post",
 		data:	{action: 'discussion_switch', discussion_id: discussionId, activity_assoc: actAssocId},
 		success: function(result){
@@ -444,7 +434,7 @@ var discussion_switch = function(discussionId, actAssocId){
 var discussion_leave = function(discussionId, actAssocId){
 	// send ajax request
 	$.ajax({
-		url:	"ajaxDiscussion",
+		url:	"/ajaxDiscussion",
 		type: 	"post",
 		data:	{action: 'discussion_leave', discussion_id: discussionId, activity_assoc: actAssocId},
 		success: function(result){
@@ -481,7 +471,7 @@ var discussion_msg_keydown = function(event, discussionId, actAssocId){
 		var msg = $.trim(target.value);
 		if (msg != ""){
 			$.ajax({
-				url:	"ajaxDiscussion",
+				url:	"/ajaxDiscussion",
 				type: 	"post",
 				data:	{action: 'msg_add', discussion_id: discussionId, message: msg, activity_assoc: actAssocId},
 				success: function(result){
@@ -550,7 +540,7 @@ $(document).ready(function () {
 				
 				// send ajax request
 				$.ajax({
-					url:	"ajaxDiscussion",
+					url:	"/ajaxDiscussion",
 					type: 	"post",
 					data:	{action: 'discussion_refresh', discussion_id: discussionId},
 					async:	true,

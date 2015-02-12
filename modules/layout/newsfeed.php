@@ -9,7 +9,7 @@
 		<?php $recentActivityAssocs = ActivityUserAssociationQuery::getRecentActivityUserAssociations($curUser->getId(), 20)?>
 		<?php foreach ($recentActivityAssocs as $recentActivityAssoc):?>
 			<?php $assocUser = $recentActivityAssoc->getUser() ?>
-			<li class="feed_block" onclick="window.location.href = 'community?id=<?php echo $assocUser->getId()?>';">
+			<li class="feed_block" onclick="window.location.href = '/id/<?php echo $assocUser->getId()?>';">
 				<a class="feed_profile_pic"></a>
 				<span class="feed_block_body">
 					<a class="feed_title">

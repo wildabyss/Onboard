@@ -9,6 +9,16 @@ var hideInterestedFriendsSummary = function(actAssocId){
 	$("#interested_friends_summary_"+actAssocId).hide();
 }
 
+var activitySectionClick = function(userId, activityAssocId){
+	//document.location.hash = 'activity_section_'+activityAssocId;
+	if(history.pushState) {
+	    history.pushState(null, null, '/id/'+userId+'#activity_section_'+activityAssocId);
+	}
+	else {
+	    location.hash = '/id/'+userId+'#activity_section_'+activityAssocId;
+	}
+}
+
 
 /* loads when document finishes loading */
 

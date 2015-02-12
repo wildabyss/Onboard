@@ -10,16 +10,16 @@
 <?php include "/layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
-<script type="text/javascript" src="js/community.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="/js/community.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
 	
 		<?php 
-			if (isset($_GET['id'])) 
-				$_FRIEND = UserQuery::create()->findOneById($_GET['id']); 
+			if (isset($request) && $request->param('id') !== false) 
+				$_FRIEND = UserQuery::create()->findOneById($request->param('id')); 
 		?>
 		
 		<?php if (isset($_FRIEND) && $_FRIEND!=false):?>
@@ -44,8 +44,8 @@
 				</ul>
 			<?php endif?>
 		
-		<?php else:?>
-	
+		<?php elseif (isset($curUser)):?>
+			
 			<?php $friends = $curUser->getFriends(); ?>
 			
 			<h1 class="page_title">My Community</h1>
@@ -53,7 +53,7 @@
 				<p id="no_activity_msg">None of your friends is currently using <i>onboard</i>.</p>
 			<?php else:?>
 				<?php foreach ($friends as $friend):?>
-					<div class="friend" onclick="location.href='community?id=<?php echo $friend->getId()?>'">
+					<div class="friend" onclick="location.href='/id/<?php echo $friend->getId()?>'">
 						<a class="friend_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_large.jpg)"></a>
 						<div class="vertical_center_filler" style="height:100px"></div>
 						<a class="friend_name"><?php echo htmlentities($friend->getDisplayName())?></a>
@@ -61,6 +61,10 @@
 				<?php endforeach ?>
 			<?php endif?>
 		
+		<?php else:?>
+			<script type="text/javascript">
+				window.location = "/";
+			</script>
 		<?php endif?>
 	</div>
 	

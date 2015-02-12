@@ -35,7 +35,7 @@
 							<?php foreach ($friendsFound as $friend):?>
 								<ul class="activity_list">
 									<li class="feed_page_block" style="margin-bottom: 10px"
-										onclick="window.location.href = 'community?id=<?php echo $friend->getId()?>';">
+										onclick="window.location.href = '/id/<?php echo $friend->getId()?>';">
 										<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
 										<span class="feed_page_block_body">
 											<a class="vertical_center_filler" style="height:50px"></a>
@@ -57,7 +57,7 @@
 							<?php foreach ($actAssocsFound as $actAssoc):?>
 								<ul class="activity_list">
 									<li class="feed_page_block" style="margin-bottom: 10px"
-										onclick="window.location.href = 'community?id=<?php echo $actAssoc->getUserId()?>#activity_section_<?php echo $actAssoc->getId()?>';">
+										onclick="window.location.href = '/id/<?php echo $actAssoc->getUserId()?>#activity_section_<?php echo $actAssoc->getId()?>';">
 										<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $actAssoc->getUserId()?>_small.jpg)"></a>
 										<span class="feed_page_block_body">
 											<a class="vertical_center_filler" style="height:50px"></a>

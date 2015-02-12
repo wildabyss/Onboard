@@ -3,7 +3,7 @@
 		<?php if (count($_INTERESTED_FRIENDS)>0):?>
 			<ul class="interest_details">
 				<?php foreach ($_INTERESTED_FRIENDS as $friend):?>
-					<li onclick="window.location.href = 'community?id=<?php echo $friend->getId()?>';">
+					<li onclick="window.location.href = '/id/<?php echo $friend->getId()?>';">
 						<a class="interested_friends_summary" id="interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>"><?php echo htmlentities($friend->getDisplayName())?></a>
 						<a class="feed_profile_pic" 
 							onmouseenter="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').show()" 

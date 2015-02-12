@@ -16,7 +16,8 @@
 	}
 ?>
 
-<li id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="activitySectionClick('<?php echo $_ACT_OBJ_VIEW->getId()?>')">
+<li class="activity" id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>" 
+	onclick="activitySectionClick('<?php echo $_ACT_OBJ_VIEW->getUserId() ?>', '<?php echo $_ACT_OBJ_VIEW->getId()?>')">
 	<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></h2>
 	
 	<?php if (isset($_MY_LIST) && $_MY_LIST):?>

@@ -23,21 +23,32 @@ try{
 
 	// check to make sure the user has logged in
 	if (isset($_SESSION['current_user'])) {
+		$curUser = $_SESSION['current_user'];
+		
+		// home page
+		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($request, $response) use ($curUser) {
+			if ($request->param('id') == $curUser->getId())
+				include "../modules/my_activities.php";
+			else 
+				include "../modules/community.php";
+			return;
+		});
+		
 		// home page
 		$kleinRouter->respond(array('GET','POST'), '/', function () {
 			include "../modules/my_activities.php";
 			return;
 		});
 		
-		// redirect to recent activities
-		$kleinRouter->respond(array('GET','POST'), '/recent', function () {
-			include "../modules/recent.php";
+		// home page
+		$kleinRouter->respond(array('GET','POST'), '/community', function () {
+			include "../modules/community.php";
 			return;
 		});
 		
-		// redirect to community
-		$kleinRouter->respond(array('GET','POST'), '/community', function () {
-			include "../modules/community.php";
+		// redirect to recent activities
+		$kleinRouter->respond(array('GET','POST'), '/recent', function () {
+			include "../modules/recent.php";
 			return;
 		});
 		
@@ -59,12 +70,6 @@ try{
 			return;
 		});
 		
-		// redirect to my activities
-		$kleinRouter->respond(array('GET','POST'), '/mylist', function () {
-			include "../modules/my_activities.php";
-			return;
-		});
-		
 		// error response
 		$kleinRouter->onHttpError(function ($code, $router) {
 			$router->response()->body('Page not found.');
@@ -74,13 +79,13 @@ try{
 	} else {
 		// No user session is present,
 		// redirect to login for private pages
-		$kleinRouter->respond('@\/(?!community)', function () {
+		$kleinRouter->respond('@^\/(?!id\/[0-9]+)', function () {
 			include "../modules/login.php";
 			return;
 		});
 		
 		// community is a public page if id is specified through GET
-		$kleinRouter->respond('/community', function ($request, $response) {
+		$kleinRouter->respond('/id/[i:id]', function ($request, $response) {
 			// check to make sure the id parameter is present
 			$id = $request->param('id');
 			if ($id){
@@ -93,6 +98,12 @@ try{
 				return;
 			}
 	    });
+		
+		// error response
+		$kleinRouter->onHttpError(function ($code, $router) {
+			$router->response()->body('Page not found.');
+			return;
+		});
 	}
 	
 	$kleinRouter->dispatch();

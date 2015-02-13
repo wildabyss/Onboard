@@ -1,0 +1,26 @@
+# Use PHPcur as default
+AddHandler application/x-httpd-phpcur .php
+<IfModule mod_suphp.c>
+    suPHP_ConfigPath /opt/phpcur/lib
+</IfModule>
+
+# Prevent directory browsing
+Options -Indexes
+DirectoryIndex viewReroute.php
+
+# Use symlinks
+Options +FollowSymLinks
+
+# Rewrite rules
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^public_html/ajax.*$ ajaxReroute.php [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule !^public_html/ajax.*$ viewReroute.php [L]
+
+

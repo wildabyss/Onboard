@@ -31,7 +31,8 @@ Web Server Configuration:
   2. Rewrite the inclusion of the following regex to ajaxReroute.php
      ^ajax.*$
      
-  Configuration for IIS7 is included in the web.config file under www/ directory
+  Configuration for IIS7 is included in the web.config file under /public_html/ directory.
+  Configuration for Apache is included in the .htaccess file under / directory.
 
 
 Application Configuration:
@@ -41,7 +42,7 @@ Application Configuration:
    /composer.json and versions as specified in /composer.lock.
    
 2. Create the following directories:
-   /www/profile_pic_cache
+   /public_html/profile_pic_cache
    
 3. Configure the web server as per Web Server Configuration. Install MySQL.
 

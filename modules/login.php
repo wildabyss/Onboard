@@ -9,7 +9,7 @@ $_PAGE_TITLE = "Sign In";
 
 if (isset($_SESSION['current_user'])) {
 	// if a valid session already exists, redirect to home
-	header("Location: mylist");
+	header("Location: /");
 	die();
 	
 } elseif (isset($_COOKIE['fb_token'])) {
@@ -27,7 +27,7 @@ if (isset($_SESSION['current_user'])) {
 				FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
 				
 				// redirect to home page
-				header("Location: mylist");
+				header("Location: /");
 				die();
 			}
 		}
@@ -80,7 +80,7 @@ try {
 		FacebookUtilities::GetProfilePicture($fbSession, $_SESSION['current_user']);
 		
 		// redirect to home page
-		header("Location: mylist");
+		header("Location: /");
 		die();
 	}
 		

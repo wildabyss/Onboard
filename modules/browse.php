@@ -74,7 +74,7 @@
 				
 			</div>
 		<?php else:?>
-			<p class="center">Search for your friends and their activities.</p>
+			<p id="no_activity_msg">Search for your friends and their activities.</p>
 		<?php endif ?>
 	</div>
 	

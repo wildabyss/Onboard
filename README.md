@@ -47,6 +47,7 @@ Application Configuration:
 3. Configure the web server as per Web Server Configuration. Install MySQL.
 
 4. Modify /database/propel.yml and /database/SQL/db_setup.sql for database username and password.
+   Modify /database/config.php for the correct database settings.
    Set up Propel and the MySQL database.
 
 5. Setup the SQL database using /database/SQL/db_setup.sql and /database/SQL/onboard.sql.
@@ -56,6 +57,8 @@ Application Configuration:
    Modify the values accordingly.
    
 7. Modify /loading.php to set error_reporting to production settings.
+
+8. Modify /modules/login.php to include the correct Facebook redirect URL.
    
 
 Updating Database Schema:

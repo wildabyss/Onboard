@@ -5,8 +5,8 @@
 	$curUser = $_SESSION['current_user'];
 ?>
 
-<?php include "/layout/screen_header_start.php"; ?>
-<?php include "/layout/screen_layout_start.php"; ?>
+<?php include "layout/screen_header_start.php"; ?>
+<?php include "layout/screen_layout_start.php"; ?>
 
 <script type="text/javascript">
 	$('#global_search').focus();
@@ -78,9 +78,9 @@
 		<?php endif ?>
 	</div>
 	
-	<?php include "/layout/screen_footer.php"?>
+	<?php include "layout/screen_footer.php"?>
 </div>
 
-<?php include "/layout/screen_layout_end.php"; ?>
+<?php include "layout/screen_layout_end.php"; ?>
 
-<?php include "/layout/screen_header_end.php"; ?>
+<?php include "layout/screen_header_end.php"; ?>

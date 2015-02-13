@@ -6,8 +6,8 @@
 		$curUser = $_SESSION['current_user'];
 ?>
 
-<?php include "/layout/screen_header_start.php"; ?>
-<?php include "/layout/screen_layout_start.php"; ?>
+<?php include "layout/screen_header_start.php"; ?>
+<?php include "layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
 <script type="text/javascript" src="/js/community.js"></script>
@@ -68,9 +68,9 @@
 		<?php endif?>
 	</div>
 	
-	<?php include "/layout/screen_footer.php"?>
+	<?php include "layout/screen_footer.php"?>
 </div>
 
-<?php include "/layout/screen_layout_end.php"; ?>
+<?php include "layout/screen_layout_end.php"; ?>
 
-<?php include "/layout/screen_header_end.php"; ?>
+<?php include "layout/screen_header_end.php"; ?>

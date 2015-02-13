@@ -11,7 +11,7 @@ use Facebook\FacebookSession;
  *
  */
 class FacebookUtilities {
-	const FACEBOOK_PRIVILEGES = array("email","user_friends","user_groups");
+	public static $FACEBOOK_PRIVILEGES = array("email","user_friends","user_groups");
 	
 	// profile picture sizes
 	const PROFILE_PIC_LARGE = 3;

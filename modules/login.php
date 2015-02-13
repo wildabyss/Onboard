@@ -88,7 +88,7 @@ try {
 
 <?php else:?>
 
-	<?php include "/layout/screen_header_start.php"; ?>
+	<?php include "layout/screen_header_start.php"; ?>
 	
 	<body>
 		<div id="global_wrapper">
@@ -99,7 +99,7 @@ try {
 			<div id="column_login" class="content_column_wrapper">
 				<h1>Sign in/Register</h1>
 				<div class="center">
-					<a id="facebook_signin" href="<?php echo $fbLoginHelper->getLoginUrl(FacebookUtilities::FACEBOOK_PRIVILEGES)?>"></a>
+					<a id="facebook_signin" href="<?php echo $fbLoginHelper->getLoginUrl(FacebookUtilities::$FACEBOOK_PRIVILEGES)?>"></a>
 					<!-- <p>or</p>
 					<a id="google_signin"></a> -->
 				</div>
@@ -115,6 +115,6 @@ try {
 		</div>
 	</body>
 	
-	<?php include "/layout/screen_header_end.php"; ?>
+	<?php include "layout/screen_header_end.php"; ?>
 	
 <?php endif?>

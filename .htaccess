@@ -11,14 +11,21 @@ DirectoryIndex viewReroute.php
 # Use symlinks
 Options +FollowSymLinks
 
-# Rewrite rules
+# Rewrite rules to follow
 RewriteEngine On
+
+# Force https
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteBase /
 
+# ajax requests
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^public_html/ajax.*$ ajaxReroute.php [L]
 
+# All other view requests
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule !^public_html/ajax.*$ viewReroute.php [L]

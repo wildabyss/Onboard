@@ -23,6 +23,8 @@ Web Server Configuration:
 
 * Disable directory browsing
 
+* Configure /public_html as the web root
+
 * Must have the following rewrite rules implemented to enable Klein re-router:
 
   1. Rewrite the exclusion of the following regex to viewReroute.php
@@ -53,12 +55,16 @@ Application Configuration:
 5. Setup the SQL database using /database/SQL/db_setup.sql and /database/SQL/onboard.sql.
    Note that onboard.sql can be replicated using /database/schema.xml from Propel.
    
-6. Populate initial data with /database/SQL/initial_data.sql.
-   Modify the values accordingly.
-   
-7. Modify /loading.php to set error_reporting to production settings.
+6. Modify /loading.php to set error_reporting to production settings.
 
-8. Modify /modules/login.php to include the correct Facebook redirect URL.
+7. Create /onboard_settings.json under the root directory with the following content, replacing the
+   entries accordingly:
+   
+   {
+        "fb_app_id": "xxxx",
+        "fb_app_secret": "xxxx",
+        "domain": "domain.com"
+   }
    
 
 Updating Database Schema:

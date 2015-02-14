@@ -7,9 +7,13 @@ use Base\User;
 // set basic variables for layout
 $_PAGE_TITLE = "Sign In"; 
 
+// redirect URL
+$requestUrl = explode('?', $_SERVER["REQUEST_URI"])[0];
+$redirectUrl = "http://$_SERVER[HTTP_HOST]$requestUrl";
+
 if (isset($_SESSION['current_user'])) {
 	// if a valid session already exists, redirect to home
-	header("Location: /");
+	header("Location: $redirectUrl");
 	die();
 	
 } elseif (isset($_COOKIE['fb_token'])) {
@@ -27,7 +31,7 @@ if (isset($_SESSION['current_user'])) {
 				FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
 				
 				// redirect to home page
-				header("Location: /");
+				header("Location: $redirectUrl");
 				die();
 			}
 		}
@@ -38,8 +42,8 @@ if (isset($_SESSION['current_user'])) {
 
 // at this point, we don't have a valid session
 
-// Facebook app info
-$fbLoginHelper = new FacebookRedirectLoginHelper('http://192.168.1.126/login');
+// Facebook login helper
+$fbLoginHelper = new FacebookRedirectLoginHelper($redirectUrl);
 
 // get access token and finalize facebook login
 try {
@@ -47,11 +51,11 @@ try {
 	 
 } catch(FacebookRequestException $ex) {
 	// Facebook login error
-	header("Location: login");
+	header("Location: /login");
 	die();
 } catch(\Exception $ex) {
 	// generic error
-	header("Location: login");
+	header("Location: /login");
 	die();
 }
 
@@ -60,30 +64,28 @@ try {
 <?php if ($fbSession):?>
 
 	<?php 
+		// verify that the user profile is in the database
+		$curUserObj = FacebookUtilities::CorroborateFacebookLogin($fbSession);
+		if ($curUserObj == false){
+			// register user in database
+			$curUserObj = FacebookUtilities::RegisterFacebookUser($fbSession);
+		}
 	
-	// verify that the user profile is in the database
-	$curUserObj = FacebookUtilities::CorroborateFacebookLogin($fbSession);
-	if ($curUserObj == false){
-		// register user in database
-		$curUserObj = FacebookUtilities::RegisterFacebookUser($fbSession);
-	}
-
-	// try again
-	if ($curUserObj != false) {
-		// refresh his community based on Facebook friends
-		UserCommunityAssociationQuery::PopulateCommunityFromFacebook($fbSession, $curUserObj);
-		
-		// finalize authenticated session
-		FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
-		
-		// get profile picture
-		FacebookUtilities::GetProfilePicture($fbSession, $_SESSION['current_user']);
-		
-		// redirect to home page
-		header("Location: /");
-		die();
-	}
-		
+		// try again
+		if ($curUserObj != false) {
+			// refresh his community based on Facebook friends
+			UserCommunityAssociationQuery::PopulateCommunityFromFacebook($fbSession, $curUserObj);
+			
+			// finalize authenticated session
+			FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
+			
+			// get profile picture
+			FacebookUtilities::GetProfilePicture($fbSession, $_SESSION['current_user']);
+			
+			// redirect to home page
+			header("Location: $redirectUrl");
+			die();
+		}
 	?>
 
 <?php else:?>

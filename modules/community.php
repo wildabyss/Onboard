@@ -27,13 +27,15 @@
 			<div id="profile_section">
 				<a id="profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $_FRIEND->getId()?>_large.jpg)"></a>
 				<h1 class="profile_name"><?php echo htmlentities($_FRIEND->getDisplayName()) ?></h1>
-				<a class="user_info">Email: <?php echo htmlentities($_FRIEND->getEmail()) ?></a>
-				<a class="user_info">Phone: <?php echo htmlentities($_FRIEND->getPhone()) ?></a>
+				<?php if (isset($curUser) && UserCommunityAssociationQuery::verifyUsersAreFriends($curUser->getId(), $_FRIEND->getId())):?>
+					<a class="user_info">Email: <?php echo htmlentities($_FRIEND->getEmail()) ?></a>
+					<a class="user_info">Phone: <?php echo htmlentities($_FRIEND->getPhone()) ?></a>
+				<?php endif ?>
 			</div>
-						
+			
 			<?php $activities = $_FRIEND->getActiveOrCompletedActivityAssociations() ?>
 			<?php if (count($activities) == 0):?>
-				<p class="no_activity_msg">This person has no activity.</p>
+				<p id="no_activity_msg">This person has no activity.</p>
 			<?php else:?>
 		
 				<ul class="activity_list">

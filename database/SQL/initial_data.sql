@@ -11,4 +11,4 @@ values
 insert into enum
 	(name, value)
 values
-	('fb_app_id', '0'), ('fb_app_secret', '0');
+	('fb_app_id', '0'), ('fb_app_secret', '0'), ('domain', '192.168.1.126');

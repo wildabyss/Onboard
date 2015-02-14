@@ -14,6 +14,14 @@ class Utilities {
 	
 	
 	/**
+	 * Returns the domain name of this website
+	 */
+	public static function GetMyDomain(){
+		$enum = EnumQuery::create()->findOneByName("domain");
+		return $enum->getValue();
+	}
+	
+	/**
 	 * Determine the client platform
 	 * @param unknown $user_agent
 	 * @return string

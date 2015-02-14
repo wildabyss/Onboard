@@ -40,7 +40,7 @@ try{
 			return;
 		});
 		
-		// home page
+		// community
 		$kleinRouter->respond(array('GET','POST'), '/community', function () {
 			include "../modules/community.php";
 			return;
@@ -67,6 +67,12 @@ try{
 		// redirect to browse
 		$kleinRouter->respond(array('GET','POST'), '/browse', function () {
 			include "../modules/browse.php";
+			return;
+		});
+		
+		// server-side onboarding
+		$kleinRouter->respond(array('GET','POST'), '/onboard/[:activity_assoc]', function ($_KLEIN_REQUEST, $response) {
+			include "../modules/onboard.php";
 			return;
 		});
 		

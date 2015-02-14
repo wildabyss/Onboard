@@ -7,7 +7,7 @@
 		<form method="get" name="globalsearch" action="browse">
 			<input class="search" id="global_search" placeholder="search" value="<?php echo $_SEARCH_QUERY ?>" name="query" />
 		</form>
-		<a href="logout" id="header_options"><?php if (isset($_SESSION['current_user'])):?>Sign Out<?php else:?>Sign In<?php endif?></a>
+		<a href="/logout" id="header_options"><?php if (isset($_SESSION['current_user'])):?>Sign Out<?php else:?>Sign In<?php endif?></a>
 	</div>
 	
 	<div id="content_wrapper">

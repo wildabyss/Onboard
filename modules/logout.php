@@ -1,7 +1,7 @@
 <?php
 
 FacebookUtilities::Logout();
-header("Location: login");
+header("Location: /login");
 die();
 
 ?>

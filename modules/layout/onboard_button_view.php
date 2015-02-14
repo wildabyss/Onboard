@@ -13,5 +13,9 @@
 			<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
 		</a>
 	<?php endif?>
+	
+<?php else:?>
+
+	<a class="onboard_leave" href="/onboard/<?php echo $_ACT_OBJ_VIEW->getId() ?>">Onboard!</a>
 
 <?php endif ?>

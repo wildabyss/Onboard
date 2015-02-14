@@ -17,8 +17,8 @@ class Utilities {
 	 * Returns the domain name of this website
 	 */
 	public static function GetMyDomain(){
-		$enum = EnumQuery::create()->findOneByName("domain");
-		return $enum->getValue();
+		$settingsData = json_decode(file_get_contents("$_SERVER[DOCUMENT_ROOT]/../onboard_settings.json"), true);
+		return $settingsData["domain"];
 	}
 	
 	/**

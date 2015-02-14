@@ -22,8 +22,8 @@ class FacebookUtilities {
 	 * Get the Facebook app id for this app
 	 */
 	public static function GetFacebookAppId(){
-		$enum = EnumQuery::create()->findOneByName("fb_app_id");
-		return $enum->getValue();
+		$settingsData = json_decode(file_get_contents("$_SERVER[DOCUMENT_ROOT]/../onboard_settings.json"), true);
+		return $settingsData["fb_app_id"];
 	}
 	
 	
@@ -31,9 +31,10 @@ class FacebookUtilities {
 	 * Get the Facebook app secret for this app
 	 */
 	public static function GetFacebookAppSecret(){
-		$enum = EnumQuery::create()->findOneByName("fb_app_secret");
-		return $enum->getValue();
+		$settingsData = json_decode(file_get_contents("$_SERVER[DOCUMENT_ROOT]/../onboard_settings.json"), true);
+		return $settingsData["fb_app_secret"];
 	}
+	
 	
 	/**
 	 * Validate that the user has already registered with our app

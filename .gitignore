@@ -1,6 +1,11 @@
 .buildpath
 .project
+.settings
 
+onboard_settings.json
+database/config.php
+database/SQL/test*.sql
+database/SQL/staging*.sql
 vendor/*
 discussions/*
 www/profile_pic_cache/*

@@ -9,6 +9,8 @@ $_PAGE_TITLE = "Sign In";
 
 // redirect URL
 $requestUrl = explode('?', $_SERVER["REQUEST_URI"])[0];
+if ($requestUrl == "/login")
+	$requestUrl = "/";
 $redirectUrl = "http://$_SERVER[HTTP_HOST]$requestUrl";
 
 if (isset($_SESSION['current_user'])) {
@@ -64,6 +66,7 @@ try {
 <?php if ($fbSession):?>
 
 	<?php 
+	
 		// verify that the user profile is in the database
 		$curUserObj = FacebookUtilities::CorroborateFacebookLogin($fbSession);
 		if ($curUserObj == false){

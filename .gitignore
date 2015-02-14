@@ -1,6 +1,9 @@
 .buildpath
 .project
+.settings
 
+database/config.php
+database/SQL/test*.sql
 vendor/*
 discussions/*
 www/profile_pic_cache/*

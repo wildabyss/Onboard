@@ -4,7 +4,7 @@ Onboard
 Working Environments
 -------
 
-This application has been tested with PHP 5.6, Chrome 30 and above, Firefox 4.0 and above, 
+This application has been tested with PHP 5.6, Chrome 15 and above, Firefox 4.0 and above, 
 and IE 8.0 and above.
 
 
@@ -48,7 +48,7 @@ Application Configuration:
    
 3. Configure the web server as per Web Server Configuration. Install MySQL.
 
-4. Modify /database/propel.yml and /database/SQL/db_setup.sql for database username and password.
+4. Modify /database/propel.yaml and /database/SQL/db_setup.sql for database username and password.
    Modify /database/config.php for the correct database settings.
    Set up Propel and the MySQL database.
 

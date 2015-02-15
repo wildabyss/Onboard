@@ -4,7 +4,8 @@
 		"facebook/php-sdk-v4" : "4.0.*",
 		"google/apiclient" : "1.0.*@beta",
 		"propel/propel" : "~2.0@dev",
-		"klein/klein" : "2.*"
+		"klein/klein" : "2.*",
+		"mobiledetect/mobiledetectlib" : "2.*"
 	},
 	
 	"autoload": {

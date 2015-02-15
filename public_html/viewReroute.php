@@ -35,8 +35,11 @@ try{
 		});
 		
 		// home page
-		$kleinRouter->respond(array('GET','POST'), '/', function () {
-			include "../modules/my_activities.php";
+		$kleinRouter->respond(array('GET','POST'), '/', function () use ($curUser) {
+			// redirect with palatable link
+			header("Location: /id/{$curUser->getId()}");
+			die();
+			//include "../modules/my_activities.php";
 			return;
 		});
 		

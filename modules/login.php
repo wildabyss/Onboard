@@ -99,7 +99,9 @@ try {
 		<div id="global_wrapper">
 			<a id="logo"></a>
 			<p class="center" id="login_slogan">
-				Activities are more fun with friends. Get onboard!
+				Share your interests...<br/> 
+				See what your friends want to do...<br/><br/>
+				Because activities are more fun with friends. Get onboard!
 			</p>
 			<div id="column_login" class="content_column_wrapper">
 				<h1>Sign in/Register</h1>
@@ -113,7 +115,7 @@ try {
 				<a class="footer_block">
 					Copyright <?php echo date("Y") ?>
 				</a>
-				<a class="footer_block">
+				<a class="footer_block" href="mailto:wildabyss@gmail.com?Subject=Onboard%20Inquiries" target="_blank">
 					Contact
 				</a>
 			</div>

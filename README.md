@@ -37,7 +37,7 @@ Web Server Configuration:
   Configuration for Apache is included in the .htaccess file under / directory.
 
 
-Application Configuration:
+Initial Application Configuration:
 -------
 
 1. Install the required vendor packages using Composer, using 
@@ -49,8 +49,8 @@ Application Configuration:
 3. Configure the web server as per Web Server Configuration. Install MySQL.
 
 4. Modify /database/propel.yaml and /database/SQL/db_setup.sql for database username and password.
-   Modify /database/config.php for the correct database settings.
    Set up Propel and the MySQL database.
+   Add Propel to the PATH variables.
 
 5. Setup the SQL database using /database/SQL/db_setup.sql and /database/SQL/onboard.sql.
    Note that onboard.sql can be replicated using /database/schema.xml from Propel.
@@ -73,8 +73,19 @@ Updating Database Schema:
 Use /database/schema.xml to update the database structure.
 
 In the directory run:
-  composer model:build      to generate the PHP database model
-  composer sql:build        to generate the sql script
+  propel config:convert   to generate the config.php
+  propel model:build      to generate the PHP database model
+  propel sql:build        to generate the sql script
   
 In the top directory run:
   composer dump-autoload    to generate the composer autoload
+  
+  
+Production Release Avoidance:
+-------
+
+Avoid the following directories/files:
+
+1. /onboard_settings.json
+2. /public_html/profile_pic_cache
+3. /database/config.php

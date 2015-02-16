@@ -18,7 +18,15 @@
 
 <li class="activity" id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>" 
 	onclick="activitySectionClick('<?php echo $_ACT_OBJ_VIEW->getUserId() ?>', '<?php echo $_ACT_OBJ_VIEW->getId()?>')">
-	<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></h2>
+	<?php if (!isset($_MY_LIST) || !$_MY_LIST):?>
+		<?php $userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())?>
+	<?php endif ?>
+	<a
+		<?php if (isset($userAssocLevel) && $userAssocLevel != ActivityUserAssociation::USER_IS_NOT_ASSOCIATED):?>
+			href="/id/<?php echo $curUser->getId()?>#activity_section_<?php echo ActivityUserAssociationQuery::getObjectForUserAndActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())->getId()?>"
+		<?php endif ?>>
+		<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></h2>
+	</a>
 	
 	<?php if (isset($_MY_LIST) && $_MY_LIST):?>
 		<a class="details" id="activity_drop_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="displayDetailsBox(event, 'activity_edit_<?php echo $_ACT_OBJ_VIEW->getId()?>')"></a>

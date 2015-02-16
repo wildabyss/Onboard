@@ -210,4 +210,18 @@ EOT;
 		$results = $stmt->fetchAll();
 		return count($results);
 	}
+	
+	
+	/**
+	 * Fetch the ActivityUserAssociation object for a given userId and activityId
+	 * @param unknown $userId
+	 * @param unknown $activityId
+	 * @return ActivityUserAssociation, false if none exists
+	 */
+	public static function getObjectForUserAndActivity($userId, $activityId){
+		return self::create()
+			->filterByActivityId($activityId)
+			->filterByUserId($userId)
+			->findOne();
+	}
 }

@@ -22,6 +22,8 @@ switch ($_POST['action']){
 
 			// current user's (i.e. my) association level with the activity
 			$userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $friendActivityUserAssoc->getActivityId());
+			// to be returned to client later
+			$assocId = 0;
 			if ($userAssocLevel == ActivityUserAssociation::USER_IS_NOT_ASSOCIATED && $_POST['action']=="onboard"){
 				// find the archived version if exist
 				$newActivityUserAssoc = ActivityUserAssociationQuery::create()
@@ -38,6 +40,9 @@ switch ($_POST['action']){
 				$newActivityUserAssoc->setAlias($friendActivityUserAssoc->getAlias());
 				$newActivityUserAssoc->setDescription($friendActivityUserAssoc->getDescription());
 				$newActivityUserAssoc->save();
+				
+				// to be returned to client later
+				$assocId = $newActivityUserAssoc->getId();
 		
 			} elseif ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED && $_POST['action']=="leave"){
 				// dissociate user
@@ -50,7 +55,11 @@ switch ($_POST['action']){
 			}
 		
 			// send the new interest tally for this friend
-			echo ActivityUserAssociationQuery::countInterestedFriends($friendActivityUserAssoc->getUserId(), $friendActivityUserAssoc->getActivityId());
+			$interestCount = ActivityUserAssociationQuery::countInterestedFriends($friendActivityUserAssoc->getUserId(), $friendActivityUserAssoc->getActivityId());
+			
+			// amalgamate into an array, then return as json encoded
+			$resp = array("assoc_id"=>$assocId, "user_id"=>$curUser->getId(), "interest_count"=>$interestCount);
+			echo json_encode($resp);
 		} catch (Exception $e){
 			exit();
 		}

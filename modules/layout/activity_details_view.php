@@ -1,4 +1,4 @@
-<div id="interest_details_<?php echo $_ACT_OBJ_VIEW->getId()?>" style="display:none">
+<div id="interest_details_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 	<div class="interest_details_container">
 		<?php if (count($_INTERESTED_FRIENDS)>0):?>
 			<ul class="interest_details">

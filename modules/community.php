@@ -41,7 +41,9 @@
 				<ul class="activity_list">
 					<?php for ($i=0; $i<count($activities); $i++):?>
 						<?php $_ACT_OBJ_VIEW = $activities[$i]?>
-						<?php include "layout/activity_section_view.php"?>
+						<li class="activity" id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>">
+							<?php include "layout/activity_section_view.php"?>
+						</li>
 					<?php endfor?>
 				</ul>
 			<?php endif?>

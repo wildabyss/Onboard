@@ -31,14 +31,18 @@
 		<?php if (count($activities) == 0):?>
 			<p id="no_activity_msg">You currently have no activity. Add one to get started.</p>
 		<?php endif;?>
-	
+
 		<?php $_MY_LIST = true ?>
+
 		<ul class="activity_list" id="default_activity_list">
 			<?php include "layout/activity_edit_view.php"?>
 		
 			<?php for ($i=0; $i<count($activities); $i++):?>
 				<?php $_ACT_OBJ_VIEW = $activities[$i];?>
-				<?php include "layout/activity_section_view.php"?>
+				
+				<li class="activity" id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>">
+					<?php include "layout/activity_section_view.php"?>
+				</li>
 			<?php endfor;?>
 		</ul>
 		

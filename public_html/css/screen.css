@@ -17,6 +17,34 @@ body{
 	position: relative;
 }
 
+#haze {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	opacity: 0.5;
+	background-color: #ccc;
+	z-index: 1000;
+	display: none;
+}
+
+.fixed_center{
+	top:40%;
+	left:50%;
+	position: fixed;
+	border: 1px solid #d9d9d9;
+	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+	z-index: 1001;
+	background: white;
+	padding: 5px;
+	min-height: 100px;
+	max-height: 600px;
+	
+	/* to be modified by inherited child */
+	width: 200px;
+	margin-left: -100px;
+	margin-top: -100px;
+}
+
 a:link{
 	color: #000099;
 	text-decoration: none;
@@ -24,7 +52,7 @@ a:link{
 a:visited {
     color: #000099;
 }
-a.link:hover{
+.link:hover{
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -108,7 +136,7 @@ input#global_search.search{
 	position: absolute;
 	left: 0;
 	top: 10px;
-	z-index: 1000;
+	z-index: 800;
 }
 
 #header_options{
@@ -445,10 +473,6 @@ input.confirmation_button{
 	margin: 0 5px 0 5px;
 }
 
-h2.activity_title{
-	display: inline-block;
-}
-
 .category_info{
 	display: inline-block;
 	margin-left: 5px;
@@ -560,19 +584,6 @@ ul.interest_details li{
 	padding: 0;
 	border: none;
 }
-
-/* popup box for listing people */
-
-#haze {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	opacity: 0.5;
-	background-color: #ccc;
-	z-index: 1000;
-	display: none;
-}
-
 
 
 /* discussions tab */
@@ -787,7 +798,7 @@ a.comm_link:hover{
 	overflow-x: auto;
 	overflow-y: hidden;
 	width: 100%;
-	z-index: 1000;
+	z-index: 800;
 	position: relative;
 	min-height: 80px;
 	white-space: nowrap;

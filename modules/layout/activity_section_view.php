@@ -17,7 +17,7 @@
 ?>
 
 
-<?php if (!isset($_MY_LIST) || !$_MY_LIST):?>
+<?php if ((!isset($_MY_LIST) || !$_MY_LIST) && isset($curUser)):?>
 	<?php $userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())?>
 <?php endif ?>
 <a

@@ -2,6 +2,15 @@
 
 require_once "../loading.php";
 
+// redirect to the correct domain if necessary
+$correctDomain = Utilities::GetMyDomain();
+if ($_SERVER["HTTP_HOST"] != $correctDomain){
+	$redirectUrl = "http://$correctDomain$_SERVER[REQUEST_URI]";
+	
+	header("Location: $redirectUrl");
+	die();
+}
+
 // begin PHP session
 session_start();
 

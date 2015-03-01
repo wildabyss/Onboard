@@ -386,8 +386,12 @@ ul.activity_list li{
 	border: 1px solid #d9d9d9;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
 }
+ul.activity_list li.activity_dud:hover{
+	background-color: #F8F8F8;
+}
 ul.activity_list li.activity:hover{
 	background-color: #F8F8F8;
+	cursor: pointer;
 }
 ul.activity_list li.adding_activity{
 	background-color: #E0ECF8;

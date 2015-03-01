@@ -22,12 +22,21 @@ var likeActivity = function (event, activityAssocId, friendId){
 				
 				var respArr = JSON.parse(result);
 				
-				// change the title appearance (link or no link)
+				// change the list's action (link or no link)
 				
 				if (respArr.assoc_id > 0){
-					$('#activity_title_'+activityAssocId).parent().attr('href', '/id/'+respArr.user_id+'#activity_section_'+respArr.assoc_id);
+					$('#activity_section_'+activityAssocId)
+						.click(function(){
+							window.location.href = '/id/'+respArr.user_id+'/actid/'+respArr.assoc_id;
+						})
+						.addClass('activity')
+						.removeClass('activity_dud');
 				} else {
-					$('#activity_title_'+activityAssocId).parent().removeAttr('href');
+					$('#activity_section_'+activityAssocId)
+						.unbind('click')
+						.removeAttr('onclick')
+						.addClass('activity_dud')
+						.removeClass('activity');
 				}
 				
 				// change interest tally

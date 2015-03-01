@@ -12,21 +12,6 @@
 		$markAsCompletedText = "Mark as completed";
 		$liClass = "";
 	}
-
-	// decipher activity title appearances	
-	if ((!isset($_IS_POPUP) || !$_IS_POPUP) && (!isset($_MY_LIST) || !$_MY_LIST) && isset($curUser)){
-		$userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
-	}
-	if (isset($userAssocLevel) && $userAssocLevel != ActivityUserAssociation::USER_IS_NOT_ASSOCIATED){
-		$activityTitleClass = 'class="h2 link activity_title '.$liClass.'"';
-		$activityTitleHref = 'href="/id/'.$curUser->getId().'#activity_section_'.ActivityUserAssociationQuery::getObjectForUserAndActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())->getId().'"';
-	} elseif ((!isset($_IS_POPUP) || !$_IS_POPUP) && (isset($_MY_LIST) && $_MY_LIST)) {
-		$activityTitleClass = 'class="h2 link activity_title '.$liClass.'"';
-		$activityTitleHref = 'onclick="expandActivity(\''.$curUser->getId().'\', \''.$_ACT_OBJ_VIEW->getId().'\')"';
-	} else{
-		$activityTitleClass = 'class="h2 activity_title '.$liClass.'"';
-		$activityTitleHref = '';
-	}
 	
 	// interest summary appearances
 	if (isset($_MY_LIST) && $_MY_LIST){
@@ -39,9 +24,7 @@
 ?>
 
 
-<a id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>" <?php echo $activityTitleClass?> <?php echo $activityTitleHref?>>
-	<?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?>
-</a>
+<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></h2>
 
 <?php if ((isset($_IS_POPUP) && $_IS_POPUP) && (isset($_MY_LIST) && $_MY_LIST)):?>
 	<a class="details" id="activity_drop_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="displayDetailsBox(event, 'activity_edit_<?php echo $_ACT_OBJ_VIEW->getId()?>')"></a>

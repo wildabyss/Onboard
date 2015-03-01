@@ -25,8 +25,8 @@
 				<?php foreach ($recentActivityAssocs as $_ACT_OBJ_VIEW):?>
 					<?php $assocUser = $_ACT_OBJ_VIEW->getUser() ?>
 					
-					<li class="feed_page_block" onclick="window.location.href = '/id/<?php echo $assocUser->getId()?>#activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>';">
-						<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $assocUser->getId()?>_small.jpg)"></a>
+					<li class="feed_page_block" onclick="window.location.href = '/id/<?php echo $assocUser->getId()?>/actid/<?php echo $_ACT_OBJ_VIEW->getId()?>';">
+						<a class="feed_profile_pic" style="background-image: url(/profile_pic_cache/<?php echo $assocUser->getId()?>_small.jpg)"></a>
 						<span class="feed_page_block_body">
 							<a class="feed_title">
 								<i><?php echo htmlentities($assocUser->getDisplayName())?></i> has added <b><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></b>.

@@ -10,7 +10,7 @@
 						<a class="feed_profile_pic" 
 							onmouseenter="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').show()" 
 							onmouseleave="$('#interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>').hide()"
-							style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
+							style="background-image: url(/profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
 					</li>
 				<?php endforeach?>
 			</ul>

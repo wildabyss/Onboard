@@ -249,13 +249,15 @@ var expandActivity = function(userId, actAssocId) {
 			if (result != ""){
 				// successful request 
 
-				// append or refresh result
+				// show haze over the original content
 				var haze = $('#haze');
 				haze.show();
-				
-				$('<div class="fixed_center popup_container" id="activity_detail_'+actAssocId+'"></div>').insertAfter(haze);
-				$('#activity_detail_'+actAssocId).html(result);
 				$('#super_global_wrapper').css('position','fixed');
+				
+				// show the popup
+				$('<div class="fixed_center popup_container" style="display:none" id="activity_detail_'+actAssocId+'"></div>').insertAfter(haze);
+				$('#activity_detail_'+actAssocId).html(result);
+				$('#activity_detail_'+actAssocId).fadeIn();
 				
 				// scroll message to bottom
 				var container = $('#discussion_main_'+actAssocId+' div.message_container').get(0);

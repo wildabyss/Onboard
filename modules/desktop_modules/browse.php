@@ -36,7 +36,7 @@
 								<ul class="activity_list">
 									<li class="feed_page_block" style="margin-bottom: 10px"
 										onclick="window.location.href = '/id/<?php echo $friend->getId()?>';">
-										<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
+										<a class="feed_profile_pic" style="background-image: url(/profile_pic_cache/<?php echo $friend->getId()?>_small.jpg)"></a>
 										<span class="feed_page_block_body">
 											<a class="vertical_center_filler" style="height:50px"></a>
 											<a class="search_result_body"><?php echo htmlentities($friend->getDisplayName())?></a>
@@ -58,7 +58,7 @@
 								<ul class="activity_list">
 									<li class="feed_page_block" style="margin-bottom: 10px"
 										onclick="window.location.href = '/id/<?php echo $actAssoc->getUserId()?>#activity_section_<?php echo $actAssoc->getId()?>';">
-										<a class="feed_profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $actAssoc->getUserId()?>_small.jpg)"></a>
+										<a class="feed_profile_pic" style="background-image: url(/profile_pic_cache/<?php echo $actAssoc->getUserId()?>_small.jpg)"></a>
 										<span class="feed_page_block_body">
 											<a class="vertical_center_filler" style="height:50px"></a>
 											<a class="search_result_body"><b><?php echo htmlentities($actAssoc->getAlias())?></b> from <i><?php echo htmlentities($actAssoc->getUser()->getDisplayName())?></i></a>

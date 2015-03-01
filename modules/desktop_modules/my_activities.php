@@ -16,7 +16,7 @@
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
 		<div id="profile_section">
-			<a id="profile_pic" style="background-image: url(../profile_pic_cache/<?php echo $curUser->getId()?>_large.jpg)"></a>
+			<a id="profile_pic" style="background-image: url(/profile_pic_cache/<?php echo $curUser->getId()?>_large.jpg)"></a>
 			<h1 class="profile_name"><?php echo htmlentities($curUser->getDisplayName()) ?></h1>
 			<a class="user_info">Email: <?php echo htmlentities($curUser->getEmail()) ?></a>
 			<a class="user_info">Phone: <?php echo htmlentities($curUser->getPhone()) ?></a>
@@ -40,7 +40,7 @@
 			<?php for ($i=0; $i<count($activities); $i++):?>
 				<?php $_ACT_OBJ_VIEW = $activities[$i];?>
 				
-				<li class="activity" id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>">
+				<li class="activity" id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="expandActivity('<?php echo $curUser->getId()?>', '<?php echo $_ACT_OBJ_VIEW->getId()?>')">
 					<?php include "layout/activity_section_view.php"?>
 				</li>
 			<?php endfor;?>

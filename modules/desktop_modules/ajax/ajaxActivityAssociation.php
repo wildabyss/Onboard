@@ -203,7 +203,6 @@ switch ($_POST['action']){
 		
 		// verify the activity association id that's passed in
 		$_MY_LIST = true;
-		$_IS_POPUP = true;
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
 			exit();

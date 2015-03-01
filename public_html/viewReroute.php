@@ -34,16 +34,7 @@ try{
 	if (isset($_SESSION['current_user'])) {
 		$curUser = $_SESSION['current_user'];
 		
-		// home page
-		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
-			if ($_KLEIN_REQUEST->param('id') == $curUser->getId())
-				include "../modules/my_activities.php";
-			else 
-				include "../modules/community.php";
-			return;
-		});
-		
-		// home page
+		// home page: default
 		$kleinRouter->respond(array('GET','POST'), '/', function () use ($curUser) {
 			// redirect with palatable link
 			header("Location: /id/{$curUser->getId()}");
@@ -52,39 +43,57 @@ try{
 			return;
 		});
 		
+		// home page: with userId specified
+		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
+			if ($_KLEIN_REQUEST->param('id') == $curUser->getId())
+				include "../modules/desktop_modules/my_activities.php";
+			else 
+				include "../modules/desktop_modules/community.php";
+			return;
+		});
+		
+		// home page: with userId and activityAssocId specified
+		$kleinRouter->respond(array('GET','POST'), '/id/[:id]/actid/[:actid]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
+			if ($_KLEIN_REQUEST->param('id') == $curUser->getId())
+				include "../modules/desktop_modules/my_activities.php";
+			else
+				include "../modules/desktop_modules/community.php";
+			return;
+		});	
+		
 		// community
 		$kleinRouter->respond(array('GET','POST'), '/community', function () {
-			include "../modules/community.php";
+			include "../modules/desktop_modules/community.php";
 			return;
 		});
 		
 		// redirect to recent activities
 		$kleinRouter->respond(array('GET','POST'), '/recent', function () {
-			include "../modules/recent.php";
+			include "../modules/desktop_modules/recent.php";
 			return;
 		});
 		
 		// redirect to login
 		$kleinRouter->respond(array('GET','POST'), '/login', function () {
-			include "../modules/login.php";
+			include "../modules/desktop_modules/login.php";
 			return;
 		});
 		
 		// redirect to login
 		$kleinRouter->respond(array('GET','POST'), '/logout', function () {
-			include "../modules/logout.php";
+			include "../modules/desktop_modules/logout.php";
 			return;
 		});
 		
 		// redirect to browse
 		$kleinRouter->respond(array('GET','POST'), '/browse', function () {
-			include "../modules/browse.php";
+			include "../modules/desktop_modules/browse.php";
 			return;
 		});
 		
 		// server-side onboarding
 		$kleinRouter->respond(array('GET','POST'), '/onboard/[:activity_assoc]', function ($_KLEIN_REQUEST, $response) {
-			include "../modules/onboard.php";
+			include "../modules/desktop_modules/onboard.php";
 			return;
 		});
 		
@@ -98,7 +107,7 @@ try{
 		// No user session is present,
 		// redirect to login for private pages
 		$kleinRouter->respond('@^\/(?!id\/[0-9]+)', function () {
-			include "../modules/login.php";
+			include "../modules/desktop_modules/login.php";
 			return;
 		});
 		
@@ -108,11 +117,11 @@ try{
 			$id = $_KLEIN_REQUEST->param('id');
 			if ($id){
 				// display the public version of the community page
-				include "../modules/community.php";
+				include "../modules/desktop_modules/community.php";
 				return;
 			} else {
 				// redirect to login
-				include "../modules/login.php";
+				include "../modules/desktop_modules/login.php";
 				return;
 			}
 	    });

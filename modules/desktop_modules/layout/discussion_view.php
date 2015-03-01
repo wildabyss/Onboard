@@ -16,7 +16,7 @@
 </div>
 
 <div class="message_container" id="message_container_<?php echo $_DISCUSSION_OBJ->getId() ?>">
-	<?php include "../modules/layout/discussion_content_view.php" ?>
+	<?php include "../modules/desktop_modules/layout/discussion_content_view.php" ?>
 </div>
 
 <textarea rows="1" class="msg_new" id="new_msg_<?php echo $_DISCUSSION_OBJ->getId()?>"

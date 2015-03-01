@@ -1,3 +1,5 @@
+<?php include "../modules/desktop_modules/layout/activity_section_view.php" ?>
+
 <div id="interest_details_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 	<div class="interest_details_container">
 		<?php if (count($_INTERESTED_FRIENDS)>0):?>
@@ -21,7 +23,7 @@
 		<!-- tabs -->
 		<div style="font-size:0" id="tab_strip_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 			<?php $_TAB_TYPE = "add" ?>
-			<?php include "../modules/layout/discussion_tab_view.php" ?>
+			<?php include "../modules/desktop_modules/layout/discussion_tab_view.php" ?>
 			
 			
 			<?php for ($k=0; $k<count($discussions); $k++):?>
@@ -34,7 +36,7 @@
 					<?php $_ACTIVE_TAB=false ?>
 				<?php endif ?>
 				
-				<?php include "../modules/layout/discussion_tab_view.php" ?>
+				<?php include "../modules/desktop_modules/layout/discussion_tab_view.php" ?>
 			<?php endfor ?>
 		</div>
 		
@@ -46,7 +48,7 @@
 				<?php $_DISCUSSION_OBJ = $discussions[0] ?>
 				<?php $_CHAT_DATA = DiscussionUtilities::getChatMessages($_DISCUSSION_OBJ->getId(), $_SESSION['discussions_time'], $changed) ?>
 		
-				<?php include "../modules/layout/discussion_view.php" ?>
+				<?php include "../modules/desktop_modules/layout/discussion_view.php" ?>
 			<?php endif ?>
 		</div>
 	</div>

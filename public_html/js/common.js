@@ -10,12 +10,18 @@ var hideInterestedFriendsSummary = function(actAssocId){
 }
 
 var activitySectionClick = function(userId, activityAssocId){
-	//document.location.hash = 'activity_section_'+activityAssocId;
+	changeBrowserURL('/id/'+userId+'/actid/'+activityAssocId);
+}
+
+
+/* change browser URL */
+
+var changeBrowserURL = function(url){
 	if(history.pushState) {
-	    history.pushState(null, null, '/id/'+userId+'#activity_section_'+activityAssocId);
+	    history.pushState(null, null, url);
 	}
 	else {
-	    location.hash = '/id/'+userId+'#activity_section_'+activityAssocId;
+	    location.hash = url;
 	}
 }
 

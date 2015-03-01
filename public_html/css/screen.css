@@ -9,6 +9,10 @@ body{
 	padding: 0;
 }
 
+#super_global_wrapper{
+	width: 100%;
+}
+
 #global_wrapper{
 	width: 850px;
 	margin: 0px auto;
@@ -17,40 +21,16 @@ body{
 	position: relative;
 }
 
-#haze {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	opacity: 0.5;
-	background-color: #ccc;
-	z-index: 1000;
-	display: none;
-}
-
-.fixed_center{
-	top:40%;
-	left:50%;
-	position: fixed;
-	border: 1px solid #d9d9d9;
-	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-	z-index: 1001;
-	background: white;
-	padding: 5px;
-	min-height: 100px;
-	max-height: 600px;
-	
-	/* to be modified by inherited child */
-	width: 200px;
-	margin-left: -100px;
-	margin-top: -100px;
-}
-
 a:link{
 	color: #000099;
 	text-decoration: none;
 }
 a:visited {
     color: #000099;
+}
+.link{
+	color: #000099;
+	text-decoration: none;
 }
 .link:hover{
 	text-decoration: underline;
@@ -83,6 +63,15 @@ h2{
 	font-size: 15px;
 	margin: 0;
 	margin-bottom: 10px;
+	display: inline-block;
+	font-weight: bold;
+}
+a.h2{
+	font-size: 15px;
+	margin: 0;
+	margin-bottom: 10px;
+	display: inline-block;
+	font-weight: bold;
 }
 
 h3{
@@ -95,6 +84,36 @@ textarea{
 	overflow: hidden;
 	font: 13px sans-serif;
 	resize: none;
+}
+
+/* fixed floating related gizmos */
+
+#haze {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	opacity: 0.5;
+	background-color: #222;
+	z-index: 1000;
+	display: none;
+}
+
+.fixed_center{
+	top:200px;
+	left:50%;
+	position: absolute;
+	border: 1px solid #d9d9d9;
+	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+	z-index: 1001;
+	background: white;
+	padding: 5px;
+	min-height: 100px;
+	max-height: 600px;
+	
+	/* to be modified by inherited child */
+	width: 200px;
+	margin-left: -100px;
+	margin-top: -100px;
 }
 
 /* search bar */
@@ -340,6 +359,12 @@ input#global_search.search{
 
 /* member's activity items */
 
+/* must be inherited from .fixed_center */
+div.popup_container{
+	width: 600px;
+	margin-left: -300px;
+}
+
 #no_activity_msg{
 	text-align: center;
 	margin-top: 30px;
@@ -505,7 +530,7 @@ input.confirmation_button{
 .interested_friends_summary{
 	display: none;
 	bottom: 0;
-	margin-left: 20px;
+	margin: 0 0 0 20px;
 	position: absolute;
 	min-width: 100px;
 	padding: 0;
@@ -514,6 +539,7 @@ input.confirmation_button{
 	z-index: 500;
 }
 ul.interested_friends_summary li{
+	padding: 5px;
 	margin: 0;
 	list-style-type: none;
 	line-height: 8px;

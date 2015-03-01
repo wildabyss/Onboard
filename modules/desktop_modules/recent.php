@@ -35,7 +35,7 @@
 						</span>
 						
 						<!-- Leave/Onboard button -->
-						<?php include "../modules/layout/onboard_button_view.php" ?>
+						<?php include "layout/onboard_button_view.php" ?>
 					</li>
 			
 				<?php endforeach?>

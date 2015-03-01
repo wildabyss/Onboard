@@ -66,8 +66,8 @@ switch ($_POST['action']){
 		
 		break;
 	
-	// get ActivityUserAssociation info
-	case 'get':
+	// get ActivityUserAssociation info and output the edit box
+	case 'edit':
 		if (!isset($_POST['activity_assoc']))
 			exit();
 		
@@ -90,7 +90,7 @@ switch ($_POST['action']){
 			$_ACT_EDIT['categories'][] = $actCatObj->getCategory()->getName();
 		}
 		
-		include '../modules/layout/activity_edit_view.php';
+		include '../modules/desktop_modules/layout/activity_edit_view.php';
 		
 		break;
 		
@@ -142,7 +142,7 @@ switch ($_POST['action']){
 		$_ACT_OBJ_VIEW->saveWithCategories($_ACT_OBJ_VIEW, $rawCategories);
 		
 		// output new HTML for client parsing
-		include '../modules/layout/activity_section_view.php';
+		include '../modules/desktop_modules/layout/activity_section_view.php';
 		
 		break;
 		
@@ -169,7 +169,7 @@ switch ($_POST['action']){
 		$_ACT_OBJ_VIEW->saveWithCategories($_ACT_OBJ_VIEW, $rawCategories);
 		
 		// output new HTML for client parsing
-		include '../modules/layout/activity_section_view.php';
+		include '../modules/desktop_modules/layout/activity_section_view.php';
 		
 		break;
 	case "mark_complete":
@@ -202,6 +202,8 @@ switch ($_POST['action']){
 			exit();
 		
 		// verify the activity association id that's passed in
+		$_MY_LIST = true;
+		$_IS_POPUP = true;
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
 			exit();
@@ -212,7 +214,7 @@ switch ($_POST['action']){
 		
 		// output interested friends
 		$_INTERESTED_FRIENDS = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
-		include "../modules/layout/activity_details_view.php";
+		include "../modules/desktop_modules/layout/activity_details_view.php";
 		break;
 }
 

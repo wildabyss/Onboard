@@ -20,7 +20,7 @@ switch ($_POST['action']){
 		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_ACT_OBJ_VIEW->getId()))
 			exit();
 					
-		include "../modules/layout/discussion_tab_view.php";
+		include "../modules/desktop_modules/layout/discussion_tab_view.php";
 		break;
 		
 	case 'discussion_new':
@@ -78,7 +78,7 @@ switch ($_POST['action']){
 		// open file
 		$_CHAT_DATA = DiscussionUtilities::getChatMessages($_POST['discussion_id'], $_SESSION['discussions_time'], $changed);
 		
-		include "../modules/layout/discussion_view.php";
+		include "../modules/desktop_modules/layout/discussion_view.php";
 		break;
 		
 	case 'discussion_refresh':
@@ -99,7 +99,7 @@ switch ($_POST['action']){
 		if (!$changed)
 			exit();
 		
-		include "../modules/layout/discussion_content_view.php";
+		include "../modules/desktop_modules/layout/discussion_content_view.php";
 		
 		break;
 		

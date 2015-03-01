@@ -1,9 +1,7 @@
 <?php 
 	if (isset($_SESSION['current_user']))
 		$curUser = $_SESSION['current_user'];
-?>
 
-<?php 
 	// completed status
 	if ($_ACT_OBJ_VIEW->getStatus()==ActivityUserAssociation::COMPLETED_STATUS){
 		$markAsCompletedClick = "$('#mark_complete_".$_ACT_OBJ_VIEW->getId()."').on('click', {actAssocId:'".$_ACT_OBJ_VIEW->getId()."'}, markAsActive);";
@@ -14,23 +12,38 @@
 		$markAsCompletedText = "Mark as completed";
 		$liClass = "";
 	}
+
+	// decipher activity title appearances	
+	if ((!isset($_IS_POPUP) || !$_IS_POPUP) && (!isset($_MY_LIST) || !$_MY_LIST) && isset($curUser)){
+		$userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
+	}
+	if (isset($userAssocLevel) && $userAssocLevel != ActivityUserAssociation::USER_IS_NOT_ASSOCIATED){
+		$activityTitleClass = 'class="h2 link activity_title '.$liClass.'"';
+		$activityTitleHref = 'href="/id/'.$curUser->getId().'#activity_section_'.ActivityUserAssociationQuery::getObjectForUserAndActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())->getId().'"';
+	} elseif ((!isset($_IS_POPUP) || !$_IS_POPUP) && (isset($_MY_LIST) && $_MY_LIST)) {
+		$activityTitleClass = 'class="h2 link activity_title '.$liClass.'"';
+		$activityTitleHref = 'onclick="expandActivity(\''.$curUser->getId().'\', \''.$_ACT_OBJ_VIEW->getId().'\')"';
+	} else{
+		$activityTitleClass = 'class="h2 activity_title '.$liClass.'"';
+		$activityTitleHref = '';
+	}
+	
+	// interest summary appearances
+	if (isset($_MY_LIST) && $_MY_LIST){
+		$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
+		$interestOnclick = "expandActivity('".$_ACT_OBJ_VIEW->getId()."')";
+	} else {
+		$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($_FRIEND->getId(), $_ACT_OBJ_VIEW->getActivityId());
+		$interestOnclick = "";
+	}
 ?>
 
 
-<?php if ((!isset($_MY_LIST) || !$_MY_LIST) && isset($curUser)):?>
-	<?php $userAssocLevel = ActivityUserAssociationQuery::detUserAssociationWithActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())?>
-<?php endif ?>
-<a
-	<?php if (isset($userAssocLevel) && $userAssocLevel != ActivityUserAssociation::USER_IS_NOT_ASSOCIATED):?>
-		class="link" href="/id/<?php echo $curUser->getId()?>#activity_section_<?php echo ActivityUserAssociationQuery::getObjectForUserAndActivity($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId())->getId()?>"
-	<?php elseif (isset($_MY_LIST) && $_MY_LIST):?>
-		class="link" href="#" onclick="expandActivity('<?php echo $_ACT_OBJ_VIEW->getId()?>')"
-	<?php endif ?>
->
-	<h2 class="activity_title <?php echo $liClass?>" id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?></h2>
+<a id="activity_title_<?php echo $_ACT_OBJ_VIEW->getId()?>" <?php echo $activityTitleClass?> <?php echo $activityTitleHref?>>
+	<?php echo htmlentities($_ACT_OBJ_VIEW->getAlias())?>
 </a>
 
-<?php if (isset($_MY_LIST) && $_MY_LIST):?>
+<?php if ((isset($_IS_POPUP) && $_IS_POPUP) && (isset($_MY_LIST) && $_MY_LIST)):?>
 	<a class="details" id="activity_drop_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="displayDetailsBox(event, 'activity_edit_<?php echo $_ACT_OBJ_VIEW->getId()?>')"></a>
 	<div class="details_box" id="activity_edit_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 		<a class="checked detail_box_item" id="mark_complete_<?php echo $_ACT_OBJ_VIEW->getId()?>"><?php echo $markAsCompletedText?></a>
@@ -53,16 +66,6 @@
 <p class="post_body" id="activity_description_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 	<?php echo htmlentities($_ACT_OBJ_VIEW->getDescription()) ?>
 </p>
-
-<?php 
-	if (isset($_MY_LIST) && $_MY_LIST){
-		$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
-		$interestOnclick = "expandActivity('".$_ACT_OBJ_VIEW->getId()."')";
-	} else {
-		$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($_FRIEND->getId(), $_ACT_OBJ_VIEW->getActivityId());
-		$interestOnclick = "";
-	}
-?>
 
 <div class="interested_friends_summary_container">
 	<ul class="interested_friends_summary" id="interested_friends_summary_<?php echo $_ACT_OBJ_VIEW->getId()?>">
@@ -89,7 +92,7 @@
 		
 		<?php if (!isset($_MY_LIST) || !$_MY_LIST):?>
 			<!-- Leave/Onboard button -->
-			<?php include "../modules/layout/onboard_button_view.php" ?>
+			<?php include "../modules/desktop_modules/layout/onboard_button_view.php" ?>
 		<?php endif?>
 	</div>
 </div>

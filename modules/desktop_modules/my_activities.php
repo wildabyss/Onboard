@@ -10,6 +10,10 @@
 	
 	// used for layout views
 	$_MY_LIST = true;
+	if (isset($_KLEIN_REQUEST) && $_KLEIN_REQUEST->param('actid') !== false
+		&& ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_KLEIN_REQUEST->param('actid'))) {
+		$inputActAssocId = $_KLEIN_REQUEST->param('actid');
+	}
 ?>
 
 <?php include "layout/screen_header_start.php"; ?>
@@ -50,6 +54,12 @@
 		</ul>
 		
 	</div>
+	
+	<?php if (isset($inputActAssocId)):?>
+		<script type="text/javascript">
+			expandActivity('<?php echo $inputActAssocId?>', '<?php echo $curUser->getId()?>');
+		</script>
+	<?php endif ?>
 	
 	<?php include "layout/screen_footer.php"?>
 </div>

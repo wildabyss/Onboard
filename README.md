@@ -81,7 +81,7 @@ In the top directory run:
   composer dump-autoload    to generate the composer autoload
   
   
-Production Release Avoidance:
+Production Release:
 -------
 
 Avoid the following directories/files:

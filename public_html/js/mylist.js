@@ -109,7 +109,7 @@ var editActivity = function(activityAssocId){
 			if (result!=""){
 				// successful request 
 				
-				var li_section = $('#activity_section_'+activityAssocId);
+				var li_section = $('#popup_basic_activity_'+activityAssocId);
 				li_section.hide();
 				$(result).insertBefore(li_section);
 				$('#edit_activity_'+activityAssocId).show();
@@ -138,29 +138,29 @@ var saveActivity = function(activityAssocId){
 			$('#cancel_activity_button_'+activityAssocId).attr("disabled", true);
 		},
 		success: function(result){
-			$('#edit_activity_'+activityAssocId).remove();
-			
-			// redisplay view
+			// replace the element in the activity list
 			if (result != ""){
-				$('#activity_section_'+activityAssocId).replaceWith(result);
+				$('#basic_activity_'+activityAssocId).parent().replaceWith(result);
 			}
-			$('#activity_section_'+activityAssocId).show();
+			// redraw the popup
+			$('#activity_popup_container_'+activityAssocId).remove();
+			expandActivity(activityAssocId);
 		}
 	});
 }
 
 var cancelSaveActivity = function(activityAssocId){
 	$('#edit_activity_'+activityAssocId).remove();
-	$('#activity_section_'+activityAssocId).show();
+	$('#popup_basic_activity_'+activityAssocId).show();
 }
 
 var deleteActivity = function(actAssocId){
-	var divToHide = $('#activity_section_'+actAssocId);
+	var divToHide = $('#popup_basic_activity_'+actAssocId);
 	// hide the current activity
 	divToHide.hide();
 	
 	// show a confirm delete section instead
-	divToAdd = $('<li class="adding_activity center" id="delete_confirmation_'+actAssocId+'"></li>');
+	divToAdd = $('<div class="center activity_basic_container activity_edit_container" id="delete_confirmation_'+actAssocId+'"></div>');
 	divToAdd.append('<span class="delete_confirmation">Are you sure you want to remove this activity?<br/>You will be sidelined from your active discussions.</span>');
 	divToAdd.append('<input type="button" value="Delete" class="confirmation_button" onclick="confirmDeleteActivity(\''+actAssocId+'\')" /> \
 		<input type="button" class="confirmation_button" value="Cancel" onclick="cancelDeleteActivity(\''+actAssocId+'\')" />');
@@ -178,7 +178,11 @@ var confirmDeleteActivity = function(actAssocId){
 				// successful request 
 				
 				$('#delete_confirmation_'+actAssocId).remove();
+				
+				// remove from activity list
 				$('#activity_section_'+actAssocId).remove();
+				// remove the popup
+				removePopup();
 			}
 		}
 	});
@@ -186,7 +190,7 @@ var confirmDeleteActivity = function(actAssocId){
 
 var cancelDeleteActivity = function(actAssocId){
 	$('#delete_confirmation_'+actAssocId).remove();
-	$('#activity_section_'+actAssocId).show();
+	$('#popup_basic_activity_'+actAssocId).show();
 }
 
 var markAsCompleted = function(event){
@@ -203,6 +207,7 @@ var markAsCompleted = function(event){
 			if (result == 1){
 				// successful request 
 				
+				$('#popup_activity_title_'+actAssocId).addClass('completed_activity');
 				$('#activity_title_'+actAssocId).addClass('completed_activity');
 				$('#mark_complete_'+actAssocId).html('Mark as active');
 				
@@ -227,6 +232,7 @@ var markAsActive = function(event){
 			if (result == 1){
 				// successful request 
 				
+				$('#popup_activity_title_'+actAssocId).removeClass('completed_activity');
 				$('#activity_title_'+actAssocId).removeClass('completed_activity');
 				$('#mark_complete_'+actAssocId).html('Mark as completed');
 
@@ -237,9 +243,22 @@ var markAsActive = function(event){
 	});
 }
 
-var expandActivity = function(userId, actAssocId) {
-
-	changeBrowserURL('/id/'+userId+'/actid/'+actAssocId);
+/* userId is optional */
+var expandActivity = function(actAssocId, userId) {
+	// change URL to reflect activity assoc id
+	if (userId){
+		changeBrowserURL('/id/'+userId+'/actid/'+actAssocId);
+	
+		// change the main content appearance, maintain the scroll position and remove the scroll bar
+		var height = $(window).scrollTop();
+		$('#super_global_wrapper')
+			.css('position','fixed')
+			.css('margin-top', -height);
+	}
+	
+	// show haze over the original content
+	var haze = $('#haze');
+	haze.show();
 	
 	$.ajax({
 		url:	"/ajaxActivityAssociation",
@@ -248,16 +267,12 @@ var expandActivity = function(userId, actAssocId) {
 		success: function(result){
 			if (result != ""){
 				// successful request 
-
-				// show haze over the original content
-				var haze = $('#haze');
-				haze.show();
-				$('#super_global_wrapper').css('position','fixed');
 				
 				// show the popup
-				$('<div class="fixed_center popup_container" style="display:none" id="activity_detail_'+actAssocId+'"></div>').insertAfter(haze);
-				$('#activity_detail_'+actAssocId).html(result);
-				$('#activity_detail_'+actAssocId).fadeIn();
+				$('<div class="fixed_center popup_container" style="display:none" id="activity_popup_container_'+actAssocId+'"></div>').insertAfter(haze);
+				$('#activity_popup_container_'+actAssocId)
+					.html(result)
+					.fadeIn();
 				
 				// scroll message to bottom
 				var container = $('#discussion_main_'+actAssocId+' div.message_container').get(0);
@@ -422,7 +437,7 @@ var discussion_leave = function(discussionId, actAssocId){
 				// successful request 
 				
 				// refresh the activity detail section
-				expandActivity(actAssocId, true);
+				expandActivity(actAssocId);
 			}
 		}
 	});
@@ -496,16 +511,17 @@ var hideParticipants = function(discId){
 
 /* loads when document finishes loading */
 $(document).ready(function () {
-	// autogrow text area
-	$('textarea').autogrow();
-	
-	// hide all activity drop downs when user clicks anywhere in the window
+	// remove dropdowns when user clicks on another part of the window
 	$(document).click(function (e) {
-		if ($(e.target).closest('[id^=activity_drop_]').length > 0) return;
-		$("[id^=activity_edit_]").hide();
+		// activity details dropdown
+		if ($(e.target).closest('[id^=activity_drop_]').length <= 0){
+			$("[id^=activity_edit_]").hide();
+		}
 		
-		if ($(e.target).closest('[id^=discussion_tab_add_]').length > 0) return;
-		$("[id^=discussion_new_]").hide();
+		// discussion new dropdown
+		if ($(e.target).closest('[id^=discussion_tab_add_]').length <= 0) {
+			$("[id^=discussion_new_]").hide();
+		}
     });
 	
 	// timer for continuously updating the chat messages

@@ -1,9 +1,9 @@
-<?php include "../modules/desktop_modules/layout/activity_section_view.php" ?>
+<?php include "activity_basic_view.php" ?>
 
-<div id="interest_details_<?php echo $_ACT_OBJ_VIEW->getId()?>">
-	<div class="interest_details_container">
+<div class="interest_details_container" id="interest_details_<?php echo $_ACT_OBJ_VIEW->getId()?>">
+	<div class="interest_tally_details_container">
 		<?php if (count($_INTERESTED_FRIENDS)>0):?>
-			<ul class="interest_details">
+			<ul class="interest_tally_details">
 				<?php foreach ($_INTERESTED_FRIENDS as $friend):?>
 					<li onclick="window.location.href = '/id/<?php echo $friend->getId()?>';">
 						<a class="interested_friends_summary" id="interested_friends_hint_<?php echo $_ACT_OBJ_VIEW->getId()?>_<?php echo $friend->getId()?>"><?php echo htmlentities($friend->getDisplayName())?></a>
@@ -23,7 +23,7 @@
 		<!-- tabs -->
 		<div style="font-size:0" id="tab_strip_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 			<?php $_TAB_TYPE = "add" ?>
-			<?php include "../modules/desktop_modules/layout/discussion_tab_view.php" ?>
+			<?php include "discussion_tab_view.php" ?>
 			
 			
 			<?php for ($k=0; $k<count($discussions); $k++):?>
@@ -36,7 +36,7 @@
 					<?php $_ACTIVE_TAB=false ?>
 				<?php endif ?>
 				
-				<?php include "../modules/desktop_modules/layout/discussion_tab_view.php" ?>
+				<?php include "discussion_tab_view.php" ?>
 			<?php endfor ?>
 		</div>
 		
@@ -48,7 +48,7 @@
 				<?php $_DISCUSSION_OBJ = $discussions[0] ?>
 				<?php $_CHAT_DATA = DiscussionUtilities::getChatMessages($_DISCUSSION_OBJ->getId(), $_SESSION['discussions_time'], $changed) ?>
 		
-				<?php include "../modules/desktop_modules/layout/discussion_view.php" ?>
+				<?php include "discussion_view.php" ?>
 			<?php endif ?>
 		</div>
 	</div>

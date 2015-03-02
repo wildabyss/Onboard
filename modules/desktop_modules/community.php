@@ -4,6 +4,11 @@
 	
 	if (isset($_SESSION['current_user']))
 		$curUser = $_SESSION['current_user'];
+	
+	// get the User object that the id parameter refers to
+	if (isset($_KLEIN_REQUEST) && $_KLEIN_REQUEST->param('id') !== false) {
+		$_FRIEND = UserQuery::create()->findOneById($_KLEIN_REQUEST->param('id'));
+	}
 ?>
 
 <?php include "layout/screen_header_start.php"; ?>
@@ -16,13 +21,6 @@
 <!-- main content -->
 <div class="content_column" id="column_middle">
 	<div class="content_column_wrapper" id="column_wrapper_middle">
-	
-		<?php 
-			// get the User object that the id parameter refers to
-			if (isset($_KLEIN_REQUEST) && $_KLEIN_REQUEST->param('id') !== false) {
-				$_FRIEND = UserQuery::create()->findOneById($_KLEIN_REQUEST->param('id')); 
-			}
-		?>
 		
 		<?php if (isset($_FRIEND) && $_FRIEND!=false):?>
 			<!-- id parameter provided, retrieve the friend's info -->
@@ -43,8 +41,6 @@
 		
 				<ul class="activity_list">
 					<?php for ($i=0; $i<count($activities); $i++):?>
-						<?php ?>
-						
 						<?php 
 							// ActivityUserAssociation object
 							$_ACT_OBJ_VIEW = $activities[$i];
@@ -67,7 +63,7 @@
 						?>
 						
 						<li <?php echo $listClass?> id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>" <?php echo $listAction?>>
-							<?php include "layout/activity_section_view.php"?>
+							<?php include "layout/activity_basic_view.php"?>
 						</li>
 					<?php endfor?>
 				</ul>
@@ -102,5 +98,4 @@
 </div>
 
 <?php include "layout/screen_layout_end.php"; ?>
-
 <?php include "layout/screen_header_end.php"; ?>

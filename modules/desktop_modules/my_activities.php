@@ -2,7 +2,14 @@
 	// set basic variables for layout
 	$_PAGE_TITLE = Utilities::PAGE_MY_ACTIVITIES; 
 	
+	// get current session user
 	$curUser = $_SESSION['current_user'];
+	
+	// get user's active activities
+	$activities = $curUser->getActiveOrCompletedActivityAssociations();
+	
+	// used for layout views
+	$_MY_LIST = true;
 ?>
 
 <?php include "layout/screen_header_start.php"; ?>
@@ -25,24 +32,20 @@
 		<div id="modification_bar" onclick="addNewActivity()">
 			<a>Add new activity</a>
 		</div>
-		
-		<?php $activities = $curUser->getActiveOrCompletedActivityAssociations(); ?>
-		
+
 		<?php if (count($activities) == 0):?>
 			<p id="no_activity_msg">You currently have no activity. Add one to get started.</p>
 		<?php endif;?>
 
-		<?php $_MY_LIST = true ?>
-
 		<ul class="activity_list" id="default_activity_list">
-			<?php include "layout/activity_edit_view.php"?>
-		
+			<li id="adding_activity">
+				<?php include "layout/activity_edit_view.php"?>
+			</li>
+
 			<?php for ($i=0; $i<count($activities); $i++):?>
 				<?php $_ACT_OBJ_VIEW = $activities[$i];?>
 				
-				<li class="activity" id="activity_section_<?php echo $_ACT_OBJ_VIEW->getId()?>" onclick="expandActivity('<?php echo $curUser->getId()?>', '<?php echo $_ACT_OBJ_VIEW->getId()?>')">
-					<?php include "layout/activity_section_view.php"?>
-				</li>
+				<?php include "layout/activity_li_view.php"?>
 			<?php endfor;?>
 		</ul>
 		
@@ -52,5 +55,4 @@
 </div>
 
 <?php include "layout/screen_layout_end.php"; ?>
-
 <?php include "layout/screen_header_end.php"; ?>

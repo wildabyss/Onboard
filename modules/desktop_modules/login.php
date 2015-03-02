@@ -1,66 +1,65 @@
 <?php 
-use Facebook\FacebookSession;
-use Facebook\FacebookRedirectLoginHelper;
-use Facebook\FacebookAuthorizationException;
-use Base\User;
-
-// set basic variables for layout
-$_PAGE_TITLE = "Sign In"; 
-
-// redirect URL
-$requestUrl = explode('?', $_SERVER["REQUEST_URI"])[0];
-if ($requestUrl == "/login")
-	$requestUrl = "/";
-$redirectUrl = "http://$_SERVER[HTTP_HOST]$requestUrl";
-
-if (isset($_SESSION['current_user'])) {
-	// if a valid session already exists, redirect to home
-	header("Location: $redirectUrl");
-	die();
+	use Facebook\FacebookSession;
+	use Facebook\FacebookRedirectLoginHelper;
+	use Facebook\FacebookAuthorizationException;
+	use Base\User;
 	
-} elseif (isset($_COOKIE['fb_token'])) {
-	// if a cookie exists, validate then proceed to create session
+	// set basic variables for layout
+	$_PAGE_TITLE = "Sign In"; 
 	
-	// get active facebook session
-	$fbSession = new FacebookSession($_COOKIE['fb_token']);
-	try {
-		// validate Facebook session, if outdated or invalid, will throw exception
-		if ($fbSession->validate()){
-			// verify that the user profile is in the database
-			$curUserObj = FacebookUtilities::CorroborateFacebookLogin($fbSession);
-			if ($curUserObj){
-				// finalize authenticated session
-				FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
-				
-				// redirect to home page
-				header("Location: $redirectUrl");
-				die();
+	// redirect URL
+	$requestUrl = explode('?', $_SERVER["REQUEST_URI"])[0];
+	if ($requestUrl == "/login")
+		$requestUrl = "/";
+	$redirectUrl = "http://$_SERVER[HTTP_HOST]$requestUrl";
+	
+	if (isset($_SESSION['current_user'])) {
+		// if a valid session already exists, redirect to home
+		header("Location: $redirectUrl");
+		die();
+		
+	} elseif (isset($_COOKIE['fb_token'])) {
+		// if a cookie exists, validate then proceed to create session
+		
+		// get active facebook session
+		$fbSession = new FacebookSession($_COOKIE['fb_token']);
+		try {
+			// validate Facebook session, if outdated or invalid, will throw exception
+			if ($fbSession->validate()){
+				// verify that the user profile is in the database
+				$curUserObj = FacebookUtilities::CorroborateFacebookLogin($fbSession);
+				if ($curUserObj){
+					// finalize authenticated session
+					FacebookUtilities::FinalizeFacebookLogin($fbSession, $curUserObj);
+					
+					// redirect to home page
+					header("Location: $redirectUrl");
+					die();
+				}
 			}
+		} catch (FacebookAuthorizationException $ex){
+			$fbSession = false;
 		}
-	} catch (FacebookAuthorizationException $ex){
-		$fbSession = false;
 	}
-}
-
-// at this point, we don't have a valid session
-
-// Facebook login helper
-$fbLoginHelper = new FacebookRedirectLoginHelper($redirectUrl);
-
-// get access token and finalize facebook login
-try {
-	$fbSession = $fbLoginHelper->getSessionFromRedirect();
-	 
-} catch(FacebookRequestException $ex) {
-	// Facebook login error
-	header("Location: /login");
-	die();
-} catch(\Exception $ex) {
-	// generic error
-	header("Location: /login");
-	die();
-}
-
+	
+	// at this point, we don't have a valid session
+	
+	// Facebook login helper
+	$fbLoginHelper = new FacebookRedirectLoginHelper($redirectUrl);
+	
+	// get access token and finalize facebook login
+	try {
+		$fbSession = $fbLoginHelper->getSessionFromRedirect();
+		 
+	} catch(FacebookRequestException $ex) {
+		// Facebook login error
+		header("Location: /login");
+		die();
+	} catch(\Exception $ex) {
+		// generic error
+		header("Location: /login");
+		die();
+	}
 ?>
 
 <?php if ($fbSession):?>
@@ -95,7 +94,7 @@ try {
 
 	<?php include "layout/screen_header_start.php"; ?>
 	
-	<body>
+	<div id="super_global_wrapper">
 		<div id="global_wrapper">
 			<a id="logo"></a>
 			<p class="center" id="login_slogan">
@@ -120,7 +119,7 @@ try {
 				</a>
 			</div>
 		</div>
-	</body>
+	</div>
 	
 	<?php include "layout/screen_header_end.php"; ?>
 	

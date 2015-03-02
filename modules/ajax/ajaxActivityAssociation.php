@@ -142,7 +142,7 @@ switch ($_POST['action']){
 		$_ACT_OBJ_VIEW->saveWithCategories($_ACT_OBJ_VIEW, $rawCategories);
 		
 		// output new HTML for client parsing
-		include '../modules/desktop_modules/layout/activity_section_view.php';
+		include '../modules/desktop_modules/layout/activity_li_view.php';
 		
 		break;
 		
@@ -169,7 +169,7 @@ switch ($_POST['action']){
 		$_ACT_OBJ_VIEW->saveWithCategories($_ACT_OBJ_VIEW, $rawCategories);
 		
 		// output new HTML for client parsing
-		include '../modules/desktop_modules/layout/activity_section_view.php';
+		include '../modules/desktop_modules/layout/activity_basic_view.php';
 		
 		break;
 	case "mark_complete":
@@ -203,6 +203,7 @@ switch ($_POST['action']){
 		
 		// verify the activity association id that's passed in
 		$_MY_LIST = true;
+		$_IS_POPUP = true;
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
 			exit();

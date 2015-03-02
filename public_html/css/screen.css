@@ -106,7 +106,6 @@ textarea{
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
 	z-index: 1001;
 	background: white;
-	padding: 5px;
 	min-height: 100px;
 	max-height: 600px;
 	
@@ -374,6 +373,8 @@ div.popup_container{
 	text-decoration: line-through;
 }
 
+/* basic activity list display */
+
 ul.activity_list{
 	padding:0;
 	margin:0;
@@ -382,21 +383,31 @@ ul.activity_list li{
 	position: relative;
 	list-style-type: none;
 	margin-bottom: 20px;
-	padding: 5px;
+	padding: 0;
 	border: 1px solid #d9d9d9;
 	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
 }
-ul.activity_list li.activity_dud:hover{
-	background-color: #F8F8F8;
-}
+/* by default, this is what an activity looks like */
 ul.activity_list li.activity:hover{
 	background-color: #F8F8F8;
 	cursor: pointer;
 }
-ul.activity_list li.adding_activity{
-	background-color: #E0ECF8;
+/* dud is an appearance for external non-users only */
+ul.activity_list li.activity_dud:hover{
+	background-color: #F8F8F8;
+}
+/* only for new activity special item */
+ul.activity_list li#adding_activity{
 	display: none;
-	overflow: auto;
+	overflow: visible;
+}
+
+.activity_basic_container{
+	padding: 5px;
+}
+/* must inherit activity_basic_container */
+.activity_edit_container{
+	background-color: #E0ECF8;
 }
 
 #modification_bar{
@@ -562,17 +573,6 @@ a.interested_friends_summary{
 	padding-right: 2px;
 }
 
-.expand{
-	text-align: center;
-	cursor: pointer;
-	margin: 5px -5px -5px -5px;
-	background-color: #F8F8F8;
-	font-weight: bold;
-}
-.expand:hover{
-	background-color: #F0F0F0;
-}
-
 .interest_tally_container{
 	padding: 5px;
 }
@@ -591,21 +591,25 @@ a.interested_friends_summary{
 }
 
 .interest_details_container{
+	margin: 0;
+	background-color: #F8F8F8;
+}
+
+.interest_tally_details_container{
 	margin-bottom: 10px;
 	border-bottom: 1px solid #dfe0e4;
 	padding: 7px;
 }
-ul.interest_details{
+ul.interest_tally_details{
 	margin: 0 auto;
 	border: none;
 	padding: 0;
-	/*background-color: #E0ECF8;*/
 	overflow-x: auto;
 	overflow-y: hidden;
 	width: 100%;
 	position: relative;
 }
-ul.interest_details li{
+ul.interest_tally_details li{
 	vertical-align: top;
 	display: inline-block;
 	cursor: pointer;

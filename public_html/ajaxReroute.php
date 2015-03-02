@@ -23,12 +23,12 @@ try{
 	
 	if (isset($_SESSION['current_user'])) {
 		$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () {
-			include "../modules/desktop_modules/ajax/ajaxActivityAssociation.php";
+			include "../modules/ajax/ajaxActivityAssociation.php";
 			return;
 		});
 		
 		$kleinRouter->respond('POST', '/ajaxDiscussion', function () {
-			include "../modules/desktop_modules/ajax/ajaxDiscussion.php";
+			include "../modules/ajax/ajaxDiscussion.php";
 			return;
 		});
 	

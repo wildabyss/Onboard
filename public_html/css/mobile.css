@@ -1,2 +1,58 @@
 @CHARSET "ISO-8859-1";
 
+/* global elements */
+
+body{
+	font-size: 14px;
+}
+
+#global_wrapper{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	position: relative;
+}
+
+h1{
+	font-size: 16px;
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+h1.page_title{
+	margin: 10px;
+	margin-bottom: 20px;
+}
+
+
+/* login screen */
+
+#login_slogan{
+	margin-top: 30px;
+	margin-bottom: 30px;
+	font-size: 14px;
+}
+
+#login_strip {
+	border: 1px solid;
+	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+	margin-top: 20px;
+	padding: 20px;
+	/*padding-bottom: 20px;*/
+	background: white;
+}
+
+
+/* footer */
+
+#footer{
+	margin: 10px 0 10px 0;
+	text-align: center;
+	font-size: 11px;
+}	
+.footer_block{
+	font-size: 12px;
+	display: inline;
+	margin: 0 10px 0 10px;
+}

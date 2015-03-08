@@ -1,0 +1,79 @@
+@CHARSET "ISO-8859-1";
+
+/* global elements */
+
+body{
+	font: x-small sans-serif;
+	background: #e9eaed;
+	color: black;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+}
+
+#super_global_wrapper{
+	width: 100%;
+}
+
+a:link{
+	color: #000099;
+	text-decoration: none;
+}
+a:visited {
+    color: #000099;
+}
+.link{
+	color: #000099;
+	text-decoration: none;
+}
+.link:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.center{
+	text-align: center;
+}
+
+
+/* login screen only */
+
+#logo{
+	display:block;
+	font: bold 20px Georgia;
+	width: 100%;
+	height: 78px;
+	background-image: url(../images/logo.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+#google_signin{
+	display: block;
+	margin: 0 auto;
+	width: 187px;
+	height: 32px;
+	background-image: url(../images/google_signin_base.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+}
+#google_signin:hover{
+	background-image: url(../images/google_signin_hover.png);
+}
+
+#facebook_signin{
+	display: block;
+	margin: 0 auto;
+	width: 187px;
+	height: 32px;
+	background-image: url(../images/facebook_signin_base.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+}
+#facebook_signin:hover{
+	background-image: url(../images/facebook_signin_hover.png);
+}

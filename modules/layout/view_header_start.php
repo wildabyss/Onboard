@@ -4,6 +4,9 @@
 		<!-- content type -->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<?php if ($_MOBILE_DETECT->isMobile()):?>
+			<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<?php endif?>
 		
 		<!-- open graph -->
 		<meta property="og:site_name" content="Onboard" />
@@ -15,6 +18,7 @@
 		<!-- layout and styles -->
 		<title>Onboard - <?php echo $_PAGE_TITLE; ?></title>
 		<link rel="shortcut icon" href="/images/logo.ico" type="image/x-icon"/>
+		<link rel="stylesheet" href="/css/common.css" type="text/css" media="screen" />
 		<?php if ($_MOBILE_DETECT->isMobile()):?>
 			<link rel="stylesheet" href="/css/mobile.css" type="text/css" media="screen" />
 		<?php else:?>

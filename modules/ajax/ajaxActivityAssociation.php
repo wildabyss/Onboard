@@ -3,20 +3,21 @@
 if (!isset($_POST['action']))
 	exit();
 
-$curUser = $_SESSION['current_user'];
+if (isset($_SESSION['current_user']))
+	$curUser = $_SESSION['current_user'];
 
 switch ($_POST['action']){
 	// onboard/leave action
 	case 'onboard':
 	case 'leave':
-		if (!isset($_POST['activity_assoc']))
+		if (!isset($curUser) || !isset($_POST['activity_assoc']))
 			exit();
 		
 		try {
 			// the friend's ActivityUserAssociation
 			$friendActivityUserAssoc = ActivityUserAssociationQuery::create()->findOneById($_POST['activity_assoc']);
 			
-			// verify this guy is my guy's friend
+			// verify this guy is my friend
 			if (!UserCommunityAssociationQuery::verifyUsersAreFriends($curUser->getId(), $friendActivityUserAssoc->getUserId()))
 				exit();
 
@@ -25,24 +26,9 @@ switch ($_POST['action']){
 			// to be returned to client later
 			$assocId = 0;
 			if ($userAssocLevel == ActivityUserAssociation::USER_IS_NOT_ASSOCIATED && $_POST['action']=="onboard"){
-				// find the archived version if exist
-				$newActivityUserAssoc = ActivityUserAssociationQuery::create()
-					->filterByActivityId($friendActivityUserAssoc->getActivityId())
-					->filterByUserId($curUser->getId())
-					->findOneOrCreate();
-				
 				// associate user
-				$newActivityUserAssoc->setActivityId($friendActivityUserAssoc->getActivityId());
-				$newActivityUserAssoc->setUserId($curUser->getId());
-				$newActivityUserAssoc->setStatus(ActivityUserAssociation::ACTIVE_STATUS);
-				$newActivityUserAssoc->setIsOwner(0);
-				$newActivityUserAssoc->setDateAdded(time());
-				$newActivityUserAssoc->setAlias($friendActivityUserAssoc->getAlias());
-				$newActivityUserAssoc->setDescription($friendActivityUserAssoc->getDescription());
-				$newActivityUserAssoc->save();
-				
-				// to be returned to client later
-				$assocId = $newActivityUserAssoc->getId();
+				$newActivityAssoc = ActivityUserAssociationQuery::onboardActivity($friendActivityUserAssoc, $curUser->getId());
+				$assocId = $newActivityAssoc->getId();
 		
 			} elseif ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED && $_POST['action']=="leave"){
 				// dissociate user
@@ -68,7 +54,7 @@ switch ($_POST['action']){
 	
 	// get ActivityUserAssociation info and output the edit box
 	case 'edit':
-		if (!isset($_POST['activity_assoc']))
+		if (!isset($curUser) || !isset($_POST['activity_assoc']))
 			exit();
 		
 		// retrieve the data object
@@ -96,7 +82,7 @@ switch ($_POST['action']){
 		
 	// delete activity
 	case 'delete':
-		if (!isset($_POST['activity_assoc']))
+		if (!isset($curUser) || !isset($_POST['activity_assoc']))
 			exit();
 		
 		// retrieve the data object
@@ -117,11 +103,12 @@ switch ($_POST['action']){
 
 	// save new activity
 	case 'save_new':
-		if (!isset($_POST['activity_alias']) || !isset($_POST['activity_descr']) || !isset($_POST['activity_cats']))
+		if (!isset($curUser) || !isset($_POST['activity_alias']) || !isset($_POST['activity_descr']) || !isset($_POST['activity_cats']))
 			exit();
 		
 		// set variables required for view generation
 		$_MY_LIST = true;
+		$_FRIEND = $curUser;
 		
 		// create the Activity object
 		//FIXME need AI to associate with existing Activity objects in the db
@@ -148,12 +135,13 @@ switch ($_POST['action']){
 		
 	// save existing activity
 	case 'save':
-		if (!isset($_POST['activity_assoc']) || !isset($_POST['activity_alias']) 
+		if (!isset($curUser) || !isset($_POST['activity_assoc']) || !isset($_POST['activity_alias']) 
 			|| !isset($_POST['activity_descr']) || !isset($_POST['activity_cats']))
 			exit();
 
 		// retrieve the existing ActivityUserAssociation object
 		$_MY_LIST = true;
+		$_FRIEND = $curUser;
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
 			exit();
@@ -174,7 +162,7 @@ switch ($_POST['action']){
 		break;
 	case "mark_complete":
 	case "mark_active":
-		if (!isset($_POST['activity_assoc']))
+		if (!isset($curUser) || !isset($_POST['activity_assoc']))
 			exit();
 		
 		// fetch associated activity
@@ -198,22 +186,29 @@ switch ($_POST['action']){
 		
 		break;
 	case "expand_activity_details":
-		if (!isset($_POST['activity_assoc']))
+		// this action can be used by non-users
+		if (!isset($_POST['activity_assoc']) || !isset($_POST['user_id']))
 			exit();
 		
 		// verify the activity association id that's passed in
-		$_MY_LIST = true;
+		if (isset($curUser) && $curUser->getId()==$_POST['user_id'])
+			$_MY_LIST = true;
+		else 
+			$_MY_LIST = false;
 		$_IS_POPUP = true;
 		$_ACT_OBJ_VIEW = ActivityUserAssociationQuery::create()->findPk($_POST['activity_assoc']);
 		if ($_ACT_OBJ_VIEW == false)
 			exit();
+		$_FRIEND = UserQuery::create()->findPk($_POST['user_id']);
+		if ($_FRIEND == false)
+			exit();
 		
 		// verify this activityAssociation belongs to the current user
-		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($curUser->getId(), $_ACT_OBJ_VIEW->getId()))
+		if (!ActivityUserAssociationQuery::verifyUserAndActivityAssociationId($_FRIEND->getId(), $_ACT_OBJ_VIEW->getId()))
 			exit();
 		
 		// output interested friends
-		$_INTERESTED_FRIENDS = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
+		$_INTERESTED_FRIENDS = ActivityUserAssociationQuery::getInterestedFriends($_FRIEND->getId(), $_ACT_OBJ_VIEW->getActivityId());
 		include "../modules/desktop_modules/layout/activity_details_view.php";
 		break;
 }

@@ -21,12 +21,12 @@ try{
 	// URL router
 	$kleinRouter = new Klein();
 	
+	$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () {
+		include "../modules/ajax/ajaxActivityAssociation.php";
+		return;
+	});
+	
 	if (isset($_SESSION['current_user'])) {
-		$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () {
-			include "../modules/ajax/ajaxActivityAssociation.php";
-			return;
-		});
-		
 		$kleinRouter->respond('POST', '/ajaxDiscussion', function () {
 			include "../modules/ajax/ajaxDiscussion.php";
 			return;

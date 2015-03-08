@@ -1,17 +1,63 @@
-var showInterestedFriendsSummary = function(showId){
-	var count = $("#"+showId+" li").length;
-	if (count > 0){
-		$("#"+showId).show("fast");
-	}
-}
-
-var hideInterestedFriendsSummary = function(showId){
-	$("#"+showId).hide();
-}
 
 var activitySectionClick = function(userId, activityAssocId){
 	changeBrowserURL('/id/'+userId+'/actid/'+activityAssocId);
 }
+
+var likeActivity = function (event, activityAssocId){
+	// IE8 fix
+	event = event || window.event;
+	//var ele = event.target || event.srcElement;
+	button = $('[id*=onboard_button_'+activityAssocId+']');
+	
+	if (event.stopPropagation)
+		event.stopPropagation();
+	else
+		event.cancelBubble = true;
+	
+	// default type
+	if (typeof button.attr("type") == typeof undefined || button.attr("type") == false){
+		button.attr("type", "onboard");
+	}
+	
+	$.ajax({
+		url:	"/ajaxActivityAssociation",
+		type: 	"post",
+		data:	{activity_assoc: activityAssocId, action: button.attr('type')},
+		success: function(result){
+			if (result!=""){
+				// successful request 
+				
+				var respArr = JSON.parse(result);
+				
+				// change interest tally
+				var intTallyEl = $("#interest_tally_"+activityAssocId);
+				if (intTallyEl.length>0) {
+					intTallyEl.html(respArr.interest_count + " interests");
+				}
+				
+				// if there's a popup, then change its appearance
+				if ($('#interest_details_'+activityAssocId).length){
+					if (button.attr('type') == "onboard"){
+						// append redirect message
+						$('.discussion_container').append('<a class="center link" id="interest_details_redirect" href="/id/'+respArr.user_id+'/actid/'+respArr.assoc_id+'">Head over to my activity.</a>');
+					} else {
+						// remove redirect message
+						$('#interest_details_redirect').remove();
+					}
+				}
+				
+				// change button
+				if (button.attr('type') == "onboard"){
+					button.attr('type', "leave");
+					button.html("Leave");
+				} else {
+					button.attr('type', "onboard");
+					button.html("Onboard!");
+				}
+			}
+		}
+	});
+};
 
 
 /* change browser URL */
@@ -28,7 +74,7 @@ var changeBrowserURL = function(url){
 
 /* loads when document finishes loading */
 
-var removePopup = function(){
+var removePopup = function(restoreURL){
 	var height = parseInt($('#super_global_wrapper').css('margin-top'));
 	
 	// remove popup
@@ -40,6 +86,13 @@ var removePopup = function(){
 	// restore main content appearance
 	$('#super_global_wrapper').removeAttr('style');
 	$(window).scrollTop(-height);
+	
+	// change URL
+	if (restoreURL){
+		var url = document.URL;
+		var link = url.split("/actid")[0];
+		changeBrowserURL(link);
+	}
 }
 
 $(document).ready(function () {
@@ -50,7 +103,7 @@ $(document).ready(function () {
 	$('#haze').click(function (e){
 		// popup box
 		if ($(e.target).closest('.popup_container').length <= 0) {
-			removePopup();
+			removePopup(true);
 		}
 	});
 });

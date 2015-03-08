@@ -1,7 +1,4 @@
 <?php 
-	if (isset($_SESSION['current_user']))
-		$curUser = $_SESSION['current_user'];
-
 	// set variables
 	if (!isset($_MY_LIST))
 		$_MY_LIST = false;
@@ -26,11 +23,7 @@
 	}
 	
 	// interest summary appearances
-	if ($_MY_LIST){
-		$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $_ACT_OBJ_VIEW->getActivityId());
-	} else {
-		$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($_FRIEND->getId(), $_ACT_OBJ_VIEW->getActivityId());
-	}
+	$interestedFrds = ActivityUserAssociationQuery::getInterestedFriends($_FRIEND->getId(), $_ACT_OBJ_VIEW->getActivityId());
 ?>
 
 <div class="activity_basic_container">
@@ -45,7 +38,7 @@
 					<?php echo $markAsCompletedClick?>
 				</script>
 				<a class="edit detail_box_item" onclick="editActivity('<?php echo $_ACT_OBJ_VIEW->getId()?>')">Edit</a>
-				<a class="delete detail_box_item" onclick="deleteActivity('<?php echo $_ACT_OBJ_VIEW->getId()?>')">Delete</a>
+				<a class="delete detail_box_item" onclick="deleteActivity('<?php echo $_ACT_OBJ_VIEW->getId()?>', '<?php echo $curUser->getId()?>')">Delete</a>
 			</div>
 		<?php endif?>
 		
@@ -80,7 +73,7 @@
 	
 	<div class="interest_info" id="<?php echo $id_prefix?>interest_info_<?php echo $_ACT_OBJ_VIEW->getId()?>">
 		<div class="interest_tally_container">
-			<a class="interest_tally" id="interest_tally_<?php echo $_ACT_OBJ_VIEW->getId()?>"
+			<a class="interest_tally" id="<?php echo $id_prefix?>interest_tally_<?php echo $_ACT_OBJ_VIEW->getId()?>"
 				onmouseover = "showInterestedFriendsSummary('<?php echo $id_prefix?>interested_friends_summary_<?php echo $_ACT_OBJ_VIEW->getId()?>')"
 				onmouseout = "hideInterestedFriendsSummary('<?php echo $id_prefix?>interested_friends_summary_<?php echo $_ACT_OBJ_VIEW->getId()?>')">
 				<?php echo $numInterestedFrds?> interests

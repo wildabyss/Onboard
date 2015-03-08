@@ -3,6 +3,17 @@
 var activity_being_added = false;
 var holding_key = "";
 
+var showInterestedFriendsSummary = function(showId){
+	var count = $("#"+showId+" li").length;
+	if (count > 0){
+		$("#"+showId).show("fast");
+	}
+}
+
+var hideInterestedFriendsSummary = function(showId){
+	$("#"+showId).hide();
+}
+
 var addNewActivity = function(){
 	if (!activity_being_added){
 		activity_being_added = true;
@@ -52,10 +63,7 @@ var saveNewActivity = function(listId){
 				$('#new_activity_description').val('');
 				$('#new_activity_categories').val('');
 			} else{
-				var noActMsg = $('#no_activity_msg');
-				if (noActMsg.is(":hidden")){
-					noActMsg.show();
-				}
+				$('#no_activity_msg').show();
 			}
 			
 			activity_being_added = false;
@@ -118,7 +126,7 @@ var editActivity = function(activityAssocId){
 	});
 }
 
-var saveActivity = function(activityAssocId){
+var saveActivity = function(activityAssocId, userId){
 	var inputActAlias = $.trim($('#edit_activity_alias_'+activityAssocId).val());
 	var inputActDescr = $.trim($('#edit_activity_description_'+activityAssocId).val());
 	var inputActCats = $.trim($('#edit_activity_categories_'+activityAssocId).val());
@@ -144,7 +152,7 @@ var saveActivity = function(activityAssocId){
 			}
 			// redraw the popup
 			$('#activity_popup_container_'+activityAssocId).remove();
-			expandActivity(activityAssocId);
+			expandActivity(activityAssocId, userId);
 		}
 	});
 }
@@ -182,7 +190,7 @@ var confirmDeleteActivity = function(actAssocId){
 				// remove from activity list
 				$('#activity_section_'+actAssocId).remove();
 				// remove the popup
-				removePopup();
+				removePopup(true);
 			}
 		}
 	});
@@ -243,10 +251,13 @@ var markAsActive = function(event){
 	});
 }
 
-/* userId is optional */
-var expandActivity = function(actAssocId, userId) {
+/* completeRedraw is optional */
+var expandActivity = function(actAssocId, userId, completeRedraw) {
+	// remove any existing popup
+	removePopup(false);
+	
 	// change URL to reflect activity assoc id
-	if (userId){
+	if (completeRedraw){
 		changeBrowserURL('/id/'+userId+'/actid/'+actAssocId);
 	
 		// change the main content appearance, maintain the scroll position and remove the scroll bar
@@ -263,7 +274,7 @@ var expandActivity = function(actAssocId, userId) {
 	$.ajax({
 		url:	"/ajaxActivityAssociation",
 		type: 	"post",
-		data:	{activity_assoc: actAssocId, action: 'expand_activity_details'},
+		data:	{activity_assoc: actAssocId, user_id: userId, action: 'expand_activity_details'},
 		success: function(result){
 			if (result != ""){
 				// successful request 
@@ -279,6 +290,8 @@ var expandActivity = function(actAssocId, userId) {
 				if (container){
 					container.scrollTop = container.scrollHeight;
 				}
+			} else {
+				removePopup(true);
 			}
 		}
 	});
@@ -426,7 +439,7 @@ var discussion_switch = function(discussionId, actAssocId){
 	});
 }
 
-var discussion_leave = function(discussionId, actAssocId){
+var discussion_leave = function(discussionId, userId, actAssocId){
 	// send ajax request
 	$.ajax({
 		url:	"/ajaxDiscussion",
@@ -437,7 +450,7 @@ var discussion_leave = function(discussionId, actAssocId){
 				// successful request 
 				
 				// refresh the activity detail section
-				expandActivity(actAssocId);
+				expandActivity(actAssocId, userId);
 			}
 		}
 	});

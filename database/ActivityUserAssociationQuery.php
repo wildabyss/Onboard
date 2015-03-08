@@ -2,6 +2,7 @@
 
 use Base\ActivityUserAssociationQuery as BaseActivityUserAssociationQuery;
 use Map\ActivityUserAssociationTableMap;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Propel;
 use Propel\Runtime\Formatter\ObjectFormatter;
 
@@ -82,7 +83,11 @@ EOT;
 				));
 	
 		$formatter = new ObjectFormatter();
-		$formatter->setClass('\User'); //full qualified class name
+		if ($getAssocs){
+			$formatter->setClass('\ActivityUserAssociation');
+		} else {
+			$formatter->setClass('\User');
+		}
 		return $formatter->format($conn->getDataFetcher($stmt));
 	}
 	
@@ -127,8 +132,7 @@ EOT;
 		if (count($results)==0 || $results[0]['status'] == ActivityUserAssociation::ARCHIVED_STATUS)
 			return ActivityUserAssociation::USER_IS_NOT_ASSOCIATED;
 		else
-			return ($results[0]['is_owner'] == 1?
-					ActivityUserAssociation::USER_IS_OWNER : ActivityUserAssociation::USER_IS_ASSOCIATED);
+			return ($results[0]['is_owner'] == 1 ? ActivityUserAssociation::USER_IS_OWNER : ActivityUserAssociation::USER_IS_ASSOCIATED);
 	}
 	
 	
@@ -184,6 +188,34 @@ EOT;
 	
 	
 	/**
+	 * Associate the user with a friend's activity
+	 * @param unknown $friendActivityUserAssoc
+	 * @param unknown $curUserId
+	 * @return ChildActivityUserAssociation
+	 */
+	public static function onboardActivity($friendActivityUserAssoc, $curUserId){
+		// find the archived version if exist
+		$newActivityUserAssoc = ActivityUserAssociationQuery::create()
+			->filterByActivityId($friendActivityUserAssoc->getActivityId())
+			->filterByUserId($curUserId)
+			->findOneOrCreate();
+		
+		// associate user
+		$newActivityUserAssoc->setActivityId($friendActivityUserAssoc->getActivityId());
+		$newActivityUserAssoc->setUserId($curUserId);
+		$newActivityUserAssoc->setStatus(ActivityUserAssociation::ACTIVE_STATUS);
+		$newActivityUserAssoc->setIsOwner(0);
+		$newActivityUserAssoc->setDateAdded(time());
+		$newActivityUserAssoc->setAlias($friendActivityUserAssoc->getAlias());
+		$newActivityUserAssoc->setDescription($friendActivityUserAssoc->getDescription());
+		$newActivityUserAssoc->save();
+		
+		// to be returned to client later
+		return $newActivityUserAssoc;
+	}
+	
+	
+	/**
 	 * Verify that the userId and the activityUserAssociationId are linked
 	 * @param unknown $userId
 	 * @param unknown $activityUserAssociationId
@@ -197,13 +229,15 @@ EOT;
 			where
 				aua.id = :associd
 				and aua.user_id = :userid
+				and aua.status <> :status
 			limit 1;
 EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
 				array(
 						':userid'	=> $userId,
-						':associd'	=> $activityUserAssociationId
+						':associd'	=> $activityUserAssociationId,
+						':status'	=> ActivityUserAssociation::ARCHIVED_STATUS
 				));
 		
 		// assess results
@@ -222,6 +256,7 @@ EOT;
 		return self::create()
 			->filterByActivityId($activityId)
 			->filterByUserId($userId)
+			->filterByStatus(ActivityUserAssociation::ARCHIVED_STATUS, Criteria::NOT_EQUAL)
 			->findOne();
 	}
 }

@@ -1,4 +1,6 @@
 <?php 
+	$curUser = $_SESSION['current_user'];
+
 	// container id
 	if (isset($_ACT_EDIT['id'])){
 		$liId = 'id="edit_activity_'.$_ACT_EDIT['id'].'"'; 
@@ -58,7 +60,7 @@
 	<div style="text-align: right">
 		<input type="button" class="new_activity_buttons" value="Save" 
 			id="<?php if (isset($_ACT_EDIT['id'])):?>save_activity_button_<?php echo $_ACT_EDIT['id']?><?php else:?>save_activity_button_new<?php endif?>"
-			onclick="<?php if (isset($_ACT_EDIT['id'])):?>saveActivity('<?php echo $_ACT_EDIT['id']?>')<?php else:?>saveNewActivity()<?php endif?>" />
+			onclick="<?php if (isset($_ACT_EDIT['id'])):?>saveActivity('<?php echo $_ACT_EDIT['id']?>', '<?php echo $curUser->getId()?>')<?php else:?>saveNewActivity()<?php endif?>" />
 		
 		<input type="button" class="new_activity_buttons" value="Cancel" 
 			id="<?php if (isset($_ACT_EDIT['id'])):?>cancel_activity_button_<?php echo $_ACT_EDIT['id']?><?php else:?>cancel_activity_button_new<?php endif?>"

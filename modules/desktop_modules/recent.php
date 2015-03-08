@@ -3,13 +3,15 @@
 	$_PAGE_TITLE = Utilities::PAGE_RECENT; 
 	
 	$curUser = $_SESSION['current_user'];
+	
+	$_IS_POPUP = false;
 ?>
 
 <?php include "layout/screen_header_start.php"; ?>
 <?php include "layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
-<script type="text/javascript" src="/js/community.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 				
 <!-- main content -->
 <div class="content_column" id="column_middle">
@@ -25,7 +27,7 @@
 				<?php foreach ($recentActivityAssocs as $_ACT_OBJ_VIEW):?>
 					<?php $assocUser = $_ACT_OBJ_VIEW->getUser() ?>
 					
-					<li class="feed_page_block" onclick="window.location.href = '/id/<?php echo $assocUser->getId()?>/actid/<?php echo $_ACT_OBJ_VIEW->getId()?>';">
+					<li class="activity feed_page_block" onclick="window.location.href = '/id/<?php echo $assocUser->getId()?>/actid/<?php echo $_ACT_OBJ_VIEW->getId()?>';">
 						<a class="feed_profile_pic" style="background-image: url(/profile_pic_cache/<?php echo $assocUser->getId()?>_small.jpg)"></a>
 						<span class="feed_page_block_body">
 							<a class="feed_title">

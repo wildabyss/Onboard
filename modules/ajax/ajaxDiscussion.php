@@ -62,6 +62,9 @@ switch ($_POST['action']){
 		if (!$_DISCUSSION_OBJ)
 			exit();
 		
+		// current user
+		$_FRIEND = $curUser;
+		
 		// verify this discussion belongs to the current user
 		if (!DiscussionUserAssociationQuery::verifyUserAndDiscussionId($curUser->getId(), $_DISCUSSION_OBJ->getId()))
 			exit();

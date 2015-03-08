@@ -12,7 +12,7 @@
 	<a class="button_discussions button_participants" 
 		onmouseover = "showParticipants('<?php echo $_DISCUSSION_OBJ->getId()?>')"
 		onmouseout = "hideParticipants('<?php echo $_DISCUSSION_OBJ->getId()?>')">Participants</a>
-	<a class="button_discussions button_leave" onclick="discussion_leave('<?php echo $_DISCUSSION_OBJ->getId()?>', '<?php echo $_ACT_OBJ_VIEW->getId() ?>')">Leave</a>
+	<a class="button_discussions button_leave" onclick="discussion_leave('<?php echo $_DISCUSSION_OBJ->getId()?>', '<?php echo $_FRIEND->getId()?>', '<?php echo $_ACT_OBJ_VIEW->getId() ?>')">Leave</a>
 </div>
 
 <div class="message_container" id="message_container_<?php echo $_DISCUSSION_OBJ->getId() ?>">

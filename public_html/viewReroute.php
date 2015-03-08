@@ -45,19 +45,13 @@ try{
 		
 		// home page: with userId specified
 		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
-			if ($_KLEIN_REQUEST->param('id') == $curUser->getId())
-				include "../modules/desktop_modules/my_activities.php";
-			else 
-				include "../modules/desktop_modules/community.php";
+			include "../modules/desktop_modules/my_activities.php";
 			return;
 		});
 		
 		// home page: with userId and activityAssocId specified
 		$kleinRouter->respond(array('GET','POST'), '/id/[:id]/actid/[:actid]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
-			if ($_KLEIN_REQUEST->param('id') == $curUser->getId())
-				include "../modules/desktop_modules/my_activities.php";
-			else
-				include "../modules/desktop_modules/community.php";
+			include "../modules/desktop_modules/my_activities.php";
 			return;
 		});	
 		
@@ -81,7 +75,7 @@ try{
 		
 		// redirect to login
 		$kleinRouter->respond(array('GET','POST'), '/logout', function () {
-			include "../modules/desktop_modules/logout.php";
+			include "../modules/logout.php";
 			return;
 		});
 		
@@ -93,7 +87,7 @@ try{
 		
 		// server-side onboarding
 		$kleinRouter->respond(array('GET','POST'), '/onboard/[:activity_assoc]', function ($_KLEIN_REQUEST, $response) {
-			include "../modules/desktop_modules/onboard.php";
+			include "../modules/onboard.php";
 			return;
 		});
 		
@@ -111,20 +105,19 @@ try{
 			return;
 		});
 		
-		// community is a public page if id is specified through GET
+		// my_activities is a public page if id is specified through GET
 		$kleinRouter->respond('/id/[i:id]', function ($_KLEIN_REQUEST, $response) {
-			// check to make sure the id parameter is present
-			$id = $_KLEIN_REQUEST->param('id');
-			if ($id){
-				// display the public version of the community page
-				include "../modules/desktop_modules/community.php";
-				return;
-			} else {
-				// redirect to login
-				include "../modules/desktop_modules/login.php";
-				return;
-			}
+			// display the public version of the my_activities page
+			include "../modules/desktop_modules/my_activities.php";
+			return;
 	    });
+		
+		// my_activities is a public page if id and actid are specified through GET
+		$kleinRouter->respond('/id/[:id]/actid/[:actid]', function ($_KLEIN_REQUEST, $response) {
+			// display the public version of the my_activities page
+			include "../modules/desktop_modules/my_activities.php";
+			return;
+		});
 		
 		// error response
 		$kleinRouter->onHttpError(function ($code, $router) {

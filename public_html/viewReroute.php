@@ -20,6 +20,7 @@ ob_start();
 // namespaces
 use Klein\Klein;
 use Facebook\FacebookSession;
+use Detection\MobileDetect;
 
 try{
 	// initialize Facebook
@@ -29,6 +30,9 @@ try{
 
 	// URL router
 	$kleinRouter = new Klein();
+	
+	// mobile browser detection
+	$_MOBILE_DETECT = new MobileDetect();
 
 	// check to make sure the user has logged in
 	if (isset($_SESSION['current_user'])) {
@@ -39,37 +43,36 @@ try{
 			// redirect with palatable link
 			header("Location: /id/{$curUser->getId()}");
 			die();
-			//include "../modules/my_activities.php";
 			return;
 		});
 		
 		// home page: with userId specified
-		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
+		$kleinRouter->respond(array('GET','POST'), '/id/[:id]', function ($_KLEIN_REQUEST, $response) use ($_MOBILE_DETECT) {
 			include "../modules/desktop_modules/my_activities.php";
 			return;
 		});
 		
 		// home page: with userId and activityAssocId specified
-		$kleinRouter->respond(array('GET','POST'), '/id/[:id]/actid/[:actid]', function ($_KLEIN_REQUEST, $response) use ($curUser) {
+		$kleinRouter->respond(array('GET','POST'), '/id/[:id]/actid/[:actid]', function ($_KLEIN_REQUEST, $response) use ($_MOBILE_DETECT) {
 			include "../modules/desktop_modules/my_activities.php";
 			return;
 		});	
 		
 		// community
-		$kleinRouter->respond(array('GET','POST'), '/community', function () {
+		$kleinRouter->respond(array('GET','POST'), '/community', function () use ($_MOBILE_DETECT) {
 			include "../modules/desktop_modules/community.php";
 			return;
 		});
 		
 		// redirect to recent activities
-		$kleinRouter->respond(array('GET','POST'), '/recent', function () {
+		$kleinRouter->respond(array('GET','POST'), '/recent', function () use ($_MOBILE_DETECT) {
 			include "../modules/desktop_modules/recent.php";
 			return;
 		});
 		
 		// redirect to login
-		$kleinRouter->respond(array('GET','POST'), '/login', function () {
-			include "../modules/desktop_modules/login.php";
+		$kleinRouter->respond(array('GET','POST'), '/login', function () use ($_MOBILE_DETECT) {
+			include "../modules/login.php";
 			return;
 		});
 		
@@ -80,7 +83,7 @@ try{
 		});
 		
 		// redirect to browse
-		$kleinRouter->respond(array('GET','POST'), '/browse', function () {
+		$kleinRouter->respond(array('GET','POST'), '/browse', function () use ($_MOBILE_DETECT) {
 			include "../modules/desktop_modules/browse.php";
 			return;
 		});
@@ -100,20 +103,20 @@ try{
 	} else {
 		// No user session is present,
 		// redirect to login for private pages
-		$kleinRouter->respond('@^\/(?!id\/[0-9]+)', function () {
-			include "../modules/desktop_modules/login.php";
+		$kleinRouter->respond('@^\/(?!id\/[0-9]+)', function () use ($_MOBILE_DETECT) {
+			include "../modules/login.php";
 			return;
 		});
 		
 		// my_activities is a public page if id is specified through GET
-		$kleinRouter->respond('/id/[i:id]', function ($_KLEIN_REQUEST, $response) {
+		$kleinRouter->respond('/id/[i:id]', function ($_KLEIN_REQUEST, $response) use ($_MOBILE_DETECT) {
 			// display the public version of the my_activities page
 			include "../modules/desktop_modules/my_activities.php";
 			return;
 	    });
 		
 		// my_activities is a public page if id and actid are specified through GET
-		$kleinRouter->respond('/id/[:id]/actid/[:actid]', function ($_KLEIN_REQUEST, $response) {
+		$kleinRouter->respond('/id/[:id]/actid/[:actid]', function ($_KLEIN_REQUEST, $response) use ($_MOBILE_DETECT) {
 			// display the public version of the my_activities page
 			include "../modules/desktop_modules/my_activities.php";
 			return;

@@ -5,7 +5,7 @@
 	$curUser = $_SESSION['current_user'];
 ?>
 
-<?php include "layout/screen_header_start.php"; ?>
+<?php include "/../layout/view_header_start.php"; ?>
 <?php include "layout/screen_layout_start.php"; ?>
 
 <script type="text/javascript">
@@ -57,7 +57,7 @@
 							<?php foreach ($actAssocsFound as $actAssoc):?>
 								<ul class="activity_list">
 									<li class="feed_page_block" style="margin-bottom: 10px"
-										onclick="window.location.href = '/id/<?php echo $actAssoc->getUserId()?>#activity_section_<?php echo $actAssoc->getId()?>';">
+										onclick="window.location.href = '/id/<?php echo $actAssoc->getUserId()?>/actid/<?php echo $actAssoc->getId()?>';">
 										<a class="feed_profile_pic" style="background-image: url(/profile_pic_cache/<?php echo $actAssoc->getUserId()?>_small.jpg)"></a>
 										<span class="feed_page_block_body">
 											<a class="vertical_center_filler" style="height:50px"></a>
@@ -82,4 +82,4 @@
 </div>
 
 <?php include "layout/screen_layout_end.php"; ?>
-<?php include "layout/screen_header_end.php"; ?>
+<?php include "/../layout/view_header_end.php"; ?>

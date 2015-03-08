@@ -36,7 +36,7 @@
 	
 ?>
 
-<?php include "layout/screen_header_start.php"; ?>
+<?php include "/../layout/view_header_start.php"; ?>
 <?php include "layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
@@ -94,4 +94,4 @@
 </div>
 
 <?php include "layout/screen_layout_end.php"; ?>
-<?php include "layout/screen_header_end.php"; ?>
+<?php include "/../layout/view_header_end.php"; ?>

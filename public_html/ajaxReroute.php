@@ -11,6 +11,7 @@ ob_start();
 // namespaces
 use Klein\Klein;
 use Facebook\FacebookSession;
+use Detection\MobileDetect;
 
 try{
 	// initialize Facebook
@@ -21,13 +22,16 @@ try{
 	// URL router
 	$kleinRouter = new Klein();
 	
-	$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () {
+	// mobile browser detection
+	$_MOBILE_DETECT = new MobileDetect();
+	
+	$kleinRouter->respond('POST', '/ajaxActivityAssociation', function () use ($_MOBILE_DETECT) {
 		include "../modules/ajax/ajaxActivityAssociation.php";
 		return;
 	});
 	
 	if (isset($_SESSION['current_user'])) {
-		$kleinRouter->respond('POST', '/ajaxDiscussion', function () {
+		$kleinRouter->respond('POST', '/ajaxDiscussion', function () use ($_MOBILE_DETECT) {
 			include "../modules/ajax/ajaxDiscussion.php";
 			return;
 		});

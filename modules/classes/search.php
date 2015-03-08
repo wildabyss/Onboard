@@ -35,27 +35,29 @@ class OnboardSearch {
 						from user_community_assoc uca
 						join user on uca.user_id_right = user.id
 						where
-							user.status = :actstatus1
+							user.status = :userstatus1
 							and uca.user_id_left = :myid1
 					union
 					select user.id
 						from user_community_assoc uca
 						join user on uca.user_id_left = user.id
 						where
-							user.status = :actstatus2
+							user.status = :userstatus2
 							and uca.user_id_right = :myid2)
 				and upper(aua.alias) like :name
+				and aua.status <> :actstatus
 			order by aua.alias asc
 			limit 20
 EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
 				array(
-						'actstatus1'	=> User::ACTIVE_STATUS,
+						'userstatus1'	=> User::ACTIVE_STATUS,
 						'myid1'			=> $curUserId,
-						'actstatus2'	=> User::ACTIVE_STATUS,
+						'userstatus2'	=> User::ACTIVE_STATUS,
 						'myid2'			=> $curUserId,
-						'name'			=> $query
+						'name'			=> $query,
+						'actstatus'		=> ActivityUserAssociation::ARCHIVED_STATUS
 				));
 		
 		$formatter = new ObjectFormatter();

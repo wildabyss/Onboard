@@ -15,7 +15,11 @@
 		<!-- layout and styles -->
 		<title>Onboard - <?php echo $_PAGE_TITLE; ?></title>
 		<link rel="shortcut icon" href="/images/logo.ico" type="image/x-icon"/>
-		<link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
+		<?php if ($_MOBILE_DETECT->isMobile()):?>
+			<link rel="stylesheet" href="/css/mobile.css" type="text/css" media="screen" />
+		<?php else:?>
+			<link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
+		<?php endif?>
 		
 		<!-- javascript includes -->
 		<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>

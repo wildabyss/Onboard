@@ -3,7 +3,7 @@ var activitySectionClick = function(userId, activityAssocId){
 	changeBrowserURL('/id/'+userId+'/actid/'+activityAssocId);
 }
 
-var likeActivity = function (event, activityAssocId){
+var likeActivity = function (event, activityAssocId, friendId){
 	// IE8 fix
 	event = event || window.event;
 	//var ele = event.target || event.srcElement;
@@ -30,20 +30,14 @@ var likeActivity = function (event, activityAssocId){
 				var respArr = JSON.parse(result);
 				
 				// change interest tally
-				var intTallyEl = $("#interest_tally_"+activityAssocId);
+				var intTallyEl = $("[id*=interest_tally_"+activityAssocId+"]");
 				if (intTallyEl.length>0) {
 					intTallyEl.html(respArr.interest_count + " interests");
 				}
 				
 				// if there's a popup, then change its appearance
 				if ($('#interest_details_'+activityAssocId).length){
-					if (button.attr('type') == "onboard"){
-						// append redirect message
-						$('.discussion_container').append('<a class="center link" id="interest_details_redirect" href="/id/'+respArr.user_id+'/actid/'+respArr.assoc_id+'">Head over to my activity.</a>');
-					} else {
-						// remove redirect message
-						$('#interest_details_redirect').remove();
-					}
+					expandActivity(activityAssocId, friendId);
 				}
 				
 				// change button

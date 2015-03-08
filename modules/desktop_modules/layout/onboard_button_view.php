@@ -20,7 +20,7 @@
 	<?php else:?>
 		<a id="<?php echo $id_prefix?>onboard_button_<?php echo $_ACT_OBJ_VIEW->getId()?>" 
 			class="onboard_leave" type="<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>leave<?php else: ?>onboard<?php endif?>" 
-			onclick="likeActivity(event, <?php echo $_ACT_OBJ_VIEW->getId()?>);">
+			onclick="likeActivity(event, '<?php echo $_ACT_OBJ_VIEW->getId()?>', '<?php echo $_ACT_OBJ_VIEW->getUserId()?>');">
 			<?php if ($userAssocLevel == ActivityUserAssociation::USER_IS_ASSOCIATED):?>Leave<?php else: ?>Onboard!<?php endif?>
 		</a>
 	<?php endif?>

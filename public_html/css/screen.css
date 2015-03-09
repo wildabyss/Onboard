@@ -59,6 +59,7 @@ textarea{
 	resize: none;
 }
 
+
 /* fixed floating related gizmos */
 
 #haze {
@@ -88,6 +89,7 @@ textarea{
 	margin-top: -100px;
 }
 
+
 /* search bar */
 
 input.search{
@@ -107,6 +109,7 @@ input#global_search.search{
 	right: 70px;
 	margin-top: 8px;
 }
+
 
 /* header */
 
@@ -147,6 +150,7 @@ input#global_search.search{
 #header_options:hover{
 	text-decoration: underline;
 }
+
 
 /* content body */
 
@@ -240,55 +244,6 @@ input#global_search.search{
 	background-color: #eee;
 }
 
-#button_home{
-	background-image: url(../images/home.png);
-}
-#button_community{
-	background-image: url(../images/friends.png);
-}
-#button_list{
-	background-image: url(../images/list.png);
-	background-position: 8px;
-}
-#button_browse{
-	background-image: url(../images/search_large.png);
-}
-#button_recent{
-	background-image: url(../images/time.png);
-}
-
-/* profile info */
-
-#profile_section{
-	display:block;
-	width: 100%;
-	overflow: auto;
-	margin-bottom: 5px;
-}
-
-#profile_pic{
-	display: block;
-	float: left;
-	height: 100px;
-	width: 100px;
-	border: 5px double white;
-	margin: 0;
-	margin-bottom: 10px;
-	background-color: gray;
-}
-
-.profile_name{
-	display: block;
-	margin-top: 20px;
-	margin-left: 120px;
-}
-
-.user_info{
-	color: #808080;
-	display: block;
-	margin-top: 5px;
-	margin-left: 120px;
-}
 
 /* member's activity items */
 
@@ -306,6 +261,7 @@ div.popup_container{
 .completed_activity{
 	text-decoration: line-through;
 }
+
 
 /* basic activity list display */
 
@@ -370,69 +326,6 @@ input.new_activity_buttons{
 	float: right:
 }
 
-.details{
-	display: inline-block;
-	height: 10px;
-	width: 10px;
-	background-image: url(../images/details.png);
-	background-repeat: no-repeat;
-	position: absolute;
-	right: 5px;
-	top: 8px;
-	cursor: pointer;
-}
-
-.details_box{
-	position: absolute;
-	border: 1px solid #aaa;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	width: 150px;
-	top: 20px;
-	right: 4px;
-	background-color: #ddd;
-	display: none;
-	z-index: 500;
-}
-.details_box_discussion{
-	width: 170px;
-	right: auto;
-	left: 34px;
-	top: 0;
-}
-
-.detail_box_item{
-	display: block;
-	padding-left: 25px;
-	height: 21px;
-	background-repeat: no-repeat;
-	background-position: 5px 3px;
-	cursor: pointer;
-	font-size: 12px;
-	line-height: 21px;
-	text-align: left;
-}
-.detail_box_item:hover{
-	background-color: white;
-}
-.delete{
-	background-image: url(../images/trash.png);
-}
-.checked{
-	background-image: url(../images/checked.png);
-}
-.edit{
-	background-image: url(../images/edit.png);
-}
-.discussion{
-	background-position: 3px 1px;
-	background-image: url(../images/discussion.png);
-}
-.facebook{
-	background-position: 3px 1px;
-	background-image: url(../images/facebook.png);
-}
-
 .delete_confirmation{
 	display:block;
 	margin-bottom: 10px;
@@ -459,6 +352,7 @@ input.confirmation_button{
 .post_body{
 	margin-top: 15px;
 }
+
 
 /* detailed information on member activity */
 
@@ -551,6 +445,69 @@ ul.interest_tally_details li{
 #interest_details_redirect {
 	display: block; 
 	padding-bottom: 10px;
+}
+
+.details{
+	display: inline-block;
+	height: 10px;
+	width: 10px;
+	background-image: url(../images/details.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	right: 5px;
+	top: 8px;
+	cursor: pointer;
+}
+
+.details_box{
+	position: absolute;
+	border: 1px solid #aaa;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 150px;
+	top: 20px;
+	right: 4px;
+	background-color: #ddd;
+	display: none;
+	z-index: 500;
+}
+.details_box_discussion{
+	width: 170px;
+	right: auto;
+	left: 34px;
+	top: 0;
+}
+
+.detail_box_item{
+	display: block;
+	padding-left: 25px;
+	height: 21px;
+	background-repeat: no-repeat;
+	background-position: 5px 3px;
+	cursor: pointer;
+	font-size: 12px;
+	line-height: 21px;
+	text-align: left;
+}
+.detail_box_item:hover{
+	background-color: white;
+}
+.delete{
+	background-image: url(../images/trash.png);
+}
+.checked{
+	background-image: url(../images/checked.png);
+}
+.edit{
+	background-image: url(../images/edit.png);
+}
+.discussion{
+	background-position: 3px 1px;
+	background-image: url(../images/discussion.png);
+}
+.facebook{
+	background-position: 3px 1px;
+	background-image: url(../images/facebook.png);
 }
 
 
@@ -666,6 +623,7 @@ ul.participants{
 	margin-left: 450px;
 }
 
+
 /* community */
 
 .friend{
@@ -726,6 +684,7 @@ a.comm_link:hover{
 	text-decoration: underline;
 }
 
+
 /* news feed page */
 
 .feed_page_block{
@@ -740,6 +699,7 @@ a.comm_link:hover{
 	margin-left: 8px;
 	white-space: normal;
 }
+
 
 /* news feed */
 
@@ -811,6 +771,7 @@ a.comm_link:hover{
 	margin-top: 5px;
 }
 
+
 /* browse and search results */
 
 .results_container{
@@ -845,6 +806,7 @@ a.search_result_body{
 	margin-left: 5px;
 	width: 210px;
 }
+
 
 /* footer */
 

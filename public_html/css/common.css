@@ -77,3 +77,59 @@ a:visited {
 #facebook_signin:hover{
 	background-image: url(../images/facebook_signin_hover.png);
 }
+
+
+/* navigation menu */
+
+#button_home{
+	background-image: url(../images/home.png);
+}
+#button_community{
+	background-image: url(../images/friends.png);
+}
+#button_list{
+	background-image: url(../images/list.png);
+	background-position: 8px;
+}
+#button_browse{
+	background-image: url(../images/search_large.png);
+}
+#button_recent{
+	background-image: url(../images/time.png);
+}
+
+
+/* profile info */
+
+#profile_section{
+	display:block;
+	width: 100%;
+	overflow: auto;
+	margin-bottom: 5px;
+}
+
+#profile_pic{
+	display: block;
+	float: left;
+	height: 100px;
+	width: 100px;
+	border: 5px double white;
+	margin: 0;
+	margin-bottom: 10px;
+	background-color: gray;
+}
+
+.profile_name{
+	display: block;
+	margin-top: 20px;
+	margin-left: 120px;
+}
+
+.user_info{
+	color: #808080;
+	display: block;
+	margin-top: 5px;
+	margin-left: 120px;
+}
+
+

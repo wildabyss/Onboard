@@ -40,8 +40,7 @@
 <?php include "layout/screen_layout_start.php"; ?>
 
 <!-- js inclusions -->
-<script type="text/javascript" src="/js/mylist.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/desktop/mylist.js"></script>
 
 <!-- main content -->
 <div class="content_column" id="column_middle">

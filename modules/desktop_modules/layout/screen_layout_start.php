@@ -16,7 +16,7 @@
 			<!-- navigation -->
 			<div class="content_column" id="column_left">
 				<div class="content_column_wrapper" id="column_wrapper_left">
-					<ul>
+					<ul class="navigation">
 						<li class="button_middle"><a id="button_list" href="/<?php if (isset($_SESSION['current_user'])):?>id/<?php echo $_SESSION['current_user']->getId()?><?php endif?>"
 							class="<?php if ($_PAGE_TITLE==Utilities::PAGE_MY_ACTIVITIES) echo "selected"?>">My Activities</a></li>
 						<li class="button_middle"><a id="button_recent" href="/recent"

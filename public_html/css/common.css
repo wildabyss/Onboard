@@ -81,6 +81,38 @@ a:visited {
 
 /* navigation menu */
 
+ul.navigation{
+	padding: 0;
+	border-style: solid none solid solid;
+	border-width: 1px;
+	border-color: #ddd;
+}
+ul.navigation li{
+	width: 100%;
+	list-style-type: none;
+}
+ul.navigation li.button_middle{
+	border-bottom: 1px solid #ccc;
+}
+ul.navigation li a{
+	display: block;
+	padding: 6px;
+	padding-left: 30px;
+	cursor: pointer;
+	background-color: #ddd;
+	background-repeat: no-repeat;
+	background-position: 6px;
+	color: #000;
+	font-size: 14px;
+}
+ul.navigation li a.selected{
+	background-color: #eee;
+}
+ul.navigation li a:hover{
+	background-color: #eee;
+}
+
+/* the following must be IDs for ul.navigation li */
 #button_home{
 	background-image: url(../images/home.png);
 }

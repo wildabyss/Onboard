@@ -28,5 +28,10 @@
 		<!-- javascript includes -->
 		<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
 		<script type="text/javascript" src="/js/autogrow.min.js"></script>
+		<?php if ($_MOBILE_DETECT->isMobile()):?>
+			<script type="text/javascript" src="/js/mobile/common.js"></script>
+		<?php else:?>
+			<script type="text/javascript" src="/js/desktop/common.js"></script>
+		<?php endif?>
 	</head>
 	<body>

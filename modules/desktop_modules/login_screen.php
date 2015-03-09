@@ -3,11 +3,13 @@
 <div id="super_global_wrapper">
 	<div id="global_wrapper">
 		<a id="logo"></a>
+		
 		<p class="center" id="login_slogan">
 			Share your interests...<br/> 
-			See what your friends want to do...<br/><br/>
-			Because activities are more fun with friends. Get onboard!
+			See what your friends want to do...<br/>
+			Because activities are more fun with friends.
 		</p>
+		
 		<div id="column_login" class="content_column_wrapper">
 			<h1>Sign in/Register</h1>
 			<div class="center">
@@ -16,6 +18,7 @@
 				<a id="google_signin"></a> -->
 			</div>
 		</div>
+		
 		<div id="footer_login">
 			<a class="footer_block">
 				Copyright <?php echo date("Y") ?>

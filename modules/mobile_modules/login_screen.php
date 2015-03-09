@@ -7,8 +7,7 @@
 		<p class="center" id="login_slogan">
 			Share your interests...<br/> 
 			See what your friends want to do...<br/>
-			Because activities are more fun with friends.<br/><br/>
-			Get onboard!
+			Because activities are more fun with friends.
 		</p>
 		
 		<div id="login_strip" class="center">
@@ -16,7 +15,7 @@
 			<a id="facebook_signin" href="<?php echo $_FB_LOGIN_HELPER->getLoginUrl(FacebookUtilities::$FACEBOOK_PRIVILEGES)?>"></a>
 		</div>
 		
-		<div id="footer">
+		<div id="footer_login">
 			<a class="footer_block" href="mailto:wildabyss@gmail.com?Subject=Onboard%20Inquiries" target="_blank">
 				Contact
 			</a>

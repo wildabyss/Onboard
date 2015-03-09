@@ -1,8 +1,9 @@
-
+/* event listener for when user clicks on an activity */
 var activitySectionClick = function(userId, activityAssocId){
 	changeBrowserURL('/id/'+userId+'/actid/'+activityAssocId);
 }
 
+/* associate the current user with Friend's activity */
 var likeActivity = function (event, activityAssocId, friendId){
 	// IE8 fix
 	event = event || window.event;
@@ -55,7 +56,6 @@ var likeActivity = function (event, activityAssocId, friendId){
 
 
 /* change browser URL */
-
 var changeBrowserURL = function(url){
 	if(history.pushState) {
 	    history.pushState(null, null, url);
@@ -66,8 +66,7 @@ var changeBrowserURL = function(url){
 }
 
 
-/* loads when document finishes loading */
-
+/* remove popup elements */
 var removePopup = function(restoreURL){
 	var height = parseInt($('#super_global_wrapper').css('margin-top'));
 	
@@ -89,6 +88,7 @@ var removePopup = function(restoreURL){
 	}
 }
 
+/* loads when document is ready */
 $(document).ready(function () {
 	// autogrow text area
 	$('textarea').autogrow();

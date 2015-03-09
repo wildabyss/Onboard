@@ -27,13 +27,11 @@ class DiscussionUserAssociationQuery extends BaseDiscussionUserAssociationQuery
 		$conn = Propel::getReadConnection(DiscussionUserAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
 			select 1 from discussion_user_assoc dua
-			    left join discussion d
-					on d.id = dua.discussion_id
-				left join activity_user_assoc aua
-					on aua.activity_id = d.activity_id
+			    left join activity_user_assoc aua
+					on aua.id = dua.activity_user_assoc_id
 			    where
 					aua.user_id = :userid 
-					and d.activity_id = :actid
+					and aua.activity_id = :actid
 					and aua.status <> :actstatus
 					and dua.status = :discstatus
 				limit 1;

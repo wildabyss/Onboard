@@ -48,7 +48,7 @@
 		<div id="profile_section">
 			<a id="profile_pic" style="background-image: url(/profile_pic_cache/<?php echo $_FRIEND->getId()?>_large.jpg)"></a>
 			<h1 class="profile_name"><?php echo htmlentities($_FRIEND->getDisplayName()) ?></h1>
-			<?php if (isset($curUser)):?>
+			<?php if (isset($curUser) && ($curUser->getId()==$_FRIEND->getId() || UserCommunityAssociationQuery::verifyUsersAreFriends($_FRIEND->getId(), $curUser->getId()))):?>
 				<a class="user_info">Email: <?php echo htmlentities($_FRIEND->getEmail()) ?></a>
 				<a class="user_info">Phone: <?php echo htmlentities($_FRIEND->getPhone()) ?></a>
 			<?php endif?>

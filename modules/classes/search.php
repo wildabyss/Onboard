@@ -27,41 +27,28 @@ class OnboardSearch {
 		// sql request
 		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
-			select distinct aua.*
-			from activity_user_assoc aua
+			select 
+				distinct a.*
+			from
+				activity a
+			left join
+				activity_user_assoc aua
+			on
+				aua.activity_id = a.id
 			where
-				aua.user_id in
-					(select user.id
-						from user_community_assoc uca
-						join user on uca.user_id_right = user.id
-						where
-							user.status = :userstatus1
-							and uca.user_id_left = :myid1
-					union
-					select user.id
-						from user_community_assoc uca
-						join user on uca.user_id_left = user.id
-						where
-							user.status = :userstatus2
-							and uca.user_id_right = :myid2)
-				and upper(aua.alias) like :name
-				and aua.status <> :actstatus
-			order by aua.alias asc
-			limit 20
+				(UPPER(aua.alias) like UPPER(:query1)
+				or UPPER(a.name) like UPPER(:query2))
+			order by a.name
 EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(
 				array(
-						'userstatus1'	=> User::ACTIVE_STATUS,
-						'myid1'			=> $curUserId,
-						'userstatus2'	=> User::ACTIVE_STATUS,
-						'myid2'			=> $curUserId,
-						'name'			=> $query,
-						'actstatus'		=> ActivityUserAssociation::ARCHIVED_STATUS
+						'query1' => "%$query%",
+						'query2' => "%$query%"
 				));
 		
 		$formatter = new ObjectFormatter();
-		$formatter->setClass('\ActivityUserAssociation'); //full qualified class name
+		$formatter->setClass('\Activity'); //full qualified class name
 		$resultArr = $formatter->format($conn->getDataFetcher($stmt));
 		
 		return $resultArr;
@@ -98,9 +85,8 @@ EOT;
 						where
 							user.status = :actstatus2
 							and uca.user_id_right = :myid2)
-				and upper(display_name) like :name
+				and upper(display_name) like upper(:name)
 			order by display_name asc
-			limit 20
 EOT;
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(

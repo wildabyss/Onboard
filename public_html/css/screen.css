@@ -740,37 +740,49 @@ a.comm_link:hover{
 
 /* browse and search results */
 
-.results_container{
+table.results_container{
 	margin-top: 20px;
 	margin-bottom: 20px;
-}
-.results_left_container{
-	box-sizing: border-box;
-	width: 50%;
-}
-.results_right_container{
-	box-sizing: border-box;
-	width: 50%;
-	float:right;
+	border-collapse: collapse;
+	width: 100%;
 }
 
-.results_content{
+td.results_content{
 	padding: 5px;
-	border: 1px solid #d9d9d9;
-	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+	vertical-align: top;
+	width: 50%;
 }
-#results_friends.results_content{
-	margin-left: 5px;
+td#results_friends.results_content{
+	border-left: 1px solid #888;
+	padding-left: 10px;
 }
-#results_activities.results_content{
-	margin-right: 5px;
+td#results_activities.results_content{
+	padding-right: 10px;
 }
 
-a.search_result_body{
+h3.search_section_title{
+	text-align: center;
+}
+
+.search_result_title{
+	display: block;
+}
+
+.search_result_body{
 	display: inline-block;
 	vertical-align: middle;
 	margin-left: 5px;
 	width: 210px;
+}
+
+a.search_interested_friends{
+	display: block;
+	float: right;
+	margin-top: 10px;
+	height: 15px;
+	background-image: url(../images/friends_small.png);
+	background-repeat: no-repeat;
+	padding-left: 18px;
 }
 
 

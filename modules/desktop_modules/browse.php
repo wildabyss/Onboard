@@ -31,14 +31,14 @@
 					<td class="results_content" id="results_activities">
 						<h3 class="search_section_title">Activities</h3>
 						
-						<?php if ($actsFound->count() > 0): ?>
+						<?php if (count($actsFound) > 0): ?>
 							<ul class="activity_list">
-							<?php foreach ($actsFound as $activity):?>
-								<?php $interestedFriends = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $activity->getId())?>
+							<?php foreach ($actsFound as $activityResult):?>
+								<?php $interestedFriends = ActivityUserAssociationQuery::getInterestedFriends($curUser->getId(), $activityResult->getActivityId())?>
 							
-								<li class="feed_page_block" style="margin-bottom: 10px" id="activity_<?php echo $activity->getId()?>">
+								<li class="feed_page_block" style="margin-bottom: 10px" id="activity_<?php echo $activityResult->getActivityId()?>">
 									<a class="search_result_title">
-										<?php echo htmlentities($activity->getName())?>
+										<?php echo htmlentities($activityResult->getActivityName())?>
 									</a>
 									
 									<?php if (count($interestedFriends) == 1):?>

@@ -14,6 +14,7 @@ use Map\ActivityUserAssociationTableMap;
  */
 class OnboardSearch {
 	
+	
 	/**
 	 * Search for activities among the friends of $curUserId
 	 * @param unknown $curUserId
@@ -21,14 +22,30 @@ class OnboardSearch {
 	 * @return Ambigous <\Propel\Runtime\Collection\Collection, multitype:, \Propel\Runtime\ActiveRecord\ActiveRecordInterface>
 	 */
 	public static function SearchForActivities($curUserId, $query){
-		// format $query
-		$query = strtoupper("%{$query}%");
+		// divide query into words
+		$rawWords = explode(' ', $query);
+		$words = array();
+		
+		// format query
+		foreach ($rawWords as $word){
+			$word = trim($word);
+			if (strlen($word) > 2){
+				$words[] = strtoupper($word);
+			}
+		}
+		$wordCount = count($words);
+		if ($wordCount == 0){
+			// if no valid word, then return empty result set
+			return new Collection();
+		}
+		
+		/* first sweep, find all matching results */
 		
 		// sql request
 		$conn = Propel::getReadConnection(ActivityUserAssociationTableMap::DATABASE_NAME);
 		$sql = <<<EOT
 			select 
-				distinct a.*
+				distinct a.id, a.name, aua.alias
 			from
 				activity a
 			left join
@@ -36,22 +53,79 @@ class OnboardSearch {
 			on
 				aua.activity_id = a.id
 			where
-				(UPPER(aua.alias) like UPPER(:query1)
-				or UPPER(a.name) like UPPER(:query2))
-			order by a.name
+				(
 EOT;
+		for ($i=0; $i<$wordCount; $i++){
+			if ($i>0){
+				$sql = $sql." or ";
+			}
+			$sql = $sql."upper(aua.alias) like upper(:alias{$i}) or upper(a.name) like upper(:name{$i}) ";
+		}
+		$sql = $sql.") order by a.id";
+		
+		// prepare for parameters
+		$parameters = array();
+		for ($i=0; $i<$wordCount; $i++){
+			$parameters["alias{$i}"] = "%{$words[$i]}%";
+			$parameters["name{$i}"] = "%{$words[$i]}%";
+		}
+		
+		// execute query
 		$stmt = $conn->prepare($sql);
-		$stmt->execute(
-				array(
-						'query1' => "%$query%",
-						'query2' => "%$query%"
-				));
+		$stmt->execute($parameters);
+		$rawResults = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
-		$formatter = new ObjectFormatter();
-		$formatter->setClass('\Activity'); //full qualified class name
-		$resultArr = $formatter->format($conn->getDataFetcher($stmt));
 		
-		return $resultArr;
+		/* second weep, classify results based on how closely they match */
+		
+		$rankedResults = array();
+		
+		foreach ($rawResults as $resultRow){
+			$id = $resultRow['id'];
+			
+			// create new search result object
+			$activityResult = new ActivitySearchResult();
+			$activityResult->SetActivityId($id);
+			
+			// determine which field to use for name
+			$nameCount = self::CountMatchedWords($words, $resultRow['name']);
+			$aliasCount = self::CountMatchedWords($words, $resultRow['alias']);
+			
+			if ($nameCount >= $aliasCount){
+				// use name
+				$activityResult->SetActivityName($resultRow['name']);
+				$activityResult->SetNumMatched($nameCount);
+			} else {
+				// use alias
+				$activityResult->SetActivityName($resultRow['alias']);
+				$activityResult->SetNumMatched($aliasCount);
+			}
+			
+			$len = count($rankedResults);
+			$insertPosition = -1;	// not inserted = -1
+			
+			// replace existing activity result?
+			for ($i=0; $i<$len; $i++){
+				if ($insertPosition == -1 && $rankedResults[$i]->GetNumMatched() < $activityResult->GetNumMatched()){
+					// note insert position
+					$insertPosition = $i;
+				} elseif ($insertPosition > -1 && $rankedResults[$i]->GetActivityId() == $activityResult->GetActivityId()){
+					array_splice($rankedResults, $i, 1);
+					break;
+				} elseif ($insertPosition == -1 && $rankedResults[$i]->GetActivityId() == $activityResult->GetActivityId()){
+					$insertPosition = -2;
+				}
+			}
+			
+			// insert result
+			if ($insertPosition > -1){
+				array_splice($rankedResults, $insertPosition, 0, $activityResult);
+			} elseif ($insertPosition == -1) {
+				$rankedResults[] = $activityResult;
+			}
+		}
+				
+		return $rankedResults;
 	}
 	
 	
@@ -103,5 +177,68 @@ EOT;
 		$resultArr = $formatter->format($conn->getDataFetcher($stmt));
 		
 		return $resultArr;
+	}
+	
+	
+	/**
+	 * Return the number of matched words in a given string
+	 * @param array $words
+	 * @param unknown $string
+	 * @return int Number of matched words
+	 */
+	private static function CountMatchedWords(array $words, $string){
+		$total = 0;
+		foreach ($words as $word){
+			if (preg_match("/\\b{$word}/i", $string)){
+				$total++;
+			}
+		}
+		
+		return $total;
+	}
+}
+
+
+
+/**
+ * Object to describe the activity search result as returned by OnboardSearch
+ * @author Jimmy
+ *
+ */
+class ActivitySearchResult{
+	// activityId
+	private $activityId = 0;
+	public function GetActivityId(){
+		return $this->activityId;
+	}
+	public function SetActivityId($id){
+		$this->activityId = $id;
+	}
+	
+	// name or alias
+	private $activityName = "";
+	public function GetActivityName(){
+		return $this->activityName;
+	}
+	public function SetActivityName($name){
+		$this->activityName = $name;
+	}
+	
+	// description
+	private $activityDescr = "";
+	public function GetActivityDescription(){
+		return $this->activityDescr;
+	}
+	public function SetActivityDescription($descr){
+		$this->activityDescr = $descr;
+	}
+	
+	// number of matches
+	private $numMatches = 0;
+	public function GetNumMatched(){
+		return $this->numMatches;
+	}
+	public function SetNumMatched($numMatches){
+		$this->numMatches = $numMatches;
 	}
 }

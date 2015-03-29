@@ -136,5 +136,6 @@ try{
 } catch (FacebookRequestException $e){
 	die("Unable to connect to Facebook");
 } catch (Exception $e){
+	die($e->getMessage());
 	die("Unexpected server error");
 }

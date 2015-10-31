@@ -20,19 +20,35 @@ class FacebookUtilities {
 	
 	/**
 	 * Get the Facebook app id for this app
+	 * Return false if domain does not match with whitelist
 	 */
 	public static function GetFacebookAppId(){
+		$curHost = $_SERVER["HTTP_HOST"];
+		
 		$settingsData = json_decode(file_get_contents("$_SERVER[DOCUMENT_ROOT]/../onboard_settings.json"), true);
-		return $settingsData["fb_app_id"];
+		foreach ($settingsData["sites"] as $site){
+			if ($curHost == $site["domain"])
+				return $site["fb_app_id"];
+		}
+		
+		return false;
 	}
 	
 	
 	/**
 	 * Get the Facebook app secret for this app
+	 * Return false if domain does not match with whitelist
 	 */
 	public static function GetFacebookAppSecret(){
+		$curHost = $_SERVER["HTTP_HOST"];
+		
 		$settingsData = json_decode(file_get_contents("$_SERVER[DOCUMENT_ROOT]/../onboard_settings.json"), true);
-		return $settingsData["fb_app_secret"];
+		foreach ($settingsData["sites"] as $site){
+			if ($curHost == $site["domain"])
+				return $site["fb_app_secret"];
+		}
+
+		return false;
 	}
 	
 	

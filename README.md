@@ -61,9 +61,18 @@ Initial Application Configuration:
    entries accordingly:
    
    {
-        "fb_app_id": "xxxx",
-        "fb_app_secret": "xxxx",
-        "domain": "domain.com"
+		sites:[
+			{
+				"fb_app_id": "xxxx",
+				"fb_app_secret": "xxxx",
+				"domain": "domain1.com"
+			},
+			{
+				"fb_app_id": "xxxx",
+				"fb_app_secret": "xxxx",
+				"domain": "domain2.com"
+			}
+		]
    }
    
 

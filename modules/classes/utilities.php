@@ -17,8 +17,15 @@ class Utilities {
 	 * Returns the domain name of this website
 	 */
 	public static function GetMyDomain(){
+		$curHost = $_SERVER["HTTP_HOST"];
+		
 		$settingsData = json_decode(file_get_contents("$_SERVER[DOCUMENT_ROOT]/../onboard_settings.json"), true);
-		return $settingsData["domain"];
+		foreach ($settingsData["sites"] as $site){
+			if ($curHost == $site["domain"])
+				return $curHost;
+		}
+		
+		return false;
 	}
 	
 	/**
